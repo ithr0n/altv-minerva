@@ -362,5 +362,5 @@ MigrationBackup/
 
 # exclude dist folder
 dist/cache/
-dist/resources/playgermany/client/*
-dist/resources/playgermany/server/*
+dist/resources/playgermany/client/
+dist/resources/playgermany/server/
