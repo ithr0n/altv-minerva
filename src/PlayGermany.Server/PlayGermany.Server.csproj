@@ -6,6 +6,14 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>..\..\dist\resources\playgermany\server\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\..\dist\resources\playgermany\server\</OutputPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="AltV.Net" Version="1.40.4" />
     <PackageReference Include="AltV.Net.Async" Version="1.40.1" />

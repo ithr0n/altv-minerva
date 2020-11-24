@@ -16,7 +16,7 @@
         "sourceMap": false,
 
         "rootDir": "./",
-        "outDir": "../../bin/resources/playgermany/client",
+        "outDir": "../../dist/resources/playgermany/client",
 
         "baseUrl": ".",
         "paths": {

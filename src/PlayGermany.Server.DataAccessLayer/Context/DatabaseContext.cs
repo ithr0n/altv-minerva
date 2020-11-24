@@ -15,7 +15,8 @@ namespace PlayGermany.Server.DataAccessLayer.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySql(_databaseConnectionString, new MariaDbServerVersion("10.5.6"));
+            optionsBuilder.UseMySql(_databaseConnectionString, MariaDbServerVersion.LatestSupportedServerVersion);
+            System.Console.WriteLine(MariaDbServerVersion.LatestSupportedServerVersion.Version.ToString());
         }
 
         #region Entities
