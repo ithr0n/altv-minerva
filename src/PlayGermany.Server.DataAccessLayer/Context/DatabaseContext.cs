@@ -6,17 +6,10 @@ namespace PlayGermany.Server.DataAccessLayer.Context
     public class DatabaseContext
         : DbContext
     {
-        private readonly string _databaseConnectionString;
-
-        public DatabaseContext(string databaseConnectionString)
+        public DatabaseContext(DbContextOptions<DatabaseContext> options)
+            : base(options)
         {
-            _databaseConnectionString = databaseConnectionString;
-        }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseMySql(_databaseConnectionString, MariaDbServerVersion.LatestSupportedServerVersion);
-            System.Console.WriteLine(MariaDbServerVersion.LatestSupportedServerVersion.Version.ToString());
         }
 
         #region Entities

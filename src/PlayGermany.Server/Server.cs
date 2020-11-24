@@ -1,37 +1,70 @@
 ﻿using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
-using AltV.Net.EntitySync;
-using AltV.Net.EntitySync.ServerEvent;
-using AltV.Net.EntitySync.SpatialPartitions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using PlayGermany.Server.DataAccessLayer.Context;
 using PlayGermany.Server.Entities;
+using PlayGermany.Server.ServerJobs;
+using PlayGermany.Server.ServerJobs.Base;
+using PlayGermany.Server.Extensions;
+using System.IO;
+using System.Timers;
 
 namespace PlayGermany.Server
 {
     public class Server
         : AsyncResource
     {
-        private readonly Kernel _kernel;
+        private readonly ServiceProvider _serviceProvider;
+
+        public IConfiguration Configuration { get; }
+
+        public ILogger<Server> Logger { get; }
 
         public Server()
         {
-            _kernel = new Kernel();
-            _kernel.Initialize();
+            Configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", true, true)
+                .Build();
+
+            var services = new ServiceCollection();
+            services.AddSingleton<IConfiguration>(Configuration);
+
+            ConfigureServices(services);
+
+            _serviceProvider = services.BuildServiceProvider();
+
+            Logger = _serviceProvider.GetService<ILogger<Server>>();
         }
 
         public override void OnStart()
         {
-            // initialize EntitySync
-            // docs: http://csharp.altv.mp/articles/entity-sync.html
-            AltEntitySync.Init(2, 100,
-                (threadId) => false,
-                (threadCount, repository) => new ServerEventNetworkLayer(threadCount, repository),
-                (entity, threadCount) => (entity.Type % threadCount),
-                (entityId, entityType, threadCount) => (entityType % threadCount),
-                (threadId) => new LimitedGrid3(50_000, 50_000, 100, 10_000, 10_000, 300),
-                new IdProvider());
+            var serverJobs = _serviceProvider.GetServices<IServerJob>();
+            foreach (var job in serverJobs)
+            {
+                job.OnStartup();
+            }
 
-            _kernel.Startup();
+            // initialize world save
+            var saveInterval = 1000 * 60 * 5; // default 5 mins
+
+            if (!int.TryParse(Configuration.GetSection("World")["SaveInterval"], out saveInterval))
+            {
+                Logger.LogWarning("No world save interval configured in appsettings.json, taking fallback value of 5 mins.");
+            }
+
+            var timer = new Timer()
+            {
+                AutoReset = true,
+                Enabled = true,
+                Interval = saveInterval
+            };
+
+            timer.Elapsed += TimerWorldSaveElapsed;
         }
 
         public override void OnTick()
@@ -41,7 +74,40 @@ namespace PlayGermany.Server
 
         public override void OnStop()
         {
-            _kernel.Shutdown();
+            var serverJobs = _serviceProvider.GetServices<IServerJob>();
+            foreach (var job in serverJobs)
+            {
+                job.OnShutdown();
+            }
+        }
+
+        private void ConfigureServices(ServiceCollection services)
+        {
+            services.AddLogging(config =>
+            {
+                config.AddDebug();
+                config.AddConsole();
+            });
+
+            services.AddEntityFrameworkMySql();
+            services.AddDbContext<DatabaseContext>(options =>
+            {
+                options.UseMySql(Configuration.GetConnectionString("Database"), MariaDbServerVersion.LatestSupportedServerVersion);
+            });
+
+            // register for DI below
+            services.RegisterAllTypes<IServerJob>(new[] { typeof(Server).Assembly });
+        }
+
+        private void TimerWorldSaveElapsed(object sender, ElapsedEventArgs e)
+        {
+            var serverJobs = _serviceProvider.GetServices<IServerJob>();
+            foreach (var job in serverJobs)
+            {
+                job.OnSave();
+            }
+
+            Logger.LogDebug("World save at {CurrentDate}", System.DateTime.Now);
         }
 
         #region Entities
