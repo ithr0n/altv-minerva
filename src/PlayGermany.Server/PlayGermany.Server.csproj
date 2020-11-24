@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AltV.Net" Version="1.40.4" />
+    <PackageReference Include="AltV.Net.Async" Version="1.40.1" />
+    <PackageReference Include="AltV.Net.EntitySync" Version="1.8.0-dev-preview" />
+    <PackageReference Include="AltV.Net.EntitySync.ServerEvent" Version="1.9.0-dev-preview" />
+    <PackageReference Include="Ninject" Version="3.3.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PlayGermany.Server.DataAccessLayer\PlayGermany.Server.DataAccessLayer.csproj" />
+  </ItemGroup>
+
+</Project>
