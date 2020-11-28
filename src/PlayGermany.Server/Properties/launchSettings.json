@@ -2,8 +2,9 @@
   "profiles": {
     "PlayGermany.Server": {
       "commandName": "Executable",
-      "executablePath": ".\\altv-server.exe",
-      "workingDirectory": "..\\..\\dist\\"
+      "executablePath": "Powershell.exe",
+      "commandLineArgs": "-executionpolicy remotesigned -File debug.ps1 -Wait",
+      "workingDirectory": ".."
     }
   }
 }

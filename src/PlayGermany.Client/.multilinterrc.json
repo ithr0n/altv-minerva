@@ -1,0 +1,12 @@
+{
+    "prettier": {
+        "enabled": true,
+        "additionalArguments": "",
+        "fileExtensions": "js,ts,vue"
+    },
+    "eslint": {
+        "enabled": true,
+        "additionalArguments": "",
+        "fileExtensions": "js,ts,vue"
+    }
+}

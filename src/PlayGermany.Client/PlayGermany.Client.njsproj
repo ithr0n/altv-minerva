@@ -21,7 +21,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
     <EnableTypeScript>true</EnableTypeScript>
-    <StartWebBrowser>false</StartWebBrowser>
+    <StartWebBrowser>False</StartWebBrowser>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,19 +31,54 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="index.ts" />
+    <Content Include=".multilinterrc.json" />
+    <Content Include="html\.eslintrc.js" />
+    <Content Include="html\.gitignore" />
+    <Content Include="html\babel.config.js" />
+    <Content Include="html\package-lock.json" />
+    <Content Include="html\package.json" />
+    <Content Include="html\prettier.config.js" />
+    <Content Include="html\public\favicon.ico" />
+    <Content Include="html\public\index.html" />
+    <Content Include="html\src\App.vue" />
+    <Content Include="html\src\assets\logo.png" />
+    <Content Include="html\src\assets\logo.svg" />
+    <Content Include="html\src\components\HelloWorld.vue" />
+    <Content Include="html\src\components\Notifications.vue" />
+    <Content Include="html\src\components\PlayerHud.vue" />
+    <Content Include="html\src\components\Phone.vue" />
+    <Content Include="html\src\components\VehicleHud.vue" />
+    <Content Include="html\src\components\VuetifyExample.vue" />
+    <Content Include="html\vue.config.js" />
+    <Content Include="html\tsconfig.json" />
     <Content Include="package.json" />
     <Content Include="README.md" />
     <Content Include="tsconfig.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="EntitySync\" />
+    <Folder Include="html\" />
+    <Folder Include="html\public\" />
+    <Folder Include="html\src\" />
+    <Folder Include="html\src\assets\" />
+    <Folder Include="html\src\components\" />
+    <Folder Include="html\src\plugins\" />
     <Folder Include="Utils\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="EntitySync\PropsStreamer.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="html\src\plugins\alt.ts" />
+    <TypeScriptCompile Include="html\src\main.ts" />
+    <TypeScriptCompile Include="html\src\plugins\vuetify.ts" />
+    <TypeScriptCompile Include="html\src\shims-alt.d.ts" />
+    <TypeScriptCompile Include="html\src\shims-tsx.d.ts" />
+    <TypeScriptCompile Include="html\src\shims-vue.d.ts" />
+    <TypeScriptCompile Include="UiManager.ts" />
+    <TypeScriptCompile Include="Utils\AltHelper.ts" />
     <TypeScriptCompile Include="Utils\AsyncHelper.ts" />
+    <TypeScriptCompile Include="Utils\KeyCodes.ts" />
     <TypeScriptCompile Include="Utils\NativesHelper.ts" />
     <TypeScriptCompile Include="Utils\Vectors.ts" />
   </ItemGroup>
