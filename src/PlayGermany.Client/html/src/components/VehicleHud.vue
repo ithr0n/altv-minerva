@@ -234,7 +234,7 @@ export default Vue.extend({
     background: var(--background);
     width: 100%;
     height: 100%;
-    border: 0.1vw solid rgb(0, 0, 0);
+    /*border: 0.1vw solid rgb(0, 0, 0);*/
     border-radius: 100%;
     display: block;
     position: relative;
