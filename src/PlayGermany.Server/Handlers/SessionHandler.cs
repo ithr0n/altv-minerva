@@ -35,7 +35,7 @@ namespace PlayGermany.Server.Handlers
 
         private void OnPlayerConnect(ServerPlayer player, string reason)
         {
-            var uiUrl = "http://resource/html/index.html";
+            var uiUrl = "http://resource/client/html/index.html";
 
 #if DEBUG
             uiUrl = "http://localhost:8080/index.html";
