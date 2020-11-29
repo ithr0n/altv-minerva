@@ -3,5 +3,6 @@ module.exports = {
 
     rules: {
         'vue/valid-template-root': 'off',
+        'object-shorthand': 'off',
     },
 }

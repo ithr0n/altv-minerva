@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import _Vue from 'vue'
 
 declare module '*.vue' {
     interface Vue {
@@ -6,10 +6,10 @@ declare module '*.vue' {
     }
 }
 
-const install = (vue: typeof Vue) => {
-    if ('alt' in window) vue.prototype.$alt = alt
+const install = (app: typeof _Vue) => {
+    if ('alt' in window) app.prototype.$alt = alt
     else
-        vue.prototype.$alt = {
+        app.prototype.$alt = {
             emit: (eventName: string, ...args: any[]) => {
                 console.log(`[ALT]::[EMIT] - ${eventName} - ${args}`)
             },

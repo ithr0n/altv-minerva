@@ -12,8 +12,10 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>37359194-dbf4-46a0-9e04-85a6e433ee1a</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>index.ts</StartupFile>
-    <StartWebBrowser>False</StartWebBrowser>
+    <!--<StartupFile>html\node_modules\@vue\cli-service\bin\vue-cli-service.js</StartupFile>-->
+    <!--<ScriptArguments>serve</ScriptArguments>-->
+	<StartupFile>index.ts</StartupFile>
+    <StartWebBrowser>false</StartWebBrowser>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -21,7 +23,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
     <EnableTypeScript>true</EnableTypeScript>
-    <StartWebBrowser>False</StartWebBrowser>
+	<NodejsPort>1337</NodejsPort>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -63,6 +65,8 @@
     <Folder Include="html\src\assets\" />
     <Folder Include="html\src\components\" />
     <Folder Include="html\src\plugins\" />
+    <Folder Include="html\src\store\" />
+    <Folder Include="html\src\store\modules\" />
     <Folder Include="Utils\" />
   </ItemGroup>
   <ItemGroup>
@@ -75,6 +79,8 @@
     <TypeScriptCompile Include="html\src\shims-alt.d.ts" />
     <TypeScriptCompile Include="html\src\shims-tsx.d.ts" />
     <TypeScriptCompile Include="html\src\shims-vue.d.ts" />
+    <TypeScriptCompile Include="html\src\store\index.ts" />
+    <TypeScriptCompile Include="html\src\store\modules\playerHud.ts" />
     <TypeScriptCompile Include="UiManager.ts" />
     <TypeScriptCompile Include="Utils\AltHelper.ts" />
     <TypeScriptCompile Include="Utils\AsyncHelper.ts" />

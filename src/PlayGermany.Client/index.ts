@@ -1,6 +1,6 @@
 import * as alt from 'alt-client'
 
 import './EntitySync/PropsStreamer'
-import 'UiManager'
+import './UiManager'
 
 alt.log('Resource has been loaded.')

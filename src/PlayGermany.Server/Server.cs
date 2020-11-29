@@ -12,6 +12,7 @@ using PlayGermany.Server.ServerJobs.Base;
 using PlayGermany.Server.Extensions;
 using System.IO;
 using System.Timers;
+using PlayGermany.Server.Handlers;
 
 namespace PlayGermany.Server
 {
@@ -47,6 +48,8 @@ namespace PlayGermany.Server
 
         public override void OnStart()
         {
+            _serviceProvider.InstanciateRegisteredServices();
+
             var serverJobs = _serviceProvider.GetServices<IServerJob>();
             foreach (var job in serverJobs)
             {
@@ -101,6 +104,7 @@ namespace PlayGermany.Server
 
             // register for DI below
             services.RegisterAllTypes<IServerJob>(new[] { typeof(Server).Assembly });
+            services.RegisterScopedAndInstanciate<SessionHandler>();
         }
 
         private void TimerWorldSaveElapsed(object sender, ElapsedEventArgs e)
