@@ -3,41 +3,95 @@
         <div id="speedometer">
             <div class="line">
                 <div>
-                    <b><span class="num_1">0</span></b>
+                    <b :style="{ 'background-color': lightsHudColor }">
+                        <span class="num_1" :style="{ color: lightsHudColor }">
+                            0
+                        </span>
+                    </b>
                 </div>
-                <div><b></b></div>
                 <div>
-                    <b><span class="num_2">1</span></b>
+                    <b :style="{ 'background-color': lightsHudColor }"></b>
                 </div>
-                <div><b></b></div>
                 <div>
-                    <b><span class="num_3">2</span></b>
+                    <b :style="{ 'background-color': lightsHudColor }">
+                        <span class="num_2" :style="{ color: lightsHudColor }">
+                            1
+                        </span>
+                    </b>
                 </div>
-                <div><b></b></div>
                 <div>
-                    <b><span class="num_4">3</span></b>
+                    <b :style="{ 'background-color': lightsHudColor }"></b>
                 </div>
-                <div><b></b></div>
                 <div>
-                    <b><span class="num_5">4</span></b>
+                    <b :style="{ 'background-color': lightsHudColor }">
+                        <span class="num_3" :style="{ color: lightsHudColor }">
+                            2
+                        </span>
+                    </b>
                 </div>
-                <div><b></b></div>
                 <div>
-                    <b><span class="num_6">5</span></b>
+                    <b :style="{ 'background-color': lightsHudColor }"></b>
                 </div>
-                <div><b></b></div>
                 <div>
-                    <b><span class="num_7">6</span></b>
+                    <b :style="{ 'background-color': lightsHudColor }">
+                        <span class="num_4" :style="{ color: lightsHudColor }">
+                            3
+                        </span>
+                    </b>
                 </div>
-                <div><b></b></div>
                 <div>
-                    <b><span class="num_8">7</span></b>
+                    <b :style="{ 'background-color': lightsHudColor }"></b>
                 </div>
-                <div><b></b></div>
                 <div>
-                    <b><span class="num_9">8</span></b>
+                    <b :style="{ 'background-color': lightsHudColor }">
+                        <span class="num_5" :style="{ color: lightsHudColor }">
+                            4
+                        </span>
+                    </b>
                 </div>
-                <div><b></b></div>
+                <div>
+                    <b :style="{ 'background-color': lightsHudColor }"></b>
+                </div>
+                <div>
+                    <b :style="{ 'background-color': lightsHudColor }">
+                        <span class="num_6" :style="{ color: lightsHudColor }">
+                            5
+                        </span>
+                    </b>
+                </div>
+                <div>
+                    <b :style="{ 'background-color': lightsHudColor }"></b>
+                </div>
+                <div>
+                    <b :style="{ 'background-color': lightsHudColor }">
+                        <span class="num_7" :style="{ color: lightsHudColor }">
+                            6
+                        </span>
+                    </b>
+                </div>
+                <div>
+                    <b :style="{ 'background-color': lightsHudColor }"></b>
+                </div>
+                <div>
+                    <b :style="{ 'background-color': lightsHudColor }">
+                        <span class="num_8" :style="{ color: lightsHudColor }">
+                            7
+                        </span>
+                    </b>
+                </div>
+                <div>
+                    <b :style="{ 'background-color': lightsHudColor }"></b>
+                </div>
+                <div>
+                    <b :style="{ 'background-color': lightsHudColor }">
+                        <span class="num_9" :style="{ color: lightsHudColor }">
+                            8
+                        </span>
+                    </b>
+                </div>
+                <div>
+                    <b :style="{ 'background-color': lightsHudColor }"></b>
+                </div>
                 <div>
                     <b><span class="num_10">9</span></b>
                 </div>
@@ -47,12 +101,18 @@
                 </div>
             </div>
             <div id="needle" :style="{ transform: needlePosition }"></div>
-            <div id="pin">
+            <div
+                id="pin"
+                :style="{
+                    color: lightsHudColor,
+                    'border-color': lightsHudColor,
+                }"
+            >
                 <div id="gearIndexBefore">{{ gearPrevious }}</div>
                 <div id="gearIndexCurrent">{{ gearCurrent }}</div>
                 <div id="gearIndexNext">{{ gearNext }}</div>
             </div>
-            <div id="kmh">
+            <div id="kmh" :style="{ color: lightsHudColor }">
                 <div id="speed">{{ speed }}</div>
                 <div>km/h</div>
             </div>
@@ -65,21 +125,21 @@
             <div v-show="tractionControl">
                 <i id="inair" class="mdi mdi-car-traction-control"></i>
             </div>
-            <div v-show="lightState === 1">
+            <div v-show="isEngineRunning && lightState === 1">
                 <i
                     id="lightsOn"
                     class="mdi mdi-car-light-dimmed"
                     style="color: #255894"
                 ></i>
             </div>
-            <div v-show="lightState === 2">
+            <div v-show="isEngineRunning && lightState === 2">
                 <i
                     id="lightsOn"
                     class="mdi mdi-car-light-high"
                     style="color: #3b97ff"
                 ></i>
             </div>
-            <div v-show="!seatbelt">
+            <div v-show="seatbeltWarning">
                 <i id="seatbelt" class="mdi mdi-seatbelt"></i>
             </div>
             <div v-show="isEngineRunning" id="fuel">
@@ -120,6 +180,9 @@ export default Vue.extend({
         tractionControl() {
             return this.isEngineRunning && !this.isVehicleOnAllWheels
         },
+        seatbeltWarning() {
+            return this.isEngineRunning && !this.seatbelt
+        },
         handbrake() {
             return this.isEngineRunning && this.isHandbrakeActive
         },
@@ -127,9 +190,10 @@ export default Vue.extend({
             if (!this.isEngineRunning) {
                 return 'R'
             } else {
+                if (this.gear === 0) return ''
                 if (this.speed === 0) return 'R'
-                if (this.speed > 0 && this.gear === 0) return ''
-                if (this.isElectric || this.gear === 1) return 'P'
+                if (this.isElectric && this.gear === 1) return 'P'
+                if (this.gear === 1) return 'R'
                 return this.gear - 1
             }
         },
@@ -138,8 +202,8 @@ export default Vue.extend({
                 if (this.speed > 0) return 'N'
                 return 'P'
             } else {
-                if (this.speed === 0) return 'P'
-                if (this.gear === 0 && this.speed > 0) return 'R'
+                if (this.isElectric && this.speed === 0) return 'P'
+                if (this.gear === 0) return 'R'
                 if (this.isElectric) return 'A'
                 return this.gear
             }
@@ -158,7 +222,13 @@ export default Vue.extend({
             return this.fuelPercentage + '%'
         },
         needlePosition() {
+            if (!this.isEngineRunning) return 'rotate(180deg)'
             return 'rotate(' + Math.round((this.rpm / 1000) * 27 + 180) + 'deg)'
+        },
+        lightsHudColor() {
+            return !this.isEngineRunning || this.lightState === 0
+                ? '#424242'
+                : '#FFF'
         },
     },
 
@@ -248,9 +318,9 @@ export default Vue.extend({
 
 #speedometer {
     background: var(--background);
-    width: 100%;
-    height: 100%;
-    /*border: 0.1vw solid rgb(0, 0, 0);*/
+    width: calc(100% - 0.2vw);
+    height: calc(100% - 0.2vw);
+    border: 0.1vw solid rgb(0, 0, 0);
     border-radius: 100%;
     display: block;
     position: relative;

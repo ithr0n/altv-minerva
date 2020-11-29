@@ -1,5 +1,5 @@
 import * as alt from 'alt-client'
-import * as native from 'natives'
+import * as natives from 'natives'
 import KeyCodes from '../Utils/KeyCodes'
 
 let electric = [
@@ -20,15 +20,15 @@ let handbrakeActive = false
 alt.on('keydown', (key) => {
     if (key === KeyCodes.VK_SPACE) handbrakeActive = true
 
-    if (key === KeyCodes.VK_END) {
+    if (key === KeyCodes.VK_ADD) {
         let currenctVehicle = alt.Player.local.vehicle
 
         if (currenctVehicle) {
-            let isRunning = native.getIsVehicleEngineRunning(currenctVehicle.scriptID)
+            let isRunning = natives.getIsVehicleEngineRunning(currenctVehicle.scriptID)
             if (isRunning) {
-                native.setVehicleEngineOn(currenctVehicle.scriptID, false, true, true)
+                natives.setVehicleEngineOn(currenctVehicle.scriptID, false, true, true)
             } else {
-                native.setVehicleEngineOn(currenctVehicle.scriptID, true, true, true)
+                natives.setVehicleEngineOn(currenctVehicle.scriptID, true, true, true)
             }
         }
     }
@@ -41,7 +41,7 @@ alt.everyTick(() => {
     let vehicle = alt.Player.local.vehicle
 
     if (vehicle) {
-        const [lowBeam, highBeam, _] = native.getVehicleLightsState(vehicle.scriptID, undefined, undefined)
+        const [_, lowBeam, highBeam] = natives.getVehicleLightsState(vehicle.scriptID, undefined, undefined)
         let lightState = 0
         if (lowBeam && !highBeam) lightState = 1
         if (lowBeam && highBeam) lightState = 2
@@ -49,10 +49,10 @@ alt.everyTick(() => {
         alt.emit('UiManager:Emit', 'VehicleHud:Update', {
             gear: vehicle.gear,
             rpm: Math.floor(vehicle.rpm * 10000),
-            speed: Math.floor(native.getEntitySpeed(vehicle.scriptID) * 3.6),
+            speed: Math.floor(natives.getEntitySpeed(vehicle.scriptID) * 3.6),
             isElectric: electric.includes(vehicle.model),
-            isEngineRunning: native.getIsVehicleEngineRunning(vehicle.scriptID),
-            isVehicleOnAllWheels: native.isVehicleOnAllWheels(vehicle.scriptID),
+            isEngineRunning: natives.getIsVehicleEngineRunning(vehicle.scriptID),
+            isVehicleOnAllWheels: natives.isVehicleOnAllWheels(vehicle.scriptID),
             isHandbrakeActive: handbrakeActive,
             lightState,
             fuelPercentage: 80, // todo
