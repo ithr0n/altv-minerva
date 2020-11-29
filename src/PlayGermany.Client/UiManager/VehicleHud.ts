@@ -61,8 +61,32 @@ alt.everyTick(() => {
     }
 })
 
-alt.onServer('playerEnteredVehicle', (vehicle, seat) => {
-    alt.emit('UiManager:ShowComponent', 'VehicleHud')
+const vehiclesWithHud: number[] = [
+    0, // compacts
+    1, // sedans
+    2, // suvs
+    3, // coupes
+    4, // muscle
+    5, // sports classics
+    6, // sports
+    7, // super cars
+    8, // motorcycles
+    9, // off-roads
+    10, // industrials
+    11, // utilities
+    12, // vans
+    17, // service
+    18, // emergency
+    19, // military
+    20, // commercials
+]
+
+alt.onServer('playerEnteredVehicle', (vehicle: alt.Vehicle, seat) => {
+    const vehicleClass = natives.getVehicleClass(vehicle.scriptID)
+
+    if (vehiclesWithHud.includes(vehicleClass)) {
+        alt.emit('UiManager:ShowComponent', 'VehicleHud')
+    }
 })
 
 alt.onServer('playerLeftVehicle', (vehicle, seat) => {

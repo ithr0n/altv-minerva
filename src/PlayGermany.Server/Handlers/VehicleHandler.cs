@@ -24,7 +24,7 @@ namespace PlayGermany.Server.Handlers
 
         private void OnPlayerLeaveVehicle(IVehicle vehicle, IPlayer player, byte seat)
         {
-            player.Emit("playerLeaveVehicle", vehicle, (int)seat);
+            player.Emit("playerLeftVehicle", vehicle, (int)seat);
         }
 
         private void OnPlayerChangeVehicleSeat(IVehicle vehicle, IPlayer player, byte oldSeat, byte newSeat)

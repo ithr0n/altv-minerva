@@ -25,4 +25,9 @@ alt.onServer('SessionHandler:PlayerSpawned', () => {
     natives.setEntityInvincible(alt.Player.local.scriptID, false)
     natives.freezeEntityPosition(alt.Player.local.scriptID, false)
     natives.displayRadar(true)
+
+    natives.setPedConfigFlag(alt.Player.local.scriptID, 241, true) // PED_FLAG_DISABLE_STOPPING_VEH_ENGINE
+    natives.setPedConfigFlag(alt.Player.local.scriptID, 429, true) // PED_FLAG_DISABLE_STARTING_VEH_ENGINE
+    natives.setPedConfigFlag(alt.Player.local.scriptID, 184, true) // PED_FLAG_DISABLE_SHUFFLING_TO_DRIVER_SEAT
+    natives.setPedConfigFlag(alt.Player.local.scriptID, 32, true) // Player_FLAG_CAN_FLY_THRU_WINDSCREEN
 })

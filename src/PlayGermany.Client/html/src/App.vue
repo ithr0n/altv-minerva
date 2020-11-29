@@ -34,12 +34,9 @@ export default Vue.extend({
         this.$alt.on(
             'ToggleComponent',
             (component: string, state?: boolean) => {
-                _me.debugMsg = 'test1'
-
                 if (_me.$data.hasOwnProperty('show' + component)) {
-                    const oldState = _me.$data['show' + component]
-
-                    if (!state) {
+                    if (state === undefined || state === null) {
+                        const oldState = !!_me.$data['show' + component]
                         _me.$data['show' + component] = !oldState
                     } else {
                         _me.$data['show' + component] = state

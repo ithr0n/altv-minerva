@@ -16,12 +16,6 @@ alt.onServer('UiManager:Initialize', (url: string) => {
     alt.emitServer("SessionHandler:Spawn")
 })
 
-alt.onServer('UiManager:Notification', (text, type) => {
-
-    view.emit('notification', text, type)
-
-})
-
 alt.on('UiManager:Emit', (eventName: string, ...args: any[]) => {
     view.emit(eventName, ...args)
 })
