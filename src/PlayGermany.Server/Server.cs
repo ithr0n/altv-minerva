@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PlayGermany.Server.DataAccessLayer.Context;
 using PlayGermany.Server.Entities;
-using PlayGermany.Server.ServerJobs;
 using PlayGermany.Server.ServerJobs.Base;
 using PlayGermany.Server.Extensions;
 using System.IO;
@@ -59,7 +58,7 @@ namespace PlayGermany.Server
             // initialize world save
             var saveInterval = 1000 * 60 * 5; // default 5 mins
 
-            if (!int.TryParse(Configuration.GetSection("World")["SaveInterval"], out saveInterval))
+            if (!int.TryParse(Configuration.GetSection("World:SaveInterval").Value, out saveInterval))
             {
                 Logger.LogWarning("No world save interval configured in appsettings.json, taking fallback value of 5 mins.");
             }
@@ -102,9 +101,12 @@ namespace PlayGermany.Server
                 options.UseMySql(Configuration.GetConnectionString("Database"), MariaDbServerVersion.LatestSupportedServerVersion);
             });
 
-            // register for DI below
+            // register all server jobs
             services.RegisterAllTypes<IServerJob>(new[] { typeof(Server).Assembly });
-            services.RegisterScopedAndInstanciate<SessionHandler>();
+
+            // register handlers
+            services.RegisterSingletonAndInstanciate<SessionHandler>();
+            services.RegisterSingletonAndInstanciate<VehicleHandler>();
         }
 
         private void TimerWorldSaveElapsed(object sender, ElapsedEventArgs e)

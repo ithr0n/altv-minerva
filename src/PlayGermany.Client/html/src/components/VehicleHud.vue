@@ -46,7 +46,7 @@
                     <b><span class="num_11">10</span></b>
                 </div>
             </div>
-            <div id="needle" v-bind:style="{ transform: needlePosition }"></div>
+            <div id="needle" :style="{ transform: needlePosition }"></div>
             <div id="pin">
                 <div id="gearIndexBefore">{{ gearPrevious }}</div>
                 <div id="gearIndexCurrent">{{ gearCurrent }}</div>
@@ -56,42 +56,35 @@
                 <div id="speed">{{ speed }}</div>
                 <div>km/h</div>
             </div>
-            <div>
-                <i v-show="shifting" id="shift" class="mdi mdi-menu-up"></i>
+            <div v-show="shifting">
+                <i id="shift" class="mdi mdi-menu-up"></i>
             </div>
-            <div>
-                <i
-                    v-show="handbrake"
-                    id="handbrake"
-                    class="mdi mdi-car-brake-alert"
-                ></i>
+            <div v-show="handbrake">
+                <i id="handbrake" class="mdi mdi-car-brake-alert"></i>
             </div>
-            <div>
-                <i
-                    v-show="inair"
-                    id="inair"
-                    class="mdi mdi-car-traction-control"
-                ></i>
+            <div v-show="tractionControl">
+                <i id="inair" class="mdi mdi-car-traction-control"></i>
             </div>
-            <div>
+            <div v-show="lightState === 1">
                 <i
-                    v-show="lightState === 1"
                     id="lightsOn"
                     class="mdi mdi-car-light-dimmed"
                     style="color: #255894"
                 ></i>
+            </div>
+            <div v-show="lightState === 2">
                 <i
-                    v-show="lightState === 2"
                     id="lightsOn"
                     class="mdi mdi-car-light-high"
                     style="color: #3b97ff"
                 ></i>
             </div>
+            <div v-show="!seatbelt">
+                <i id="seatbelt" class="mdi mdi-seatbelt"></i>
+            </div>
             <div v-show="isEngineRunning" id="fuel">
                 <div id="fuelbar">
-                    <div
-                        v-bind:style="{ height: fuelbarFilledPercentage }"
-                    ></div>
+                    <div :style="{ height: fuelbarFilledPercentage }"></div>
                 </div>
                 <div><i class="mdi mdi-fuel"></i></div>
             </div>
@@ -111,12 +104,12 @@ export default Vue.extend({
             isHandbrakeActive: true,
             isVehicleOnAllWheels: false,
             lightState: 1,
-            inair: true,
             rpm: 9100,
             speed: 193,
             gear: 1,
             isElectric: false,
             fuelPercentage: 80,
+            seatbelt: false,
         }
     },
 
@@ -125,7 +118,7 @@ export default Vue.extend({
             return Math.floor(this.rpm / 100) > 90
         },
         tractionControl() {
-            return this.isEngineRunning && this.isVehicleOnAllWheels
+            return this.isEngineRunning && !this.isVehicleOnAllWheels
         },
         handbrake() {
             return this.isEngineRunning && this.isHandbrakeActive
@@ -135,6 +128,7 @@ export default Vue.extend({
                 return 'R'
             } else {
                 if (this.speed === 0) return 'R'
+                if (this.speed > 0 && this.gear === 0) return ''
                 if (this.isElectric || this.gear === 1) return 'P'
                 return this.gear - 1
             }
@@ -144,6 +138,8 @@ export default Vue.extend({
                 if (this.speed > 0) return 'N'
                 return 'P'
             } else {
+                if (this.speed === 0) return 'P'
+                if (this.gear === 0 && this.speed > 0) return 'R'
                 if (this.isElectric) return 'A'
                 return this.gear
             }
@@ -174,13 +170,34 @@ export default Vue.extend({
             _me.isHandbrakeActive = data.isHandbrakeActive
             _me.isVehicleOnAllWheels = data.isVehicleOnAllWheels
             _me.lightState = data.lightState
-            _me.inair = data.inair
-            _me.handbrake = data.handbrake
             _me.rpm = data.rpm
             _me.speed = data.speed
             _me.gear = data.gear
             _me.isElectric = data.isElectric
+            _me.seatbelt = data.seatbelt
+            _me.fuelPercentage = data.fuelPercentage
         })
+
+        this.$alt.on('VehicleHud:Reset', () => {
+            this.reset()
+        })
+
+        this.reset()
+    },
+
+    methods: {
+        reset() {
+            this.isEngineRunning = false
+            this.isHandbrakeActive = true
+            this.isVehicleOnAllWheels = false
+            this.lightState = 0
+            this.rpm = 0
+            this.speed = 0
+            this.gear = 1
+            this.isElectric = false
+            this.fuelPercentage = 0
+            this.seatbelt = false
+        },
     },
 })
 </script>
@@ -223,7 +240,6 @@ export default Vue.extend({
     right: 2vw;
     bottom: 2vw;
     overflow: hidden;
-
     --red: rgb(165, 32, 32);
     --orange: rgb(221, 140, 18);
     --blue: #193a61;
@@ -480,7 +496,8 @@ export default Vue.extend({
 #shift,
 #handbrake,
 #inair,
-#lightsOn {
+#lightsOn,
+#seatbelt {
     font-size: 2vw;
     width: 2vw;
     height: 2vw;
@@ -497,7 +514,8 @@ export default Vue.extend({
 
 #handbrake,
 #inair,
-#lightsOn {
+#lightsOn,
+#seatbelt {
     left: calc(30% - 1vw);
     font-size: 1vw;
     color: var(--orange);
@@ -516,6 +534,28 @@ export default Vue.extend({
     top: calc(70% - 1vw);
     left: calc(50% - 1vw);
     color: var(--blue);
+}
+
+#seatbelt {
+    top: calc(79% - 1vw);
+    left: calc(50% - 1vw);
+    color: var(--red);
+    animation-duration: 800ms;
+    animation-name: blink;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+@keyframes blink {
+    from {
+        /*opacity: 1;*/
+        color: var(--orange);
+    }
+
+    to {
+        /*opacity: 0;*/
+        color: var(--red);
+    }
 }
 
 #fuel {

@@ -1,8 +1,9 @@
 <template>
     <div id="container">
         <!--<VuetifyExample />-->
-        <PlayerHud />
-        <VehicleHud />
+        <span>{{ debugMsg }}</span>
+        <PlayerHud v-show="showPlayerHud" />
+        <VehicleHud v-show="showVehicleHud" />
     </div>
 </template>
 
@@ -22,7 +23,30 @@ export default Vue.extend({
     },
 
     data: () => ({
-        //
+        showPlayerHud: false,
+        showVehicleHud: false,
+        debugMsg: 'debug',
     }),
+
+    mounted() {
+        const _me = this
+
+        this.$alt.on(
+            'ToggleComponent',
+            (component: string, state?: boolean) => {
+                _me.debugMsg = 'test1'
+
+                if (_me.$data.hasOwnProperty('show' + component)) {
+                    const oldState = _me.$data['show' + component]
+
+                    if (!state) {
+                        _me.$data['show' + component] = !oldState
+                    } else {
+                        _me.$data['show' + component] = state
+                    }
+                }
+            }
+        )
+    },
 })
 </script>
