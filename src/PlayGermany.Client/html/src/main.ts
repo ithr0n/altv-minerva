@@ -3,6 +3,7 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import alt from './plugins/alt'
+import VueClipboard from 'vue-clipboard2'
 import Toast, { TYPE } from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
 import store from './store'
@@ -10,6 +11,7 @@ import store from './store'
 Vue.config.productionTip = false
 
 Vue.use(alt)
+Vue.use(VueClipboard)
 Vue.use(Toast, {
     toastDefaults: {
         [TYPE.ERROR]: {

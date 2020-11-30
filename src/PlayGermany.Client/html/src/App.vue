@@ -57,7 +57,17 @@ export default Vue.extend({
             }
         )
 
+        this.$alt.on('CopyToClipboard', (content: string) => {
+            this.$copyText(content)
+        })
+
         this.$alt.emit('loaded')
     },
 })
 </script>
+
+<style>
+#copyArea {
+    visibility: hidden;
+}
+</style>

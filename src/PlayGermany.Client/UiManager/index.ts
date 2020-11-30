@@ -20,6 +20,12 @@ alt.onServer('UiManager:Initialize', async (url: string) => {
     })
 })
 
+const uiCopyToClipboardHandler = (contents: string) => {
+    view.emit('CopyToClipboard', contents)
+}
+alt.on('UiManager:CopyToClipboard', uiCopyToClipboardHandler)
+alt.onServer('UiManager:CopyToClipboard', uiCopyToClipboardHandler)
+
 alt.on('UiManager:Emit', (eventName: string, ...args: any[]) => {
     view.emit(eventName, ...args)
 })

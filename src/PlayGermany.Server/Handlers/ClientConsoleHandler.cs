@@ -1,4 +1,5 @@
 ﻿using AltV.Net;
+using AltV.Net.Elements.Entities;
 using Microsoft.Extensions.Logging;
 using PlayGermany.Server.Entities;
 using System;
@@ -27,6 +28,7 @@ namespace PlayGermany.Server.Handlers
             {
                 case "pos":
                     player.Emit("UiManager:Info", $"Aktuelle Position: {player.Position}");
+                    player.Emit("UiManager:CopyToClipboard", player.Position.ToString());
                     break;
 
                 case "tpwp":
@@ -72,11 +74,29 @@ namespace PlayGermany.Server.Handlers
                 case "broadcast":
                     if (args.Length < 1)
                     {
-                        player.Emit("UiManager:Notification", "Du musst eine Nachricht angeben!");
+                        player.Emit("UiManager:Error", "Du musst eine Nachricht angeben!");
                         return;
                     }
                     var message = string.Join(' ', args);
                     Alt.EmitAllClients("UiManager:Notification", message);
+                    break;
+
+                case "car":
+                    if (args.Length < 1)
+                    {
+                        player.Emit("UiManager:Error", "Du musst ein Fahrzeug angeben!");
+                        return;
+                    }
+
+                    var pos = player.Position + new AltV.Net.Data.Position(3, 0, 0);
+                    try
+                    {
+                        _ = new Vehicle(Alt.Hash(args[0]), pos, player.Rotation);
+                    }
+                    catch (Exception ex)
+                    {
+                        player.Emit("UiManager:Error", ex.Message);
+                    }
                     break;
 
                 default:
