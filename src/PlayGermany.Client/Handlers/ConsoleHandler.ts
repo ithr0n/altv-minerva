@@ -15,6 +15,6 @@ alt.onServer('ConsoleHandler:TeleportToWaypoint', async () => {
 
         alt.emitServer('RequestTeleport', new alt.Vector3(coords.x, coords.y, z))
     } else {
-        alt.emit('UiManager:Notification', 'Du musst zuerst einen Marker setzen!')
+        alt.emit('UiManager:Error', 'Du musst zuerst einen Marker setzen!')
     }
 })

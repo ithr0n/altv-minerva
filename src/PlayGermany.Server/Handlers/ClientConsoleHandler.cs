@@ -26,7 +26,7 @@ namespace PlayGermany.Server.Handlers
             switch (command.ToLower())
             {
                 case "pos":
-                    player.Emit("UiManager:Notification", $"Aktuelle Position: {player.Position}");
+                    player.Emit("UiManager:Info", $"Aktuelle Position: {player.Position}");
                     break;
 
                 case "tpwp":
@@ -36,14 +36,14 @@ namespace PlayGermany.Server.Handlers
                 case "players":
                     Alt.GetAllPlayers().ToList().ForEach(otherPlayer =>
                     {
-                        player.Emit("UiManager:Notification", ((ServerPlayer)otherPlayer).RoleplayName);
+                        player.Emit("UiManager:Info", ((ServerPlayer)otherPlayer).RoleplayName);
                     });
                     break;
 
                 case "tp":
                     if (args.Length < 1)
                     {
-                        player.Emit("UiManager:Notification", "Du musst ein Ziel angeben");
+                        player.Emit("UiManager:Error", "Du musst ein Ziel angeben!");
                         return;
                     }
 
@@ -65,12 +65,22 @@ namespace PlayGermany.Server.Handlers
                     }
                     else
                     {
-                        player.Emit("UiManager:Notification", "Spieler nicht gefunden oder nicht eindeutig");
+                        player.Emit("UiManager:Error", "Spieler nicht gefunden oder nicht eindeutig");
                     }
                     break;
 
+                case "broadcast":
+                    if (args.Length < 1)
+                    {
+                        player.Emit("UiManager:Notification", "Du musst eine Nachricht angeben!");
+                        return;
+                    }
+                    var message = string.Join(' ', args);
+                    Alt.EmitAllClients("UiManager:Notification", message);
+                    break;
+
                 default:
-                    player.Emit("UiManager:Notification", "Dieser Befehl existiert nicht.");
+                    player.Emit("UiManager:Error", "Dieser Befehl existiert nicht.");
                     break;
             }
         }
