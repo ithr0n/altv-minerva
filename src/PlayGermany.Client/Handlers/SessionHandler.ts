@@ -18,7 +18,7 @@ alt.on('connectionComplete', async () => {
     natives.displayRadar(false)
 })
 
-alt.onServer('SessionHandler:PlayerSpawned', () => {
+alt.onServer('PlayerSpawned', () => {
     loginCamera.destroy()
 
     natives.setEntityAlpha(alt.Player.local.scriptID, 255, false)

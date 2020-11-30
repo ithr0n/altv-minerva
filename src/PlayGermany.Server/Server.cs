@@ -32,11 +32,12 @@ namespace PlayGermany.Server
 
             Configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", true, true)
+                .AddJsonFile("appsettings.json", false, true)
+                .AddJsonFile("appsettings.local.json", true, true)
                 .Build();
 
             var services = new ServiceCollection();
-            services.AddSingleton<IConfiguration>(Configuration);
+            services.AddSingleton(Configuration);
 
             ConfigureServices(services);
 
@@ -91,6 +92,7 @@ namespace PlayGermany.Server
         {
             services.AddLogging(config =>
             {
+                config.AddConfiguration(Configuration.GetSection("Logging"));
                 config.AddDebug();
                 config.AddConsole();
             });
@@ -105,8 +107,9 @@ namespace PlayGermany.Server
             services.RegisterAllTypes<IServerJob>(new[] { typeof(Server).Assembly });
 
             // register handlers
-            services.RegisterSingletonAndInstanciate<SessionHandler>();
-            services.RegisterSingletonAndInstanciate<VehicleHandler>();
+            services.AddSingletonAndInstanciate<SessionHandler>();
+            services.AddSingletonAndInstanciate<VehicleHandler>();
+            services.AddSingletonAndInstanciate<ClientConsoleHandler>();
         }
 
         private void TimerWorldSaveElapsed(object sender, ElapsedEventArgs e)

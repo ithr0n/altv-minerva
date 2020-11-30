@@ -18,7 +18,9 @@ namespace PlayGermany.Server.Handlers
         public SessionHandler(ILogger<SessionHandler> logger, IConfiguration configuration)
         {
             Alt.OnPlayerConnect += (player, reason) => OnPlayerConnect(player as ServerPlayer, reason);
-            Alt.OnClient<IPlayer>("SessionHandler:Spawn", OnSpawn);
+            Alt.OnPlayerDead += (player, killer, weapon) => OnPlayerDead(player as ServerPlayer, killer, weapon);
+            Alt.OnClient<ServerPlayer>("RequestSpawn", OnRequestSpawn);
+            Alt.OnClient<ServerPlayer, Vector3>("RequestTeleport", OnRequestTeleport);
 
             Logger = logger;
             Configuration = configuration;
@@ -42,20 +44,37 @@ namespace PlayGermany.Server.Handlers
 #endif
 
             Logger.LogInformation("Player connect: {socialClub} ({socialClubId})", player.Name, player.SocialClubId);
-            Logger.LogInformation("Requesting UI from {url}", uiUrl);
+            Logger.LogDebug("Requesting UI from {url}", uiUrl);
 
             player.Emit("UiManager:Initialize", uiUrl);
         }
 
-        private void OnSpawn(IPlayer player)
+        private void OnPlayerDead(ServerPlayer player, IEntity killer, uint weapon)
         {
-            Logger.LogInformation("OnSpawn");
+            OnRequestSpawn(player);
+        }
 
+        private void OnRequestSpawn(ServerPlayer player)
+        {
             player.Model = (uint)PedModel.FreemodeFemale01; // load from db
             player.Dimension = 0;
             player.SpawnAsync(SpawnPoint);
 
-            player.Emit("SessionHandler:PlayerSpawned");
+            player.RoleplayName = $"Spieler {Alt.GetAllPlayers().Count}";
+
+            player.Emit("PlayerSpawned");
+        }
+
+        private void OnRequestTeleport(ServerPlayer player, Vector3 targetPosition)
+        {
+            if (player.IsInVehicle)
+            {
+                player.Vehicle.Position = targetPosition;
+            }
+            else
+            {
+                player.Position = targetPosition;
+            }
         }
     }
 }

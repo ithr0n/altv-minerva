@@ -4,6 +4,7 @@
         <span>{{ debugMsg }}</span>
         <PlayerHud v-show="showPlayerHud" />
         <VehicleHud v-show="showVehicleHud" />
+        <Notifications />
     </div>
 </template>
 
@@ -12,6 +13,7 @@ import Vue from 'vue'
 /*import VuetifyExample from './components/VuetifyExample.vue'*/
 import PlayerHud from './components/PlayerHud.vue'
 import VehicleHud from './components/VehicleHud.vue'
+import Notifications from './components/Notifications.vue'
 
 export default Vue.extend({
     name: 'App',
@@ -20,6 +22,7 @@ export default Vue.extend({
         /*VuetifyExample,*/
         PlayerHud,
         VehicleHud,
+        Notifications,
     },
 
     data: () => ({
@@ -34,16 +37,27 @@ export default Vue.extend({
         this.$alt.on(
             'ToggleComponent',
             (component: string, state?: boolean) => {
+                _me.debugMsg = 'test'
                 if (_me.$data.hasOwnProperty('show' + component)) {
-                    if (state === undefined || state === null) {
-                        const oldState = !!_me.$data['show' + component]
+                    if (typeof state === 'undefined') {
+                        _me.debugMsg =
+                            'state was undefined (component: ' + component + ')'
+                        const oldState = !_me.$data['show' + component]
                         _me.$data['show' + component] = !oldState
                     } else {
+                        _me.debugMsg =
+                            'set ' + component + ' ' + state
+                                ? 'visible'
+                                : 'hidden'
                         _me.$data['show' + component] = state
                     }
+                } else {
+                    _me.debugMsg = 'missing property: show' + component
                 }
             }
         )
+
+        this.$alt.emit('loaded')
     },
 })
 </script>

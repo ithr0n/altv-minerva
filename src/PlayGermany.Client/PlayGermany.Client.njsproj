@@ -88,7 +88,9 @@
     <TypeScriptCompile Include="EntitySync\PropsStreamer.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Handlers\ConsoleHandler.ts" />
     <TypeScriptCompile Include="Handlers\SessionHandler.ts" />
+    <TypeScriptCompile Include="Handlers\VehicleHandler.ts" />
     <TypeScriptCompile Include="html\src\main.ts" />
     <TypeScriptCompile Include="html\src\plugins\alt.ts" />
     <TypeScriptCompile Include="html\src\plugins\vuetify.ts" />
@@ -97,6 +99,7 @@
     <TypeScriptCompile Include="html\src\shims-vue.d.ts" />
     <TypeScriptCompile Include="html\src\store\index.ts" />
     <TypeScriptCompile Include="html\src\store\modules\playerHud.ts" />
+    <TypeScriptCompile Include="loadIpls.ts" />
     <TypeScriptCompile Include="NativeUI\enums\Alignment.ts" />
     <TypeScriptCompile Include="NativeUI\enums\BadgeStyle.ts" />
     <TypeScriptCompile Include="NativeUI\enums\ChangeDirection.ts" />
@@ -133,6 +136,8 @@
     <TypeScriptCompile Include="NativeUI\utils\Size.ts" />
     <TypeScriptCompile Include="NativeUI\utils\UUIDV4.ts" />
     <TypeScriptCompile Include="UiManager\index.ts" />
+    <TypeScriptCompile Include="UiManager\Notifications.ts" />
+    <TypeScriptCompile Include="UiManager\PlayerHud.ts" />
     <TypeScriptCompile Include="UiManager\VehicleHud.ts" />
     <TypeScriptCompile Include="Utils\AltHelper.ts" />
     <TypeScriptCompile Include="Utils\AsyncHelper.ts" />

@@ -1,24 +1,31 @@
-﻿using PlayGermany.Server.ServerJobs.Base;
-using System;
+﻿using Microsoft.Extensions.Logging;
+using PlayGermany.Server.ServerJobs.Base;
 
 namespace PlayGermany.Server.ServerJobs
 {
     public class DemoJob
         : IServerJob
     {
+        public ILogger<DemoJob> Logger { get; }
+
+        public DemoJob(ILogger<DemoJob> logger)
+        {
+            Logger = logger;
+        }
+
         public void OnSave()
         {
-            Console.WriteLine("OnSave Demo");
+            Logger.LogInformation("OnSave Demo");
         }
 
         public void OnShutdown()
         {
-            Console.WriteLine("OnShutdown Demo");
+            Logger.LogInformation("OnShutdown Demo");
         }
 
         public void OnStartup()
         {
-            Console.WriteLine("OnStartup Demo");
+            Logger.LogInformation("OnStartup Demo");
         }
     }
 }

@@ -1,5 +1,7 @@
 <template>
     <div id="container">
+        <span class="playerName">{{ playerName }}</span>
+
         <span class="cashColor cashFont">$ {{ cashFormatted }}</span>
         <i class="cashColor mdi mdi-cash-usd"></i>
 
@@ -19,6 +21,7 @@ export default Vue.extend({
 
     data: () => {
         return {
+            playerName: 'Spielername',
             cash: 1000,
             hunger: 100,
             thirst: 100,
@@ -27,20 +30,23 @@ export default Vue.extend({
 
     computed: {
         cashFormatted() {
-            return this.cash.toFixed(2)
+            return this.cash?.toFixed(2)
         },
     },
 
     mounted() {
         const _me = this
-        this.$alt.on('PlayerHud:UpdateCash', cash => {
-            _me.cash = cash
-        })
-        this.$alt.on('PlayerHud:UpdateHunger', hunger => {
-            _me.hunger = hunger
-        })
-        this.$alt.on('PlayerHud:UpdateThirst', thirst => {
-            _me.thirst = thirst
+        this.$alt.on(
+            'PlayerHud:Update',
+            (cash: number, hunger: number, thirst: number) => {
+                _me.cash = cash
+                _me.hunger = hunger
+                _me.thirst = thirst
+            }
+        )
+
+        this.$alt.on('PlayerHud:SetName', (name: string) => {
+            _me.playerName = name
         })
     },
 })
@@ -49,14 +55,18 @@ export default Vue.extend({
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #container {
+    position: absolute;
+    top: 8vw;
+    right: 2vw;
     display: grid;
     grid-template-columns: 1fr auto;
-    position: absolute;
-    right: 30px;
-    top: 30px;
     font-weight: bold;
-    font-size: 37px;
+    font-size: 30px;
     text-align: right;
+}
+
+.playerName {
+    grid-column: 1 / 3;
 }
 
 .cashColor {

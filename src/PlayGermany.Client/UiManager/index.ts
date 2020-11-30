@@ -1,11 +1,13 @@
 import * as alt from 'alt-client'
-import natives from 'natives'
 
+import './PlayerHud'
 import './VehicleHud'
+import './Notifications'
 
 let view: alt.WebView = null
 
-alt.onServer('UiManager:Initialize', (url: string) => {
+alt.onServer('UiManager:Initialize', async (url: string) => {
+    // this call can take a while, thats why we have async function
     if (view) {
         view.destroy()
     }
@@ -13,7 +15,9 @@ alt.onServer('UiManager:Initialize', (url: string) => {
     view = new alt.WebView(url)
     view.focus()
 
-    alt.emitServer("SessionHandler:Spawn")
+    view.on("loaded", () => {
+        alt.emitServer("RequestSpawn")
+    })
 })
 
 alt.on('UiManager:Emit', (eventName: string, ...args: any[]) => {

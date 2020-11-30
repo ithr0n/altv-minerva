@@ -20,14 +20,14 @@ namespace PlayGermany.Server.Extensions
 
         private static readonly List<Type> servicesToInstanciate = new List<Type>();
 
-        public static void RegisterScopedAndInstanciate<T>(this ServiceCollection services)
+        public static void AddScopedAndInstanciate<T>(this ServiceCollection services)
             where T : class
         {
             services.AddScoped<T>();
             servicesToInstanciate.Add(typeof(T));
         }
 
-        public static void RegisterSingletonAndInstanciate<T>(this ServiceCollection services)
+        public static void AddSingletonAndInstanciate<T>(this ServiceCollection services)
             where T : class
         {
             services.AddSingleton<T>();
