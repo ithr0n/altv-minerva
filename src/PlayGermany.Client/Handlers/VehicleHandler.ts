@@ -19,3 +19,13 @@ alt.onServer('VehicleHandler:TeleportInto', (vehicle: alt.Vehicle, seat: number)
         }
     }, 5000);
 });
+
+alt.everyTick(() => {
+    let veh = alt.Player.local.vehicle;
+    if (veh && veh.valid) {
+        let power = veh.getStreamSyncedMeta("EnginePowerMultiplier");
+        if (!isNaN(+power)) {
+            natives.setVehicleCheatPowerIncrease(veh.scriptID, power);
+        }
+    }
+})

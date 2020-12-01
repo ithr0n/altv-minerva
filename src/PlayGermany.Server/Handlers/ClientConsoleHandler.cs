@@ -99,6 +99,20 @@ namespace PlayGermany.Server.Handlers
                     }
                     break;
 
+                case "speedcheat":
+                    if (args.Length < 1 || !int.TryParse(args[0], out int engineMultiplier) || engineMultiplier < 0 || engineMultiplier > 100)
+                    {
+                        player.Emit("UiManager:Error", "Du musst einen Wert (0-100) angeben!");
+                        return;
+                    }
+                    if (!player.IsInVehicle)
+                    {
+                        player.Emit("UiManager:Error", "Du musst in einem Fahrzeug sitzen!");
+                        return;
+                    }
+                    player.Vehicle.SetStreamSyncedMetaData("EnginePowerMultiplier", engineMultiplier);
+                    break;
+
                 default:
                     player.Emit("UiManager:Error", "Dieser Befehl existiert nicht.");
                     break;
