@@ -10,7 +10,8 @@
                     { pulseIcon: pulseHunger },
                     'mdi',
                     'mdi-food-drumstick',
-                    'hungerColor',
+                    { hungerColor: !displayHungerWarn },
+                    { warnColor: displayHungerWarn },
                 ]"
             ></i>
         </div>
@@ -21,7 +22,8 @@
                     { pulseIcon: pulseThirst },
                     'mdi',
                     'mdi-cup-water',
-                    'thirstColor',
+                    { thirstColor: !displayThirstWarn },
+                    { warnColor: displayThirstWarn },
                 ]"
             ></i>
         </div>
@@ -62,11 +64,17 @@ export default Vue.extend({
         displayThirst() {
             return this.thirst < 50
         },
-        pulseHunger() {
+        displayHungerWarn() {
             return this.hunger < 20
         },
+        displayThirstWarn() {
+            return this.hunger < 20
+        },
+        pulseHunger() {
+            return this.hunger < 10
+        },
         pulseThirst() {
-            return this.thirst < 20
+            return this.thirst < 10
         },
     },
 
@@ -115,6 +123,10 @@ export default Vue.extend({
 
 .thirstColor {
     color: rgb(20, 78, 169);
+}
+
+.warnColor {
+    color: rgb(255, 0, 0);
 }
 
 i {
