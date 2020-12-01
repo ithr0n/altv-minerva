@@ -53,7 +53,7 @@ alt.on('keyup', (key: KeyCodes) => {
         }
 
         case KeyCodes.VK_BACK: {
-            alt.emit('UiManager:ToggleComponent', 'PlayerHud')
+            //alt.emit('UiManager:ToggleComponent', 'PlayerHud') // demo code
         }
     }
 });
