@@ -45,6 +45,14 @@ alt.on('keyup', (key: KeyCodes) => {
             break
         }
 
+        case KeyCodes.VK_SUBTRACT: {
+            if (localPlayer.vehicle &&
+                natives.getPedInVehicleSeat(localPlayer.vehicle.scriptID, -1, undefined) === localPlayer.scriptID &&
+                natives.getVehicleClass(localPlayer.vehicle.scriptID) === 18) {
+                alt.emitServer("Vehicle:ToggleSiren")
+            }
+        }
+
         case KeyCodes.VK_BACK: {
             //alt.emit('UiManager:ToggleComponent', 'PlayerHud') // demo code
         }

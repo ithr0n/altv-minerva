@@ -16,6 +16,7 @@ namespace PlayGermany.Server.Handlers
             Alt.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
             Alt.OnPlayerChangeVehicleSeat += OnPlayerChangeVehicleSeat;
             Alt.OnClient<ServerPlayer, int>("Vehicle:ToggleIndicator", OnToggleIndicator);
+            Alt.OnClient<ServerPlayer>("Vehicle:ToggleSiren", OnToggleSiren);
 
             Logger = logger;
         }
@@ -51,5 +52,18 @@ namespace PlayGermany.Server.Handlers
                 }
 			}
 		}
+
+        private void OnToggleSiren(ServerPlayer player)
+        {
+            if (player.IsInVehicle)
+            {
+                if (!player.Vehicle.GetStreamSyncedMetaData("sirenDisabled", out bool oldState))
+                {
+                    oldState = false;
+                }
+
+                player.Vehicle.SetStreamSyncedMetaData("sirenDisabled", !oldState);
+            }
+        }
     }
 }
