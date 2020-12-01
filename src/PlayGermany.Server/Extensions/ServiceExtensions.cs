@@ -8,11 +8,16 @@ namespace PlayGermany.Server.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static void RegisterAllTypes<T>(this IServiceCollection services, Assembly[] assemblies,
-            ServiceLifetime lifetime = ServiceLifetime.Transient)
+        public static void AddAllTypes<T>(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Transient)
         {
-            var typesFromAssemblies = assemblies.SelectMany(a => a.DefinedTypes.Where(x => x.GetInterfaces().Contains(typeof(T))));
-            foreach (var type in typesFromAssemblies)
+            var typesOfInterface = Assembly.GetExecutingAssembly().DefinedTypes.Where(x => x.GetInterfaces().Contains(typeof(T)));
+            foreach (var type in typesOfInterface)
+            {
+                services.Add(new ServiceDescriptor(typeof(T), type, lifetime));
+            }
+
+            var typesOfClasses = Assembly.GetExecutingAssembly().GetTypes().Where(x => x.IsClass && !x.IsAbstract && x.IsSubclassOf(typeof(T)));
+            foreach (var type in typesOfClasses)
             {
                 services.Add(new ServiceDescriptor(typeof(T), type, lifetime));
             }

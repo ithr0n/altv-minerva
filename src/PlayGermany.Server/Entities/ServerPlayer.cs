@@ -10,6 +10,8 @@ namespace PlayGermany.Server.Entities
         public ServerPlayer(IntPtr nativePointer, ushort id)
             : base(nativePointer, id)
         {
+            Hunger = 100;
+            Thirst = 100;
         }
 
         public string RoleplayName
@@ -40,32 +42,44 @@ namespace PlayGermany.Server.Entities
             set => SetStreamSyncedMetaData("cash", value);
         }
 
-        public ushort Hunger
+        public int Hunger
         {
             get
             {
-                if (!GetStreamSyncedMetaData("hunger", out ushort result))
+                if (!GetStreamSyncedMetaData("hunger", out int result))
                 {
                     return 0;
                 }
 
                 return result;
             }
-            set => SetStreamSyncedMetaData("hunger", value);
+            set
+            {
+                var newValue = Math.Min(value, 0);
+                newValue = Math.Max(newValue, 100);
+
+                SetStreamSyncedMetaData("hunger", newValue);
+            }
         }
 
-        public ushort Thirst
+        public int Thirst
         {
             get
             {
-                if (!GetStreamSyncedMetaData("thirst", out ushort result))
+                if (!GetStreamSyncedMetaData("thirst", out int result))
                 {
                     return 0;
                 }
 
                 return result;
             }
-            set => SetStreamSyncedMetaData("thirst", value);
+            set
+            {
+                var newValue = Math.Min(value, 0);
+                newValue = Math.Max(newValue, 100);
+
+                SetStreamSyncedMetaData("thirst", newValue);
+            }
         }
 
         public PlayerVoiceLevel VoiceLevel

@@ -10,8 +10,8 @@ using PlayGermany.Server.Entities;
 using PlayGermany.Server.ServerJobs.Base;
 using PlayGermany.Server.Extensions;
 using System.IO;
-using System.Timers;
 using PlayGermany.Server.Handlers;
+using PlayGermany.Server.ScheduledJobs.Base;
 
 namespace PlayGermany.Server
 {
@@ -55,23 +55,6 @@ namespace PlayGermany.Server
             {
                 job.OnStartup();
             }
-
-            // initialize world save
-            var saveInterval = 1000 * 60 * 5; // default 5 mins
-
-            if (!int.TryParse(Configuration.GetSection("World:SaveInterval").Value, out saveInterval))
-            {
-                Logger.LogWarning("No world save interval configured in appsettings.json, taking fallback value of 5 mins.");
-            }
-
-            var timer = new Timer()
-            {
-                AutoReset = true,
-                Enabled = true,
-                Interval = saveInterval
-            };
-
-            timer.Elapsed += TimerWorldSaveElapsed;
         }
 
         public override void OnTick()
@@ -97,31 +80,23 @@ namespace PlayGermany.Server
                 config.AddConsole();
             });
 
-            services.AddEntityFrameworkMySql();
             services.AddDbContext<DatabaseContext>(options =>
             {
                 options.UseMySql(Configuration.GetConnectionString("Database"), MariaDbServerVersion.LatestSupportedServerVersion);
             });
 
             // register all server jobs
-            services.RegisterAllTypes<IServerJob>(new[] { typeof(Server).Assembly });
+            services.AddAllTypes<IServerJob>();
+
+            // register scheduled jobs
+            services.AddSingletonAndInstanciate<ScheduleJobManager>();
+            services.AddAllTypes<BaseScheduledJob>();
 
             // register handlers
             services.AddSingletonAndInstanciate<SessionHandler>();
             services.AddSingletonAndInstanciate<VehicleHandler>();
             services.AddSingletonAndInstanciate<ClientConsoleHandler>();
             services.AddSingletonAndInstanciate<VoiceHandler>();
-        }
-
-        private void TimerWorldSaveElapsed(object sender, ElapsedEventArgs e)
-        {
-            var serverJobs = _serviceProvider.GetServices<IServerJob>();
-            foreach (var job in serverJobs)
-            {
-                job.OnSave();
-            }
-
-            Logger.LogDebug("World save at {CurrentDate}", System.DateTime.Now);
         }
 
         #region Entities
