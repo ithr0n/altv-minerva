@@ -91,7 +91,7 @@ namespace PlayGermany.Server.Handlers
                     var pos = player.Position + new AltV.Net.Data.Position(3, 0, 0);
                     try
                     {
-                        _ = new Vehicle(Alt.Hash(args[0]), pos, player.Rotation);
+                        _ = new ServerVehicle(Alt.Hash(args[0]), pos, player.Rotation);
                     }
                     catch (Exception ex)
                     {
