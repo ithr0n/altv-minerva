@@ -15,7 +15,7 @@ namespace PlayGermany.Server.Handlers
             Alt.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
             Alt.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
             Alt.OnPlayerChangeVehicleSeat += OnPlayerChangeVehicleSeat;
-            Alt.OnClient<ServerPlayer, int>("ToggleIndicator", OnToggleIndicator);
+            Alt.OnClient<ServerPlayer, int>("Vehicle:ToggleIndicator", OnToggleIndicator);
 
             Logger = logger;
         }
