@@ -31,7 +31,7 @@ namespace PlayGermany.Server.Entities
             }
             set
             {
-                SetStreamSyncedMetaData("indicators", value);
+                SetStreamSyncedMetaData("indicators", (int)value);
             }
         }
     }
