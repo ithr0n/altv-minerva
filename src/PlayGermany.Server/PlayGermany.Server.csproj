@@ -12,6 +12,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>..\..\dist\resources\playgermany\server\</OutputPath>
+    <Optimize>false</Optimize>
   </PropertyGroup>
 
   <ItemGroup>
