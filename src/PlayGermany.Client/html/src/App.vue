@@ -42,7 +42,7 @@ export default Vue.extend({
                     if (typeof state === 'undefined') {
                         _me.debugMsg =
                             'state was undefined (component: ' + component + ')'
-                        const oldState = !_me.$data['show' + component]
+                        const oldState = _me.$data['show' + component]
                         _me.$data['show' + component] = !oldState
                     } else {
                         _me.debugMsg =

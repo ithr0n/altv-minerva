@@ -13,7 +13,8 @@ alt.onServer('UiManager:Initialize', async (url: string) => {
     }
 
     view = new alt.WebView(url)
-    view.focus()
+    //view.focus()
+    //view.unfocus()
 
     view.on("loaded", () => {
         alt.emitServer("RequestSpawn")
@@ -36,4 +37,8 @@ alt.on('UiManager:ShowComponent', (component: string) => {
 
 alt.on('UiManager:HideComponent', (component: string) => {
     view.emit('ToggleComponent', component, false)
+})
+
+alt.on('UiManager:ToggleComponent', (component: string) => {
+    view.emit('ToggleComponent', component)
 })
