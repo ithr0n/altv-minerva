@@ -4,9 +4,6 @@ using PlayGermany.Server.ScheduledJobs.Base;
 using PlayGermany.Server.ServerJobs.Base;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PlayGermany.Server.ScheduledJobs
 {

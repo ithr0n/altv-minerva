@@ -55,6 +55,12 @@ namespace PlayGermany.Server
             {
                 job.OnStartup();
             }
+
+            var scheduleJobManager = _serviceProvider.GetService<ScheduleJobManager>();
+            if (scheduleJobManager != null)
+            {
+                scheduleJobManager.EnableWorker();
+            }
         }
 
         public override void OnTick()

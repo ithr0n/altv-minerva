@@ -1,5 +1,4 @@
-﻿using AltV.Net;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -21,8 +20,15 @@ namespace PlayGermany.Server.ScheduledJobs.Base
             _scheduledJobs = new ConcurrentBag<BaseScheduledJob>(scheduledJobs);
 
             _worker = new Thread(OnWork) { IsBackground = true };
-            _worker.Start();
             Logger = logger;
+        }
+
+        public void EnableWorker()
+        {
+            if (_worker != null && !_worker.IsAlive)
+            {
+                _worker.Start();
+            }
         }
 
         private void OnWork()
@@ -31,6 +37,12 @@ namespace PlayGermany.Server.ScheduledJobs.Base
             {
                 foreach (var job in _scheduledJobs)
                 {
+                    if (job.LastExecution == DateTime.MinValue)
+                    {
+                        // skip first execution directly on server startup
+                        job.LastExecution = DateTime.Now;
+                    }
+
                     try
                     {
                         if (job.LastExecution + job.Interval < DateTime.Now)
