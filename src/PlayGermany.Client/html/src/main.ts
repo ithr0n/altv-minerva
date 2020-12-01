@@ -3,6 +3,7 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import alt from './plugins/alt'
+import VueVisible from 'vue-visible'
 import VueClipboard from 'vue-clipboard2'
 import Toast, { TYPE } from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
@@ -11,6 +12,7 @@ import store from './store'
 Vue.config.productionTip = false
 
 Vue.use(alt)
+Vue.use(VueVisible)
 Vue.use(VueClipboard)
 Vue.use(Toast, {
     toastDefaults: {
@@ -47,7 +49,7 @@ Vue.use(Toast, {
             },
         },
         [TYPE.DEFAULT]: {
-            timeout: 30000,
+            timeout: 3000,
             hideProgressBar: true,
             showCloseButtonOnHover: true,
             icon: {

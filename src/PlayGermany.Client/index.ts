@@ -5,6 +5,7 @@ import './loadIpls'
 import './Handlers/SessionHandler'
 import './Handlers/ConsoleHandler'
 import './Handlers/VehicleHandler'
+import './Handlers/KeyHandler'
 
 import './EntitySync/PropsStreamer'
 

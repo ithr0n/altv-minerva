@@ -3,7 +3,8 @@ import * as natives from 'natives'
 import * as NativesHelper from '../Utils/NativesHelper'
 
 alt.on('consoleCommand', (command: string, ...args: string[]) => {
-    alt.emitServer('ClientConsoleHandler:Command', command, ...args)
+    alt.log(JSON.stringify(args))
+    alt.emitServer('ClientConsoleHandler:Command', command, args)
 })
 
 alt.onServer('ConsoleHandler:TeleportToWaypoint', async () => {

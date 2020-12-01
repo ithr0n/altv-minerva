@@ -110,6 +110,7 @@ namespace PlayGermany.Server
             services.AddSingletonAndInstanciate<SessionHandler>();
             services.AddSingletonAndInstanciate<VehicleHandler>();
             services.AddSingletonAndInstanciate<ClientConsoleHandler>();
+            services.AddSingletonAndInstanciate<VoiceHandler>();
         }
 
         private void TimerWorldSaveElapsed(object sender, ElapsedEventArgs e)

@@ -19,19 +19,6 @@ let handbrakeActive = false
 
 alt.on('keydown', (key) => {
     if (key === KeyCodes.VK_SPACE) handbrakeActive = true
-
-    if (key === KeyCodes.VK_ADD) {
-        let currenctVehicle = alt.Player.local.vehicle
-
-        if (currenctVehicle) {
-            let isRunning = natives.getIsVehicleEngineRunning(currenctVehicle.scriptID)
-            if (isRunning) {
-                natives.setVehicleEngineOn(currenctVehicle.scriptID, false, true, true)
-            } else {
-                natives.setVehicleEngineOn(currenctVehicle.scriptID, true, true, true)
-            }
-        }
-    }
 })
 alt.on('keyup', (key) => {
     if (key === KeyCodes.VK_SPACE) handbrakeActive = false

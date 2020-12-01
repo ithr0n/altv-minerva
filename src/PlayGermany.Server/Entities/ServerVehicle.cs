@@ -4,7 +4,7 @@ using System;
 
 namespace PlayGermany.Server.Entities
 {
-    internal class ServerVehicle
+    public class ServerVehicle
         : Vehicle
     {
         public ServerVehicle(IntPtr nativePointer, ushort id)

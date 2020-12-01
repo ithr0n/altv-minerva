@@ -1,15 +1,38 @@
 <template>
     <div id="container">
-        <span class="playerName">{{ playerName }}</span>
+        <div class="playerName">{{ playerName }}</div>
 
-        <span class="cashColor cashFont">$ {{ cashFormatted }}</span>
-        <i class="cashColor mdi mdi-cash-usd"></i>
+        <div class="cash">$ {{ cashFormatted }}</div>
 
-        <span class="hungerColor needsFont">{{ hunger }}&nbsp;%</span>
-        <i class="hungerColor mdi mdi-food-drumstick"></i>
+        <div v-visible="displayHunger" :class="{ pulseElement: pulseHunger }">
+            <i
+                :class="[
+                    { pulseIcon: pulseHunger },
+                    'mdi',
+                    'mdi-food-drumstick',
+                    'hungerColor',
+                ]"
+            ></i>
+        </div>
 
-        <span class="thirstColor needsFont">{{ thirst }}&nbsp;%</span>
-        <i class="thirstColor mdi mdi-cup-water"></i>
+        <div v-visible="displayThirst" :class="{ pulseElement: pulseThirst }">
+            <i
+                :class="[
+                    { pulseIcon: pulseThirst },
+                    'mdi',
+                    'mdi-cup-water',
+                    'thirstColor',
+                ]"
+            ></i>
+        </div>
+
+        <div>
+            <i v-show="voiceIndex === 0" class="mdi mdi-volume-off"></i>
+            <i v-show="voiceIndex === 1" class="mdi mdi-volume-low"></i>
+            <i v-show="voiceIndex === 2" class="mdi mdi-volume-medium"></i>
+            <i v-show="voiceIndex === 3" class="mdi mdi-volume-high"></i>
+            <i v-show="voiceIndex === 4" class="mdi mdi-volume-vibrate"></i>
+        </div>
     </div>
 </template>
 
@@ -25,6 +48,7 @@ export default Vue.extend({
             cash: 1000,
             hunger: 100,
             thirst: 100,
+            voiceIndex: 2,
         }
     },
 
@@ -32,21 +56,30 @@ export default Vue.extend({
         cashFormatted() {
             return this.cash?.toFixed(2)
         },
+        displayHunger() {
+            return this.hunger < 50
+        },
+        displayThirst() {
+            return this.thirst < 50
+        },
+        pulseHunger() {
+            return this.hunger < 20
+        },
+        pulseThirst() {
+            return this.thirst < 20
+        },
     },
 
     mounted() {
         const _me = this
-        this.$alt.on(
-            'PlayerHud:Update',
-            (cash: number, hunger: number, thirst: number) => {
-                _me.cash = cash
-                _me.hunger = hunger
-                _me.thirst = thirst
+        this.$alt.on('PlayerHud:SetData', (key: string, value: string) => {
+            if (_me.$data.hasOwnProperty(key)) {
+                if (isNaN(+value)) {
+                    _me.$data[key] = String(value)
+                } else {
+                    _me.$data[key] = Number(value)
+                }
             }
-        )
-
-        this.$alt.on('PlayerHud:SetName', (name: string) => {
-            _me.playerName = name
         })
     },
 })
@@ -56,24 +89,20 @@ export default Vue.extend({
 <style scoped>
 #container {
     position: absolute;
-    top: 8vw;
+    top: 5vw;
     right: 2vw;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    font-weight: bold;
-    font-size: 30px;
     text-align: right;
 }
 
 .playerName {
-    grid-column: 1 / 3;
+    font-weight: bold;
+    font-size: 30px;
+    font-style: italic;
 }
 
-.cashColor {
+.cash {
     color: rgb(0, 168, 0);
-}
-
-.cashFont {
+    font-size: 42px;
     font-family: 'Pricedown', arial;
     text-align: right;
     text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000,
@@ -81,23 +110,39 @@ export default Vue.extend({
 }
 
 .hungerColor {
-    color: orange;
+    color: rgb(157, 92, 0);
 }
 
 .thirstColor {
-    color: cornflowerblue;
-}
-
-.needsFont {
-    font-family: 'Pricedown', arial;
-    text-align: right;
-    text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000,
-        2px 2px 0 #000;
+    color: rgb(20, 78, 169);
 }
 
 i {
     text-align: center;
     color: darkslategray;
     margin-left: 8px;
+    font-size: 50px;
+}
+
+.pulseIcon {
+    text-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    animation: pulseShadow 0.3s infinite alternate;
+}
+
+.pulseElement {
+    transform: scale(0.9);
+    animation: pulseSize 0.3s infinite alternate;
+}
+
+@keyframes pulseShadow {
+    to {
+        text-shadow: 0 0 80px rgba(151, 0, 0, 1);
+    }
+}
+
+@keyframes pulseSize {
+    to {
+        transform: scale(1);
+    }
 }
 </style>

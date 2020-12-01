@@ -1,9 +1,10 @@
 ﻿using AltV.Net.Elements.Entities;
+using PlayGermany.Server.Enums;
 using System;
 
 namespace PlayGermany.Server.Entities
 {
-    internal class ServerPlayer
+    public class ServerPlayer
         : Player
     {
         public ServerPlayer(IntPtr nativePointer, ushort id)
@@ -65,6 +66,23 @@ namespace PlayGermany.Server.Entities
                 return result;
             }
             set => SetStreamSyncedMetaData("thirst", value);
+        }
+
+        public PlayerVoiceLevel VoiceLevel
+        {
+            get
+            {
+                if (!GetStreamSyncedMetaData("voiceIndex", out int result))
+                {
+                    return PlayerVoiceLevel.Mute;
+                }
+
+                return (PlayerVoiceLevel)result;
+            }
+            set
+            {
+                SetStreamSyncedMetaData("voiceIndex", (int)value);
+            }
         }
     }
 }

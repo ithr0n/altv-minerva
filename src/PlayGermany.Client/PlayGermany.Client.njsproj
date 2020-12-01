@@ -89,6 +89,7 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Handlers\ConsoleHandler.ts" />
+    <TypeScriptCompile Include="Handlers\KeyHandler.ts" />
     <TypeScriptCompile Include="Handlers\SessionHandler.ts" />
     <TypeScriptCompile Include="Handlers\VehicleHandler.ts" />
     <TypeScriptCompile Include="html\src\main.ts" />
