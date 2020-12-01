@@ -26,10 +26,6 @@ namespace PlayGermany.Server
 
         public Server()
         {
-#if DEBUG
-            System.Diagnostics.Debugger.Launch();
-#endif
-
             Configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", false, true)
