@@ -30,8 +30,8 @@ alt.everyTick(() => {
     if (vehicle) {
         const [_, lowBeam, highBeam] = natives.getVehicleLightsState(vehicle.scriptID, undefined, undefined)
         let lightState = 0
-        if (lowBeam && !highBeam) lightState = 1
-        if (lowBeam && highBeam) lightState = 2
+        if (lowBeam) lightState = 1
+        if (highBeam) lightState = 2
 
         alt.emit('UiManager:Emit', 'VehicleHud:Update', {
             gear: vehicle.gear,

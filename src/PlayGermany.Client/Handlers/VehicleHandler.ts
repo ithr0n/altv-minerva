@@ -31,15 +31,13 @@ alt.everyTick(() => {
 })
 
 alt.on('streamSyncedMetaChange', (entity: alt.Entity, key: string, value: string) => {
-    if (entity instanceof alt.Vehicle) {
+    if (!(entity instanceof alt.Vehicle)) {
         return
     }
 
-    if (key === 'indicators' && !isNaN(+value)) {
-        const left = (+value & (1 << 0)) > 0
-        const right = (+value & (1 << 1)) > 0
-
-        natives.setVehicleIndicatorLights(entity.scriptID, 0, right);
-        natives.setVehicleIndicatorLights(entity.scriptID, 1, left);
+    const valueNumber = Number(value)
+    if (key === 'indicators' && !isNaN(valueNumber)) {
+        natives.setVehicleIndicatorLights(entity.scriptID, 1, (valueNumber >= 2))
+        natives.setVehicleIndicatorLights(entity.scriptID, 0, (valueNumber === 3 || valueNumber === 1))
     }
 })
