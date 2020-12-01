@@ -1,0 +1,13 @@
+﻿using System;
+
+namespace PlayGermany.Server.Enums
+{
+    [Flags]
+    public enum VehicleIndicator
+    {
+        None = 0x00,
+        Right = 0x01,
+        Left = 0x10,
+        Hazard = Left | Right
+    }
+}

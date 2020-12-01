@@ -9,7 +9,7 @@ alt.onServer('PlayerSpawned', () => {
     alt.emit('UiManager:Emit', 'PlayerHud:SetData', 'voiceIndex', alt.Player.local.getStreamSyncedMeta("voiceIndex"))
 })
 
-alt.on('streamSyncedMetaChange', (entity, key, value) => {
+alt.on('streamSyncedMetaChange', (entity: alt.Entity, key: string, value: string) => {
     if (entity !== alt.Player.local) {
         return
     }

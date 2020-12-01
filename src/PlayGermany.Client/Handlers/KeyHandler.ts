@@ -4,6 +4,8 @@ import KeyCodes from '../Utils/KeyCodes'
 
 const localPlayer = alt.Player.local
 
+const vehicleClassesWithIndicators: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 17, 18, 19, 20]
+
 alt.on('keyup', (key: KeyCodes) => {
     if (!alt.gameControlsEnabled()) {
         return
@@ -29,26 +31,17 @@ alt.on('keyup', (key: KeyCodes) => {
         }
 
         case KeyCodes.VK_NUMPAD4: {
-            const vehicle = localPlayer.vehicle
-            if (vehicle && natives.getPedInVehicleSeat(vehicle.scriptID, -1, undefined) === localPlayer.scriptID) {
-                alt.emitServer("Vehicle:ToggleIndicator", 1);
-            }
+            toggleIndicator(2)
             break
         }
 
         case KeyCodes.VK_NUMPAD5: {
-            const vehicle = localPlayer.vehicle
-            if (vehicle && natives.getPedInVehicleSeat(vehicle.scriptID, -1, undefined) === localPlayer.scriptID) {
-                alt.emitServer("Vehicle:ToggleIndicator", 2);
-            }
+            toggleIndicator(3)
             break
         }
 
         case KeyCodes.VK_NUMPAD6: {
-            const vehicle = localPlayer.vehicle
-            if (vehicle && natives.getPedInVehicleSeat(vehicle.scriptID, -1, undefined) === localPlayer.scriptID) {
-                alt.emitServer("Vehicle:ToggleIndicator", 0);
-            }
+            toggleIndicator(1)
             break
         }
 
@@ -57,3 +50,13 @@ alt.on('keyup', (key: KeyCodes) => {
         }
     }
 });
+
+const toggleIndicator = (index: number) => {
+    const vehicle = localPlayer.vehicle
+    const vehicleClass = natives.getVehicleClass(vehicle.scriptID)
+    if (vehicleClassesWithIndicators.includes(vehicleClass)) {
+        if (vehicle && natives.getPedInVehicleSeat(vehicle.scriptID, -1, undefined) === localPlayer.scriptID) {
+            alt.emitServer("Vehicle:ToggleIndicator", index);
+        }
+    }
+}

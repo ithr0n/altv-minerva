@@ -1,6 +1,8 @@
 ﻿using AltV.Net;
 using AltV.Net.Elements.Entities;
 using Microsoft.Extensions.Logging;
+using PlayGermany.Server.Entities;
+using PlayGermany.Server.Enums;
 
 namespace PlayGermany.Server.Handlers
 {
@@ -13,6 +15,7 @@ namespace PlayGermany.Server.Handlers
             Alt.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
             Alt.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
             Alt.OnPlayerChangeVehicleSeat += OnPlayerChangeVehicleSeat;
+            Alt.OnClient<ServerPlayer, int>("ToggleIndicator", OnToggleIndicator);
 
             Logger = logger;
         }
@@ -31,5 +34,22 @@ namespace PlayGermany.Server.Handlers
         {
             player.Emit("playerChangeVehicleSeat", vehicle, (int)oldSeat, (int)newSeat);
         }
+
+        private void OnToggleIndicator(ServerPlayer player, int indicatorFlag)
+        {
+			if (player.IsInVehicle && player.Seat == 1)
+			{
+				var veh = (ServerVehicle)player.Vehicle;
+
+                if (veh.ActiveIndicators == (VehicleIndicator)indicatorFlag)
+                {
+                    veh.ActiveIndicators = VehicleIndicator.None;
+                }
+                else
+                {
+                    veh.ActiveIndicators = (VehicleIndicator)indicatorFlag;
+                }
+			}
+		}
     }
 }
