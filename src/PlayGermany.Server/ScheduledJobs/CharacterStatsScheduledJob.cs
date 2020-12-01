@@ -31,18 +31,18 @@ namespace PlayGermany.Server.ScheduledJobs
                     var newHunger = serverPlayer.Hunger - _random.Next(2, 7);
                     var newThirst = serverPlayer.Thirst - _random.Next(4, 11);
 
-                    serverPlayer.Hunger = Math.Min(newHunger, 0);
-                    serverPlayer.Thirst -= Math.Min(newThirst, 0);
-                }
+                    serverPlayer.Hunger = Math.Max(newHunger, 0);
+                    serverPlayer.Thirst = Math.Max(newThirst, 0);
 
-                if (serverPlayer.Hunger == 0)
-                {
-                    serverPlayer.Health -= 10;
-                }
+                    if (serverPlayer.Hunger == 0)
+                    {
+                        serverPlayer.Health -= 10;
+                    }
 
-                if (serverPlayer.Thirst == 0)
-                {
-                    serverPlayer.Health -= 30;
+                    if (serverPlayer.Thirst == 0)
+                    {
+                        serverPlayer.Health -= 30;
+                    }
                 }
             }
         }
