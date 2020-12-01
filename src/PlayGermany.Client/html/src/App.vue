@@ -67,6 +67,10 @@ export default Vue.extend({
 </script>
 
 <style>
+* {
+    user-select: none;
+}
+
 #copyArea {
     visibility: hidden;
 }
