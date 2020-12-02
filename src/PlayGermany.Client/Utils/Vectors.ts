@@ -18,7 +18,7 @@ export function radToDeg(radians: number) {
 }
 
 function normalizeVector(vector: alt.Vector3) {
-    const mag = natives.vmag(vector.x, vector.y, vector.z)
+    const mag = natives.vmag(vector.x, vector.y, vector.z) // todo: dont use natives
 
     return { x: vector.x / mag, y: vector.y / mag, z: vector.z / mag }
 }
