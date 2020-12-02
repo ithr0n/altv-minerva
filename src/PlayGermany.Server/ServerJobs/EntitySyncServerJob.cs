@@ -22,6 +22,7 @@ namespace PlayGermany.Server.ServerJobs
 
         public void OnShutdown()
         {
+            AltEntitySync.Stop();
         }
 
         public void OnStartup()

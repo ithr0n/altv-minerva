@@ -13,7 +13,8 @@ namespace PlayGermany.Server.ScheduledJobs.Base
         private readonly Thread _worker;
         private readonly int _minimalInterval = 1;
 
-        public ILogger<ScheduleJobManager> Logger { get; }
+        public CancellationTokenSource Cancellation { get; private set; }
+        private ILogger<ScheduleJobManager> Logger { get; }
 
         public ScheduleJobManager(ILogger<ScheduleJobManager> logger, IEnumerable<BaseScheduledJob> scheduledJobs)
         {
@@ -27,16 +28,22 @@ namespace PlayGermany.Server.ScheduledJobs.Base
         {
             if (_worker != null && !_worker.IsAlive)
             {
+                Cancellation = new CancellationTokenSource();
                 _worker.Start();
             }
         }
 
         private void OnWork()
         {
-            while (true)
+            while (!Cancellation.IsCancellationRequested)
             {
                 foreach (var job in _scheduledJobs)
                 {
+                    if (Cancellation.IsCancellationRequested)
+                    {
+                        break;
+                    }
+
                     if (job.LastExecution == DateTime.MinValue)
                     {
                         // skip first execution directly on server startup
@@ -62,7 +69,10 @@ namespace PlayGermany.Server.ScheduledJobs.Base
                     }
                 }
 
-                Thread.Sleep(_minimalInterval * 1000);
+                if (!Cancellation.IsCancellationRequested)
+                {
+                    Thread.Sleep(_minimalInterval * 1000);
+                }
             }
         }
 

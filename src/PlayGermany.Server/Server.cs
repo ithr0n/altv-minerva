@@ -52,10 +52,10 @@ namespace PlayGermany.Server
                 job.OnStartup();
             }
 
-            var scheduleJobManager = _serviceProvider.GetService<ScheduleJobManager>();
-            if (scheduleJobManager != null)
+            var scheduledJobsManager = _serviceProvider.GetService<ScheduleJobManager>();
+            if (scheduledJobsManager != null)
             {
-                scheduleJobManager.EnableWorker();
+                scheduledJobsManager.EnableWorker();
             }
         }
 
@@ -70,6 +70,12 @@ namespace PlayGermany.Server
             foreach (var job in serverJobs)
             {
                 job.OnShutdown();
+            }
+
+            var scheduledJobsManager = _serviceProvider.GetService<ScheduleJobManager>();
+            if (scheduledJobsManager != null)
+            {
+                scheduledJobsManager.Cancellation.Cancel();
             }
         }
 
@@ -87,11 +93,8 @@ namespace PlayGermany.Server
                 options.UseMySql(Configuration.GetConnectionString("Database"), MariaDbServerVersion.LatestSupportedServerVersion);
             });
 
-            // register all server jobs
+            // register all server and scheduled jobs
             services.AddAllTypes<IServerJob>();
-
-            // register scheduled jobs
-            services.AddSingletonAndInstanciate<ScheduleJobManager>();
             services.AddAllTypes<BaseScheduledJob>();
 
             // register handlers

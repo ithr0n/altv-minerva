@@ -9,7 +9,7 @@ namespace PlayGermany.Server.Handlers
 {
     public class ClientConsoleHandler
     {
-        public ILogger<ClientConsoleHandler> Logger { get; }
+        private ILogger<ClientConsoleHandler> Logger { get; }
 
         public ClientConsoleHandler(ILogger<ClientConsoleHandler> logger)
         {

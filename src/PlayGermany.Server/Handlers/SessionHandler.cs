@@ -11,8 +11,7 @@ namespace PlayGermany.Server.Handlers
 {
     public class SessionHandler
     {
-        public ILogger<SessionHandler> Logger { get; }
-        public IConfiguration Configuration { get; }
+        private ILogger<SessionHandler> Logger { get; }
         public Vector3 SpawnPoint { get; }
 
         public SessionHandler(ILogger<SessionHandler> logger, IConfiguration configuration)
@@ -23,12 +22,11 @@ namespace PlayGermany.Server.Handlers
             Alt.OnClient<ServerPlayer, Vector3>("RequestTeleport", OnRequestTeleport);
 
             Logger = logger;
-            Configuration = configuration;
 
             if (
-                float.TryParse(Configuration.GetSection("World:SpawnPoint:X").Value, out float spX) &&
-                float.TryParse(Configuration.GetSection("World:SpawnPoint:Y").Value, out float spY) &&
-                float.TryParse(Configuration.GetSection("World:SpawnPoint:Z").Value, out float spZ)
+                float.TryParse(configuration.GetSection("World:SpawnPoint:X").Value, out float spX) &&
+                float.TryParse(configuration.GetSection("World:SpawnPoint:Y").Value, out float spY) &&
+                float.TryParse(configuration.GetSection("World:SpawnPoint:Z").Value, out float spZ)
                 )
             {
                 SpawnPoint = new Vector3(spX, spY, spZ);

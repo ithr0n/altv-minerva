@@ -12,7 +12,7 @@ namespace PlayGermany.Server.ScheduledJobs
     {
         private readonly IEnumerable<IServerJob> _serverJobs;
 
-        public ILogger<WorldSaverScheduledJob> Logger { get; }
+        private ILogger<WorldSaverScheduledJob> Logger { get; }
 
         public WorldSaverScheduledJob(ILogger<WorldSaverScheduledJob> logger, IConfiguration serverConfig, IEnumerable<IServerJob> serverJobs)
             : base(TimeSpan.FromMilliseconds(double.Parse(serverConfig.GetSection("World:SaveInterval")?.Value ?? "300000")))

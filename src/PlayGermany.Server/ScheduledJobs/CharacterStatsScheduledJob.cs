@@ -11,7 +11,7 @@ namespace PlayGermany.Server.ScheduledJobs
     {
         private readonly Random _random;
 
-        public ILogger<CharacterStatsScheduledJob> Logger { get; }
+        private ILogger<CharacterStatsScheduledJob> Logger { get; }
 
         public CharacterStatsScheduledJob(ILogger<CharacterStatsScheduledJob> logger)
             : base(TimeSpan.FromMinutes(1))

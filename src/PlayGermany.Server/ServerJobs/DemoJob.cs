@@ -6,7 +6,7 @@ namespace PlayGermany.Server.ServerJobs
     public class DemoJob
         : IServerJob
     {
-        public ILogger<DemoJob> Logger { get; }
+        private ILogger<DemoJob> Logger { get; }
 
         public DemoJob(ILogger<DemoJob> logger)
         {

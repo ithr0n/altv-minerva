@@ -9,6 +9,7 @@ namespace PlayGermany.Server.Extensions
     public static class ServiceCollectionExtensions
     {
         public static void AddAllTypes<T>(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Transient)
+            where T : class
         {
             var typesOfInterface = Assembly.GetExecutingAssembly().DefinedTypes.Where(x => x.GetInterfaces().Contains(typeof(T)));
             foreach (var type in typesOfInterface)

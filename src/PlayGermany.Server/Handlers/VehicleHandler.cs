@@ -8,7 +8,7 @@ namespace PlayGermany.Server.Handlers
 {
     public class VehicleHandler
     {
-        public ILogger<VehicleHandler> Logger { get; }
+        private ILogger<VehicleHandler> Logger { get; }
 
         public VehicleHandler(ILogger<VehicleHandler> logger)
         {
