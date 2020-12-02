@@ -68,7 +68,7 @@ export default Vue.extend({
             return this.hunger < 20
         },
         displayThirstWarn() {
-            return this.hunger < 20
+            return this.thirst < 20
         },
         pulseHunger() {
             return this.hunger < 10
