@@ -1,6 +1,6 @@
-﻿namespace PlayGermany.Server.EntitySync
+﻿namespace PlayGermany.Server.Enums
 {
-    public enum EntityTypes
+    public enum EntitySyncType
         : ulong
     {
         // based on https://github.com/lameule123/altv-csharp-streamer

@@ -2,7 +2,7 @@
 using AltV.Net.Elements.Entities;
 using System;
 
-namespace PlayGermany.Server.Entities
+namespace PlayGermany.Server.Entities.Factories
 {
     public class ServerPlayerFactory
         : IEntityFactory<IPlayer>
