@@ -1,0 +1,4 @@
+[submodule "dist/data/dumps"]
+	path = dist/data/dumps
+	url = https://github.com/DurtyFree/gta-v-data-dumps.git
+	branch = master
