@@ -67,3 +67,14 @@ alt.on('gameEntityCreate', (entity: alt.Entity) => {
     } else if (entity.hasStreamSyncedMeta('sirenDisabled'))
         natives.setVehicleHasMutedSirens(entity.scriptID, !!entity.getStreamSyncedMeta('sirenDisabled'))
 });
+
+// store seat index
+alt.onServer('playerEnteredVehicle', (vehicle: alt.Vehicle, seat: number) => {
+    alt.Player.local.setMeta('seat', seat)
+})
+alt.onServer('playerLeftVehicle', (vehicle: alt.Vehicle, seat: number) => {
+    alt.Player.local.deleteMeta('seat')
+})
+alt.onServer('playerChangedVehicleSeat', (vehicle: alt.Vehicle, oldSeat: number, newSeat: number) => {
+    alt.Player.local.setMeta('seat', newSeat)
+})

@@ -11,6 +11,7 @@
     "dependencies": {
         "@mdi/font": "^5.8.55",
         "core-js": "^3.6.5",
+        "howler": "^2.2.1",
         "roboto-fontface": "*",
         "vue": "^2.6.11",
         "vue-clipboard2": "^0.3.1",
@@ -22,6 +23,7 @@
     },
     "devDependencies": {
         "@altv/types-webview": "^1.0.2",
+        "@types/howler": "^2.2.1",
         "@typescript-eslint/eslint-plugin": "^2.33.0",
         "@typescript-eslint/parser": "^2.33.0",
         "@vue/cli-plugin-babel": "~4.5.0",

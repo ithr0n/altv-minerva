@@ -3,6 +3,7 @@
         <!--<VuetifyExample />-->
         <span>{{ debugMsg }}</span>
         <PlayerHud v-show="showPlayerHud" />
+        <VehicleRadio :playerInVehicle="isPlayerInVehicle" />
         <VehicleHud v-show="showVehicleHud" />
         <Notifications />
     </div>
@@ -13,6 +14,7 @@ import Vue from 'vue'
 /*import VuetifyExample from './components/VuetifyExample.vue'*/
 import PlayerHud from './components/PlayerHud.vue'
 import VehicleHud from './components/VehicleHud.vue'
+import VehicleRadio from './components/VehicleRadio.vue'
 import Notifications from './components/Notifications.vue'
 
 export default Vue.extend({
@@ -22,12 +24,14 @@ export default Vue.extend({
         /*VuetifyExample,*/
         PlayerHud,
         VehicleHud,
+        VehicleRadio,
         Notifications,
     },
 
     data: () => ({
         showPlayerHud: false,
         showVehicleHud: false,
+        isPlayerInVehicle: false,
         debugMsg: 'debug',
     }),
 
@@ -59,6 +63,10 @@ export default Vue.extend({
 
         this.$alt.on('CopyToClipboard', (content: string) => {
             this.$copyText(content)
+        })
+
+        this.$alt.on('SetAppData', (key: string, value: any) => {
+            this.$data[key] = value
         })
 
         this.$alt.emit('loaded')

@@ -3,6 +3,7 @@ using AltV.Net.Elements.Entities;
 using Microsoft.Extensions.Logging;
 using PlayGermany.Server.Entities;
 using PlayGermany.Server.Enums;
+using System;
 
 namespace PlayGermany.Server.Handlers
 {
@@ -17,6 +18,7 @@ namespace PlayGermany.Server.Handlers
             Alt.OnPlayerChangeVehicleSeat += OnPlayerChangeVehicleSeat;
             Alt.OnClient<ServerPlayer, int>("Vehicle:ToggleIndicator", OnToggleIndicator);
             Alt.OnClient<ServerPlayer>("Vehicle:ToggleSiren", OnToggleSiren);
+            Alt.OnClient<ServerPlayer, int>("Vehicle:RadioChanged", OnRadioChanged);
 
             Logger = logger;
         }
@@ -33,7 +35,7 @@ namespace PlayGermany.Server.Handlers
 
         private void OnPlayerChangeVehicleSeat(IVehicle vehicle, IPlayer player, byte oldSeat, byte newSeat)
         {
-            player.Emit("playerChangeVehicleSeat", vehicle, (int)oldSeat, (int)newSeat);
+            player.Emit("playerChangedVehicleSeat", vehicle, (int)oldSeat, (int)newSeat);
         }
 
         private void OnToggleIndicator(ServerPlayer player, int indicatorFlag)
@@ -63,6 +65,14 @@ namespace PlayGermany.Server.Handlers
                 }
 
                 player.Vehicle.SetStreamSyncedMetaData("sirenDisabled", !oldState);
+            }
+        }
+
+        private void OnRadioChanged(ServerPlayer player, int radioStationIndex)
+        {
+            if (player.IsInVehicle)
+            {
+                player.Vehicle.SetStreamSyncedMetaData("radioStation", radioStationIndex);
             }
         }
     }

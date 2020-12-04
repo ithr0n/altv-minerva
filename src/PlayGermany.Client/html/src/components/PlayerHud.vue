@@ -1,5 +1,5 @@
 <template>
-    <div id="container">
+    <div class="container">
         <div class="playerName">{{ playerName }}</div>
 
         <div class="cash">$ {{ cashFormatted }}</div>
@@ -95,7 +95,7 @@ export default Vue.extend({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-#container {
+.container {
     position: absolute;
     top: 5vw;
     right: 2vw;

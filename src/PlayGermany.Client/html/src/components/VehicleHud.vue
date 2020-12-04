@@ -1,5 +1,5 @@
 <template>
-    <div id="container">
+    <div class="container">
         <div id="speedometer">
             <div class="line">
                 <div>
@@ -194,7 +194,7 @@ export default Vue.extend({
                 if (this.speed === 0) return 'R'
                 if (this.isElectric && this.gear === 1) return 'P'
                 if (this.gear === 1) return 'R'
-                return this.gear - 1
+                return String(this.gear - 1)
             }
         },
         gearCurrent() {
@@ -215,7 +215,7 @@ export default Vue.extend({
             } else {
                 if (this.isElectric && this.gear >= 1) return ''
                 if (this.gear >= 6) return ''
-                return this.gear + 1
+                return String(this.gear + 1)
             }
         },
         fuelbarFilledPercentage() {
@@ -303,7 +303,7 @@ export default Vue.extend({
     background: transparent;
 }
 
-#container {
+.container {
     position: absolute;
     width: 15vw;
     height: 15vw;

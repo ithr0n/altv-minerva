@@ -17,7 +17,8 @@
         "isolatedModules": true,
         "types": [
             "webpack-env",
-            "vuetify"
+            "vuetify",
+            "howl"
         ],
         "paths": {
             "@/*": [
