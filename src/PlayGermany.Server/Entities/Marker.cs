@@ -9,7 +9,7 @@ namespace PlayGermany.Server.EntitySync
     /// DynamicMarker class that stores all data related to a single marker.
     /// </summary>
     public class Marker 
-        : Entity, IEntity
+        : Entity
     {
         public Marker(Vector3 position, int dimension, uint range)
             : base((ulong)EntitySyncType.Marker, position, dimension, range)

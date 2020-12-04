@@ -13,6 +13,7 @@ using System.IO;
 using PlayGermany.Server.Handlers;
 using PlayGermany.Server.ScheduledJobs.Base;
 using PlayGermany.Server.Entities.Factories;
+using PlayGermany.Server.EntitySync.Streamers;
 
 namespace PlayGermany.Server
 {
@@ -97,6 +98,9 @@ namespace PlayGermany.Server
             // register all server and scheduled jobs
             services.AddAllTypes<IServerJob>();
             services.AddAllTypes<BaseScheduledJob>();
+
+            // register streamers
+            services.AddSingleton<PropsStreamer>();
 
             // register handlers
             services.AddSingletonAndInstanciate<SessionHandler>();

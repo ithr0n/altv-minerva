@@ -8,9 +8,12 @@ namespace PlayGermany.Server.Entities
     public class Prop
         : Entity
     {
+        public Vector3 InitialPosition { get; }
+
         public Prop(Vector3 position, int dimension, uint range)
             : base((ulong)EntitySyncType.Prop, position, dimension, range)
         {
+            InitialPosition = position;
         }
 
         /// <summary>
