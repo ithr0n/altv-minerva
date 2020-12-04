@@ -16,6 +16,8 @@ alt.on('connectionComplete', async () => {
     natives.setEntityInvincible(alt.Player.local.scriptID, true)
     natives.freezeEntityPosition(alt.Player.local.scriptID, true)
     natives.displayRadar(false)
+
+    natives.pauseClock(true)
 })
 
 alt.onServer('PlayerSpawned', () => {
