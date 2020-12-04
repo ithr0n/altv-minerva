@@ -101,6 +101,8 @@
     <Folder Include="Utils\" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="EntitySync\MarkersStreamer.ts" />
+    <TypeScriptCompile Include="EntitySync\StaticBlipsStreamer.ts" />
     <TypeScriptCompile Include="EntitySync\PropsStreamer.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
