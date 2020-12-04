@@ -101,6 +101,8 @@ namespace PlayGermany.Server
 
             // register streamers
             services.AddSingleton<PropsStreamer>();
+            services.AddSingleton<MarkersStreamer>();
+            services.AddSingleton<StaticBlipsStreamer>();
 
             // register handlers
             services.AddSingletonAndInstanciate<SessionHandler>();

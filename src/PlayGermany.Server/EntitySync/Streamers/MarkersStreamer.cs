@@ -19,7 +19,7 @@ namespace PlayGermany.Server.EntitySync.Streamers
             Vector3 scale,
             Vector3? rotation = null,
             Vector3? direction = null,
-            WritableRgba? color = null,
+            WritableRgba color = null,
             int dimension = 0,
             bool? bobUpDown = false,
             bool? faceCamera = false,
@@ -32,10 +32,10 @@ namespace PlayGermany.Server.EntitySync.Streamers
         {
             var newEntity = new Marker(position, dimension, streamRange)
             {
-                Rotation = rotation.HasValue ? new WritableVector3(rotation.Value) : new WritableVector3(),
                 MarkerType = markerType,
-                Direction = direction.HasValue ? new WritableVector3(direction.Value) : new WritableVector3(),
                 Scale = new WritableVector3(scale),
+                Rotation = rotation.HasValue ? new WritableVector3(rotation.Value) : new WritableVector3(),
+                Direction = direction.HasValue ? new WritableVector3(direction.Value) : new WritableVector3(),
                 Color = color ?? null,
                 BobUpDown = bobUpDown ?? false,
                 FaceCamera = faceCamera ?? false,

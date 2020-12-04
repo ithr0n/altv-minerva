@@ -10,6 +10,7 @@ import './Handlers/KeyHandler'
 import './Handlers/PedHandler'
 
 import './EntitySync/PropsStreamer'
+import './EntitySync/MarkersStreamer'
 
 import './UiManager'
 

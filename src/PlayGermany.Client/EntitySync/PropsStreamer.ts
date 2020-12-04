@@ -40,12 +40,13 @@ alt.onServer("entitySync:create", async (entityId: number, entityType: number, p
         entity.Rotation = newEntityData.rotation
         entity.LodDistance = newEntityData.lodDistance
         entity.TextureVariation = newEntityData.textureVariation
-        entity.Dynamic = newEntityData.dynamic
-        entity.Visible = newEntityData.visible
-        entity.OnFire = newEntityData.onFire
-        entity.Freezed = newEntityData.freezed
+        entity.Dynamic = !!newEntityData.dynamic
+        entity.Visible = !!newEntityData.visible
+        entity.OnFire = !!newEntityData.onFire
+        entity.Freezed = !!newEntityData.freezed
         entity.LightColor = newEntityData.lightColor
         entity.Velocity = newEntityData.velocity
+
         entity.Position = position
 
         entities[entityId] = entity;
