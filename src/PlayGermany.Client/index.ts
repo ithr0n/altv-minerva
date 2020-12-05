@@ -8,6 +8,7 @@ import './Handlers/ConsoleHandler'
 import './Handlers/VehicleHandler'
 import './Handlers/KeyHandler'
 import './Handlers/PedHandler'
+import './Handlers/WorldDataHandler'
 
 import './EntitySync/PropsStreamer'
 import './EntitySync/MarkersStreamer'

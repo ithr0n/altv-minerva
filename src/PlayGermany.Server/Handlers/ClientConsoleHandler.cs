@@ -1,9 +1,11 @@
 ﻿using AltV.Net;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
+using AltV.Net.Enums;
 using Microsoft.Extensions.Logging;
 using PlayGermany.Server.Entities;
 using PlayGermany.Server.EntitySync.Streamers;
+using PlayGermany.Server.ScheduledJobs;
 using System;
 using System.Linq;
 using System.Numerics;
@@ -12,15 +14,19 @@ namespace PlayGermany.Server.Handlers
 {
     public class ClientConsoleHandler
     {
+        private readonly WorldData _worldData;
+
         private ILogger<ClientConsoleHandler> Logger { get; }
         public PropsStreamer PropsStreamer { get; }
 
         public ClientConsoleHandler(
             ILogger<ClientConsoleHandler> logger,
-            PropsStreamer propsStreamer)
+            PropsStreamer propsStreamer,
+            WorldData worldData)
         {
             Logger = logger;
             PropsStreamer = propsStreamer;
+            _worldData = worldData;
             Alt.OnClient<ServerPlayer, string, string[]>("ClientConsoleHandler:Command", OnCommand);
         }
 
@@ -166,6 +172,41 @@ namespace PlayGermany.Server.Handlers
                         catch (Exception ex)
                         {
                             player.Emit("UiManager:Error", ex.Message);
+                        }
+
+                        break;
+                    }
+
+                case "weather":
+                    {
+                        if (args.Length < 1 || !uint.TryParse(args[0], out uint weatherId))
+                        {
+                            player.Emit("UiManager:Error", "Du musst eine Wetter ID und optional die Tageszeit (Stunden) angeben!");
+                            return;
+                        }
+
+                        if (!Enum.IsDefined(typeof(WeatherType), weatherId))
+                        {
+                            player.Emit("UiManager:Error", "Ungültiges Wetter angegeben!");
+                            return;
+                        }
+
+                        _worldData.Weather = (WeatherType)weatherId;
+
+                        if (args.Length >= 2)
+                        {
+                            if (!int.TryParse(args[1], out int hours))
+                            {
+                                player.Emit("UiManager:Error", "Zeit wurde nicht gesetzt, ungültiges Format angegeben!");
+                                return;
+                            }
+
+                            _worldData.Clock = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hours, 0, 0);
+
+                            if (args.Length >= 3 && bool.TryParse(args[2], out bool clockEnabled))
+                            {
+                                _worldData.ClockPaused = clockEnabled;
+                            }
                         }
 
                         break;

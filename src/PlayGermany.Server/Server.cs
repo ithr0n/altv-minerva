@@ -98,6 +98,7 @@ namespace PlayGermany.Server
             // register all server and scheduled jobs
             services.AddAllTypes<IServerJob>();
             services.AddAllTypes<BaseScheduledJob>();
+            services.AddSingletonAndInstanciate<ScheduleJobManager>();
 
             // register streamers
             services.AddSingleton<PropsStreamer>();
@@ -109,6 +110,9 @@ namespace PlayGermany.Server
             services.AddSingletonAndInstanciate<VehicleHandler>();
             services.AddSingletonAndInstanciate<ClientConsoleHandler>();
             services.AddSingletonAndInstanciate<VoiceHandler>();
+
+            // custom
+            services.AddSingleton<WorldData>();
         }
 
         #region Entities

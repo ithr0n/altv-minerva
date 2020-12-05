@@ -111,6 +111,7 @@
     <TypeScriptCompile Include="Handlers\PedHandler.ts" />
     <TypeScriptCompile Include="Handlers\SessionHandler.ts" />
     <TypeScriptCompile Include="Handlers\VehicleHandler.ts" />
+    <TypeScriptCompile Include="Handlers\WorldDataHandler.ts" />
     <TypeScriptCompile Include="html\src\main.ts" />
     <TypeScriptCompile Include="html\src\plugins\alt.ts" />
     <TypeScriptCompile Include="html\src\plugins\vuetify.ts" />

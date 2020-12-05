@@ -71,3 +71,39 @@ export function displayAdvancedNotification(
 
     return natives.endTextCommandThefeedPostTicker(false, true)
 }
+
+export enum WeatherTypeHash {
+    ExtraSunny = 2544503417,
+    Clear = 916995460,
+    Clouds = 821931868,
+    Smog = 282916021,
+    Foggy = 2926802500,
+    Overcast = 3146353965,
+    Rain = 1420204096,
+    Thunder = 3061285535,
+    Clearing = 1840358669,
+    Neutral = 2764706598,
+    Snow = 4021743606,
+    Blizzard = 669657108,
+    Snowlight = 603685163,
+    Xmas = 2865350805,
+    Halloween = 3373937154
+}
+
+export enum WeatherType {
+    ExtraSunny = 0,
+    Clear = 1,
+    Clouds = 2,
+    Smog = 3,
+    Foggy = 4,
+    Overcast = 5,
+    Rain = 6,
+    Thunder = 7,
+    Clearing = 8,
+    Neutral = 9,
+    Snow = 10,
+    Blizzard = 11,
+    Snowlight = 12,
+    Xmas = 13,
+    Halloween = 14
+}

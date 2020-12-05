@@ -8,3 +8,7 @@ export function showCursor(show: boolean = true) {
     cursorStatus = show
     alt.showCursor(show)
 }
+
+export function random(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}

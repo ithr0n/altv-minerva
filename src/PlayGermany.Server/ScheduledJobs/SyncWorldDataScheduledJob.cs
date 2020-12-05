@@ -6,28 +6,44 @@ using System;
 
 namespace PlayGermany.Server.ScheduledJobs
 {
-    public class WeatherSyncScheduledJob
+    public class SyncWorldDataScheduledJob
         : BaseScheduledJob
     {
-        //private WeatherType _lastTickWeather;
+        private readonly WorldData _worldData;
 
-        public WeatherType CurrentWeather { get; set; }
+        private DateTime _lastTick;
 
-        public WeatherSyncScheduledJob()
-            : base(TimeSpan.FromMinutes(15d))
+        public SyncWorldDataScheduledJob(WorldData worldData)
+            : base(TimeSpan.FromSeconds(3d))
         {
+            _worldData = worldData;
+
             Alt.OnPlayerConnect += (player, reason) => OnPlayerConnect(player as ServerPlayer, reason);
         }
 
         public override void Action()
         {
+            if (!_worldData.ClockPaused)
+            {
+                _worldData.Clock += DateTime.Now - _lastTick;
+            }
+
             foreach (var player in Alt.GetAllPlayers())
             {
+                player.SetDateTime(
+                    _worldData.Clock.Day,
+                    _worldData.Clock.Month,
+                    _worldData.Clock.Year,
+                    _worldData.Clock.Hour,
+                    _worldData.Clock.Minute,
+                    _worldData.Clock.Second);
+
+                //player.SetWeather((uint)_worldData.Weather);
+
                 // if weather transitions not working correctly, check _lastTickWeather != CurrentWeather
                 // and then emit event to all clients, which calls in a loop (0 to 100):
                 // natives.setWeatherTypeTransition(alt.hash(oldWeather), alt.hash(currentWeather), loopStep);
 
-                player.SetWeather((uint)CurrentWeather);
 
                 // additional cool stuff (client side):
                 /*
@@ -40,11 +56,21 @@ namespace PlayGermany.Server.ScheduledJobs
                 }
                 */
             }
+
+            _lastTick = DateTime.Now;
         }
 
         private void OnPlayerConnect(ServerPlayer player, string reason)
         {
-            player.SetWeather((uint)CurrentWeather);
+            player.SetDateTime(
+                    _worldData.Clock.Day,
+                    _worldData.Clock.Month,
+                    _worldData.Clock.Year,
+                    _worldData.Clock.Hour,
+                    _worldData.Clock.Minute,
+                    _worldData.Clock.Second);
+
+            player.SetWeather((uint)_worldData.Weather);
         }
     }
 }
