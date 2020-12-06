@@ -54,5 +54,6 @@ alt.on('globalSyncedMetaChange', (key: string, value: any, oldValue: any) => {
 
     if (key === 'blackout') {
         natives.setArtificialLightsState(!!value)
+        return
     }
 })
