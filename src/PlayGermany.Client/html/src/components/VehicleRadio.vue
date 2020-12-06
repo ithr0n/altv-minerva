@@ -17,7 +17,7 @@ let PlayerRadio: Howl | null = null
 const PlayerBeep: Howl = new Howl({
     src: [require(`../assets/VehicleRadio/beep.mp3`)],
     volume: 0.1,
-    html5: true,
+    html5: false,
     format: ['mp3'],
 })
 
@@ -50,12 +50,12 @@ export default Vue.extend({
             switching: false,
             radioList: [new RadioStation('OFF', 'off.png', '', 0)],
             switchingAudios: [
-                '../assets/VehicleRadio/switching1.mp3',
-                '../assets/VehicleRadio/switching2.mp3',
-                '../assets/VehicleRadio/switching3.mp3',
-                '../assets/VehicleRadio/switching4.mp3',
-                '../assets/VehicleRadio/switching5.mp3',
-                '../assets/VehicleRadio/switching6.mp3',
+                require('../assets/VehicleRadio/switching1.mp3'),
+                require('../assets/VehicleRadio/switching2.mp3'),
+                require('../assets/VehicleRadio/switching3.mp3'),
+                require('../assets/VehicleRadio/switching4.mp3'),
+                require('../assets/VehicleRadio/switching5.mp3'),
+                require('../assets/VehicleRadio/switching6.mp3'),
             ],
         }
     },
@@ -130,13 +130,20 @@ export default Vue.extend({
             }
         },
 
-        createHowl(url: string, volume: number, onplay?: HowlCallback): Howl {
+        createHowl(
+            url: string,
+            volume: number,
+            onplay?: HowlCallback,
+            html5 = true
+        ): Howl {
             return new Howl({
                 src: [url],
-                html5: true,
+                html5,
                 format: ['mp3', 'aac'],
                 volume: volume * 0.001,
                 onplay,
+                onplayerror: (id, error) => console.log(id + ': ' + error),
+                onloaderror: (id, error) => console.log(id + ': ' + error),
             })
         },
 
@@ -218,7 +225,7 @@ export default Vue.extend({
             if (!this.switching) {
                 const audio = this.switchingAudios[this.randomNumber(0, 5)]
 
-                PlayerSwitching = this.createHowl(audio, 50)
+                PlayerSwitching = this.createHowl(audio, 50, undefined, false)
                 PlayerSwitching.play()
             }
 
