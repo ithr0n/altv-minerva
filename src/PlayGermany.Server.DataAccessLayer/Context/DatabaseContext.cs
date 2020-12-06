@@ -6,7 +6,7 @@ namespace PlayGermany.Server.DataAccessLayer.Context
     public class DatabaseContext
         : DbContext
     {
-        internal DatabaseContext(DbContextOptions<DatabaseContext> options)
+        public DatabaseContext(DbContextOptions<DatabaseContext> options)
             : base(options)
         {
         }

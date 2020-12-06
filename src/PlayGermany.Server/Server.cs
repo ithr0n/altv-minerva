@@ -90,10 +90,14 @@ namespace PlayGermany.Server
                 config.AddConsole();
             });
 
-            services.AddDbContext<DatabaseContext>(options =>
+            services.AddDbContextFactory<DatabaseContext>(options =>
             {
                 options.UseMySql(Configuration.GetConnectionString("Database"), MariaDbServerVersion.LatestSupportedServerVersion);
             });
+
+            services.AddScoped(p => p
+                .GetRequiredService<IDbContextFactory<DatabaseContext>>()
+                .CreateDbContext());
 
             // register all server and scheduled jobs
             services.AddAllTypes<IServerJob>();
