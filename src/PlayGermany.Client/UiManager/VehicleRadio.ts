@@ -7,6 +7,11 @@ let focused = false
 
 let radioStations = [
     {
+        name: 'Play-Germany Radio',
+        url: 'http://gtaradio.play-germany.de:8000/Listen.pls',
+        image: 'playgermany.png'
+    },
+    {
         name: '011.FM - Country Roads',
         url: 'http://listen.011fm.com:8016/stream09',
         image: '011-fm.png'
