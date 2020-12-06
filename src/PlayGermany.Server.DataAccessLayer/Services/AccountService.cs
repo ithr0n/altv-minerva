@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PlayGermany.Server.DataAccessLayer.Context;
 using PlayGermany.Server.DataAccessLayer.Models;
+using System;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace PlayGermany.Server.DataAccessLayer
@@ -14,28 +17,22 @@ namespace PlayGermany.Server.DataAccessLayer
             _dbContextFactory = dbContextFactory;
         }
 
-        private DatabaseContext EnsureContextCreated(DatabaseContext context)
+        public Task<Account> FindAccount(string socialClubId)
         {
-            if (context == null)
-            {
-                context = _dbContextFactory.CreateDbContext();
-            }
+            using var dbContext = _dbContextFactory.CreateDbContext();
 
-            return context;
+            return dbContext.Accounts.FirstOrDefaultAsync(e => e.SocialClubId == socialClubId);
         }
 
-        public Task<Account> FindAccount(string socialClubId, DatabaseContext context = null)
+        public Task<bool> Authenticate(string socialClubId, string password)
         {
-            EnsureContextCreated(ref context);
+            using var dbContext = _dbContextFactory.CreateDbContext();
+            using var alg = SHA512.Create();
 
-            return context.Accounts.FirstOrDefaultAsync(e => e.SocialClubId == socialClubId);
-        }
+            alg.ComputeHash(Encoding.UTF8.GetBytes(password));
+            var encrypted = BitConverter.ToString(alg.Hash);
 
-        public async bool Authenticate(string socialClubId, string password, DatabaseContext context = null)
-        {
-            using var context = EnsureContextCreated(ref context);
-
-            var account = await dbContext.Accounts.FirstOrDefaultAsync(e => e.SocialClubId == socialClubId);
+            return dbContext.Accounts.AnyAsync(e => e.SocialClubId == socialClubId && e.Password == encrypted);
         }
     }
 }
