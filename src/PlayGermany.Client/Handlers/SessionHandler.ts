@@ -38,4 +38,4 @@ alt.onServer('PlayerSpawned', () => {
 let idle = alt.setInterval(() => {
     natives.invalidateIdleCam(); // Disable player idle camera
     natives._0x9E4CFFF989258472(); // Disable vehicle idle camera
-}, 20000); // Idle camera activated after 30 seconds
+}, 5000);

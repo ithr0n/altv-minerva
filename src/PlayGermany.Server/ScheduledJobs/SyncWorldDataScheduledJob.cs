@@ -23,6 +23,13 @@ namespace PlayGermany.Server.ScheduledJobs
 
         public override void Action()
         {
+            if (_lastTick == DateTime.MinValue)
+            {
+                // skip first tick after server start
+                _lastTick = DateTime.Now;
+                return;
+            }
+
             if (!_worldData.ClockPaused)
             {
                 _worldData.Clock += DateTime.Now - _lastTick;

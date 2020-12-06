@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using PlayGermany.Server.DataAccessLayer.Context;
 using PlayGermany.Server.ServerJobs.Base;
 
@@ -7,17 +8,17 @@ namespace PlayGermany.Server.ServerJobs
     public class DatabaseServerJob
         : IServerJob
     {
-        private readonly DatabaseContext _dbContext;
+        private readonly IDbContextFactory<DatabaseContext> _dbContextFactory;
 
         private ILogger<DatabaseServerJob> Logger { get; }
 
         public DatabaseServerJob(
-            DatabaseContext dbContext,
+            IDbContextFactory<DatabaseContext> dbContextFactory,
             ILogger<DatabaseServerJob> logger)
         {
             Logger = logger;
 
-            _dbContext = dbContext;
+            _dbContextFactory = dbContextFactory;
         }
 
         public void OnSave()
@@ -32,10 +33,12 @@ namespace PlayGermany.Server.ServerJobs
 
         public void OnStartup()
         {
-            _dbContext.Database.EnsureDeleted();
+            using var dbContext = _dbContextFactory.CreateDbContext();
+
+            dbContext.Database.EnsureDeleted();
             Logger.LogWarning("Database dropped");
 
-            _dbContext.Database.EnsureCreated();
+            dbContext.Database.EnsureCreated();
             Logger.LogInformation("Database created");
         }
     }

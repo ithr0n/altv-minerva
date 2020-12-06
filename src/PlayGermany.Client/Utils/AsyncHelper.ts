@@ -63,7 +63,7 @@ export const RequestAnimDict = (dictName: string) => {
                 alt.log(error)
                 reject(new Error(error)) // probably better resolve(false)
             }
-        }, 10)
+        }, 50)
     })
 }
 

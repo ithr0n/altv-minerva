@@ -28,6 +28,7 @@ alt.on('keyup', (key: KeyCodes) => {
                     natives.setVehicleEngineOn(vehicle.scriptID, true, false, true)
                 }
             }
+            break
         }
 
         case KeyCodes.VK_NUMPAD4: {
@@ -51,10 +52,12 @@ alt.on('keyup', (key: KeyCodes) => {
                 natives.getVehicleClass(localPlayer.vehicle.scriptID) === 18) {
                 alt.emitServer("Vehicle:ToggleSiren")
             }
+            break
         }
 
         case KeyCodes.VK_BACK: {
             //alt.emit('UiManager:ToggleComponent', 'PlayerHud') // demo code
+            break
         }
     }
 });

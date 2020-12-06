@@ -6,10 +6,9 @@ namespace PlayGermany.Server.DataAccessLayer.Context
     public class DatabaseContext
         : DbContext
     {
-        public DatabaseContext(DbContextOptions<DatabaseContext> options)
+        internal DatabaseContext(DbContextOptions<DatabaseContext> options)
             : base(options)
         {
-
         }
 
         #region Entities
