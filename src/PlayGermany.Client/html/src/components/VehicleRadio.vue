@@ -15,9 +15,10 @@ import Vue from 'vue'
 let PlayerSwitching: Howl | null = null
 let PlayerRadio: Howl | null = null
 const PlayerBeep: Howl = new Howl({
-    src: '../assets/VehicleRadio/beep.mp3',
+    src: [require(`../assets/VehicleRadio/beep.mp3`)],
     volume: 0.1,
-    autoplay: false,
+    html5: true,
+    format: ['mp3'],
 })
 
 class RadioStation {
@@ -103,6 +104,17 @@ export default Vue.extend({
         })
 
         this.$alt.on('radio:SetStations', (stations: any[]) => {
+            this.setRadioStations(stations)
+        })
+
+        this.$alt.on('radio:StopPlaying', () => {
+            this.stopSwitching()
+            this.stopRadio()
+        })
+    },
+
+    methods: {
+        setRadioStations(stations: any[]) {
             for (const station of stations) {
                 let vol = station.volume
                 if (!vol) vol = 100
@@ -116,15 +128,8 @@ export default Vue.extend({
                     )
                 )
             }
-        })
+        },
 
-        this.$alt.on('radio:StopPlaying', () => {
-            this.stopSwitching()
-            this.stopRadio()
-        })
-    },
-
-    methods: {
         createHowl(url: string, volume: number, onplay?: HowlCallback): Howl {
             return new Howl({
                 src: [url],
