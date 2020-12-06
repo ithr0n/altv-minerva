@@ -212,6 +212,12 @@ namespace PlayGermany.Server.Handlers
                         break;
                     }
 
+                case "blackout":
+                    {
+                        _worldData.Blackout = !_worldData.Blackout;
+                        break;
+                    }
+
                 default:
                     player.Emit("UiManager:Error", "Dieser Befehl existiert nicht.");
                     break;

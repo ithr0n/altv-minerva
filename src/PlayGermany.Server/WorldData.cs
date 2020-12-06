@@ -42,5 +42,19 @@ namespace PlayGermany.Server
             }
             set => Alt.SetSyncedMetaData("weather", (uint)value);
         }
+
+        public bool Blackout
+        {
+            get
+            {
+                if (!Alt.GetSyncedMetaData("blackout", out bool blackout))
+                {
+                    return false;
+                }
+
+                return blackout;
+            }
+            set => Alt.SetSyncedMetaData("blackout", value);
+        }
     }
 }
