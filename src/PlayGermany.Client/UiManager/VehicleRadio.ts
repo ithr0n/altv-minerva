@@ -36,6 +36,11 @@ let radioStations = [
         name: 'ADR.FM',
         url: 'http://192.111.140.6:9683/stream',
         image: 'adr.png'
+    },
+    {
+        name: 'SWR1',
+        url: 'http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/64/stream.mp3',
+        image: 'swr1.png'
     }
 ]
 
@@ -63,7 +68,7 @@ alt.on('streamSyncedMetaChange', (entity: alt.Entity, key: string, value: string
     }
 
     if (key === 'radioStation') {
-        if (player.vehicle == entity && player.hasMeta('seat') && player.getMeta('seat') !== -1) {
+        if (player.vehicle === entity && player.hasMeta('seat') && player.getMeta('seat') !== -1) {
             alt.emit('UiManager:Emit', 'radio:SwitchStation', value)
         } else {
             // later: we can play radio of nearby cars here
