@@ -8,7 +8,7 @@ let focused = false
 let radioStations = [
     {
         name: 'Play-Germany Radio',
-        url: 'http://gtaradio.play-germany.de:8000',
+        url: 'http://gtaradio.play-germany.de:8000/stream',
         image: 'playgermany.png'
     },
     {
