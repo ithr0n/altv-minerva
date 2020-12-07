@@ -1,15 +1,13 @@
 import * as alt from 'alt-client'
 import * as natives from 'natives'
 import { WeatherType, WeatherTypeHash } from '../Utils/NativesHelper'
-import { random } from '../Utils/AltHelper'
 
-let weatherTransitionInterval: number = -1
+let currentWeatherId: number = WeatherType['CLEAR']
 
 alt.on('connectionComplete', () => {
-    alt.setWeatherSyncActive(false)
+    alt.setWeatherSyncActive(true)
     natives.clearOverrideWeather()
-    natives.clearWeatherTypePersist()
-    natives.setWeatherTypeNow('CLEAR')
+    natives.setWeatherTypeNowPersist(WeatherType[currentWeatherId])
 })
 
 alt.on('globalSyncedMetaChange', (key: string, value: any, oldValue: any) => {
@@ -20,60 +18,18 @@ alt.on('globalSyncedMetaChange', (key: string, value: any, oldValue: any) => {
 
     if (key === 'weather') {
         if (value !== oldValue) {
-            const oldWeatherHash : number = (<any>WeatherTypeHash)[WeatherType[oldValue]]
-            const newWeatherHash : number = (<any>WeatherTypeHash)[WeatherType[value]]
-            
-            if (typeof (oldWeatherHash) !== 'undefined' && typeof (newWeatherHash) !== 'undefined') {
-                if (weatherTransitionInterval >= 0) {
-                    // transition still running, stop the old
-                    alt.clearInterval(weatherTransitionInterval)
-                }
-
-                const specialWeather = [WeatherType.Xmas, WeatherType.Halloween, value === WeatherType.Neutral]
-                if (specialWeather.includes(value)) {
-                    natives.clearOverrideWeather()
-                    natives.clearWeatherTypePersist()
-
-                    let weatherString = ''
-                    switch (value) {
-                        case WeatherType.Xmas: {
-                            weatherString = 'XMAS'
-                            break
-                        }
-
-                        case WeatherType.Halloween: {
-                            weatherString = 'HALLOWEEN'
-                            break
-                        }
-
-                        case WeatherType.Neutral: {
-                            weatherString = 'NEUTRAL'
-                        }
-                    }
-
-                    natives.setWeatherTypeNow(weatherString)
-                } else {
-                    let i = 0;
-                    weatherTransitionInterval = alt.setInterval(() => {
-                        if (++i < 100) {
-                            natives.setWeatherTypeTransition(oldWeatherHash, newWeatherHash, (i / 100));
-                        } else {
-                            alt.clearInterval(weatherTransitionInterval)
-                            weatherTransitionInterval = -1
-                        }
-                    }, random(15000, 35000) / 100)
-                }
-
-                if (value === WeatherType.Xmas) {
-                    natives.setForceVehicleTrails(true);
-                    natives.setForcePedFootstepsTracks(true);
-                } else {
-                    natives.setForceVehicleTrails(false);
-                    natives.setForcePedFootstepsTracks(false);
-                }
-            }
+            changeWeather(++currentWeatherId, false)
         }
 
+        return
+    }
+
+    if (key === 'overrideWeather') {
+        if (value === null) {
+            natives.clearOverrideWeather()
+        } else {
+            natives.setOverrideWeather(WeatherType[++value])
+        }
         return
     }
 
@@ -82,3 +38,29 @@ alt.on('globalSyncedMetaChange', (key: string, value: any, oldValue: any) => {
         return
     }
 })
+
+alt.onServer('World:SetWeatherImmediately', () => {
+    changeWeather(currentWeatherId, true)
+})
+
+const changeWeather = (weatherTypeId: number, immediately: boolean) => {
+    currentWeatherId = weatherTypeId
+
+    if (immediately) {
+        natives.setWeatherTypeNowPersist(WeatherType[weatherTypeId])
+        toggleWinterEffects()
+    } else {
+        natives.setWeatherTypePersist(WeatherType[weatherTypeId])
+        alt.setTimeout(() => toggleWinterEffects, 1000 * 60 * 2)
+    }
+}
+
+const toggleWinterEffects = () => {
+    if (currentWeatherId === WeatherType.XMAS) {
+        natives.setForceVehicleTrails(true);
+        natives.setForcePedFootstepsTracks(true);
+    } else {
+        natives.setForceVehicleTrails(false);
+        natives.setForcePedFootstepsTracks(false);
+    }
+}

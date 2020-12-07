@@ -1,14 +1,14 @@
 ﻿using AltV.Net;
 using AltV.Net.Data;
-using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using Microsoft.Extensions.Logging;
 using PlayGermany.Server.Entities;
 using PlayGermany.Server.EntitySync.Streamers;
-using PlayGermany.Server.ScheduledJobs;
+using PlayGermany.Server.Enums;
+using PlayGermany.Server.Extensions;
 using System;
 using System.Linq;
-using System.Numerics;
+using System.Threading.Tasks;
 
 namespace PlayGermany.Server.Handlers
 {
@@ -30,7 +30,7 @@ namespace PlayGermany.Server.Handlers
             Alt.OnClient<ServerPlayer, string, string[]>("ClientConsoleHandler:Command", OnCommand);
         }
 
-        private void OnCommand(ServerPlayer player, string command, string[] args = null)
+        private async void OnCommand(ServerPlayer player, string command, string[] args = null)
         {
             args ??= Array.Empty<string>();
 
@@ -40,7 +40,7 @@ namespace PlayGermany.Server.Handlers
             {
                 case "pos":
                     {
-                        player.Emit("UiManager:Info", $"Aktuelle Position: {player.Position}");
+                        player.Notify($"Aktuelle Position: {player.Position}");
                         player.Emit("UiManager:CopyToClipboard", player.Position.ToString());
 
                         break;
@@ -57,7 +57,7 @@ namespace PlayGermany.Server.Handlers
                     {
                         Alt.GetAllPlayers().ToList().ForEach(otherPlayer =>
                         {
-                            player.Emit("UiManager:Info", ((ServerPlayer)otherPlayer).RoleplayName);
+                            player.Notify(((ServerPlayer)otherPlayer).RoleplayName);
                         });
 
                         break;
@@ -67,7 +67,7 @@ namespace PlayGermany.Server.Handlers
                     {
                         if (args.Length < 1)
                         {
-                            player.Emit("UiManager:Error", "Du musst ein Ziel angeben!");
+                            player.Notify("Du musst ein Ziel angeben!", NotificationType.Error);
                             return;
                         }
 
@@ -89,7 +89,7 @@ namespace PlayGermany.Server.Handlers
                         }
                         else
                         {
-                            player.Emit("UiManager:Error", "Spieler nicht gefunden oder nicht eindeutig");
+                            player.Notify("Spieler nicht gefunden oder nicht eindeutig", NotificationType.Error);
                         }
 
                         break;
@@ -99,7 +99,7 @@ namespace PlayGermany.Server.Handlers
                     {
                         if (args.Length < 1)
                         {
-                            player.Emit("UiManager:Error", "Du musst eine Nachricht angeben!");
+                            player.Notify("Du musst eine Nachricht angeben!", NotificationType.Error);
                             return;
                         }
 
@@ -113,7 +113,7 @@ namespace PlayGermany.Server.Handlers
                     {
                         if (args.Length < 1)
                         {
-                            player.Emit("UiManager:Error", "Du musst ein Fahrzeug angeben!");
+                            player.Notify("Du musst ein Fahrzeug angeben!, NotificationType.Error");
                             return;
                         }
 
@@ -129,7 +129,7 @@ namespace PlayGermany.Server.Handlers
                         }
                         catch (Exception ex)
                         {
-                            player.Emit("UiManager:Error", ex.Message);
+                            player.Notify(ex.Message, NotificationType.Error);
                         }
 
                         break;
@@ -139,12 +139,12 @@ namespace PlayGermany.Server.Handlers
                     {
                         if (args.Length < 1 || !int.TryParse(args[0], out int engineMultiplier) || engineMultiplier < 0 || engineMultiplier > 100)
                         {
-                            player.Emit("UiManager:Error", "Du musst einen Wert (0-100) angeben!");
+                            player.Notify("Du musst einen Wert (0-100) angeben!", NotificationType.Error);
                             return;
                         }
                         if (!player.IsInVehicle)
                         {
-                            player.Emit("UiManager:Error", "Du musst in einem Fahrzeug sitzen!");
+                            player.Notify("Du musst in einem Fahrzeug sitzen!", NotificationType.Error);
                             return;
                         }
                         player.Vehicle.SetStreamSyncedMetaData("EnginePowerMultiplier", engineMultiplier);
@@ -156,7 +156,7 @@ namespace PlayGermany.Server.Handlers
                     {
                         if (args.Length < 1)
                         {
-                            player.Emit("UiManager:Error", "Du musst ein Objekt angeben!");
+                            player.Notify("Du musst ein Objekt angeben!", NotificationType.Error);
                             return;
                         }
 
@@ -171,7 +171,7 @@ namespace PlayGermany.Server.Handlers
                         }
                         catch (Exception ex)
                         {
-                            player.Emit("UiManager:Error", ex.Message);
+                            player.Notify(ex.Message, NotificationType.Error);
                         }
 
                         break;
@@ -181,32 +181,65 @@ namespace PlayGermany.Server.Handlers
                     {
                         if (args.Length < 1 || !uint.TryParse(args[0], out uint weatherId))
                         {
-                            player.Emit("UiManager:Error", "Du musst eine Wetter ID und optional die Tageszeit (Stunden) angeben!");
+                            player.Notify("Du musst eine Wetter ID und optional die Tageszeit (Stunden) angeben!", NotificationType.Error);
                             return;
                         }
 
                         if (!Enum.IsDefined(typeof(WeatherType), weatherId))
                         {
-                            player.Emit("UiManager:Error", "Ungültiges Wetter angegeben!");
+                            player.Notify("Ungültiges Wetter angegeben!", NotificationType.Error);
+                            return;
+                        }
+
+                        bool immediately = false;
+
+                        if (args.Length >= 2 && !bool.TryParse(args[1], out immediately))
+                        {
+                            player.Notify("Ungültiger Parameter (immediately)", NotificationType.Error);
                             return;
                         }
 
                         _worldData.Weather = (WeatherType)weatherId;
 
-                        if (args.Length >= 2)
+                        if (immediately)
                         {
-                            if (!int.TryParse(args[1], out int hours))
-                            {
-                                player.Emit("UiManager:Error", "Zeit wurde nicht gesetzt, ungültiges Format angegeben!");
-                                return;
-                            }
+                            await Task.Delay(500);
 
-                            _worldData.Clock = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hours, 0, 0);
-
-                            if (args.Length >= 3 && bool.TryParse(args[2], out bool clockEnabled))
+                            foreach (var p in Alt.GetAllPlayers())
                             {
-                                _worldData.ClockPaused = clockEnabled;
+                                p.Emit("World:SetWeatherImmediately");
                             }
+                        }
+
+                        break;
+                    }
+
+                case "overrideweather":
+                    {
+                        if (args.Length < 1 || !uint.TryParse(args[0], out uint weatherId))
+                        {
+                            player.Notify("Du musst eine Wetter ID angeben!", NotificationType.Error);
+                            return;
+                        }
+
+                        _worldData.OverrideWeather = (WeatherType)weatherId;
+
+                        break;
+                    }
+
+                case "clock":
+                    {
+                        if (args.Length < 1 || !int.TryParse(args[0], out int hours) || hours < 0 && hours > 23)
+                        {
+                            player.Notify("Du musst eine Stundenanzahl (0-23) angeben!", NotificationType.Error);
+                            return;
+                        }
+
+                        _worldData.Clock = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hours, 0, 0);
+
+                        if (args.Length >= 2 && bool.TryParse(args[1], out bool clockEnabled))
+                        {
+                            _worldData.ClockPaused = clockEnabled;
                         }
 
                         break;
@@ -219,7 +252,7 @@ namespace PlayGermany.Server.Handlers
                     }
 
                 default:
-                    player.Emit("UiManager:Error", "Dieser Befehl existiert nicht.");
+                    player.Notify("Dieser Befehl existiert nicht.", NotificationType.Error);
                     break;
             }
         }

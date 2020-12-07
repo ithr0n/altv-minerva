@@ -53,9 +53,9 @@
     <Content Include="html\src\assets\VehicleRadio\b4b.png" />
     <Content Include="html\src\assets\VehicleRadio\beep.mp3" />
     <Content Include="html\src\assets\VehicleRadio\insanity.png" />
-    <Content Include="html\src\assets\VehicleRadio\msx.png" />
     <Content Include="html\src\assets\VehicleRadio\off.png" />
     <Content Include="html\src\assets\VehicleRadio\onelove.png" />
+    <Content Include="html\src\assets\VehicleRadio\playgermany.png" />
     <Content Include="html\src\assets\VehicleRadio\radiosa.png" />
     <Content Include="html\src\assets\VehicleRadio\rnr.png" />
     <Content Include="html\src\assets\VehicleRadio\star104.png" />
