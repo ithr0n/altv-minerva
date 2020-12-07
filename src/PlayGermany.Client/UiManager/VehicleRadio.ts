@@ -63,7 +63,7 @@ alt.on('streamSyncedMetaChange', (entity: alt.Entity, key: string, value: string
     }
 
     if (key === 'radioStation') {
-        if (player.vehicle && player.hasMeta('seat') && player.getMeta('seat') !== -1) {
+        if (player.vehicle == entity && player.hasMeta('seat') && player.getMeta('seat') !== -1) {
             alt.emit('UiManager:Emit', 'radio:SwitchStation', value)
         } else {
             // later: we can play radio of nearby cars here
