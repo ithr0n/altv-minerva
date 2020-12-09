@@ -68,7 +68,11 @@ export default Vue.extend({
 
     watch: {
         currentRadio() {
-            this.$alt.emit('radio:StationChanged', this.currentRadio)
+            this.$alt.emit(
+                'ui:EmitServer',
+                'Vehicle: RadioChanged',
+                this.currentRadio
+            )
         },
 
         playerInVehicle(value: boolean) {

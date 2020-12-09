@@ -4,6 +4,7 @@ using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using PlayGermany.Server.DataAccessLayer;
 using PlayGermany.Server.Entities;
 using System.Numerics;
 
@@ -11,13 +12,18 @@ namespace PlayGermany.Server.Handlers
 {
     public class SessionHandler
     {
+        private readonly AccountService _accountService;
+
         private ILogger<SessionHandler> Logger { get; }
         public Vector3 SpawnPoint { get; }
 
-        public SessionHandler(ILogger<SessionHandler> logger, IConfiguration configuration)
+        public SessionHandler(ILogger<SessionHandler> logger, IConfiguration configuration, AccountService accountService)
         {
+            _accountService = accountService;
+
             Alt.OnPlayerConnect += (player, reason) => OnPlayerConnect(player as ServerPlayer, reason);
             Alt.OnPlayerDead += (player, killer, weapon) => OnPlayerDead(player as ServerPlayer, killer, weapon);
+            Alt.OnClient<ServerPlayer, string>("Login:Authenticate", OnLoginAuthenticate);
             Alt.OnClient<ServerPlayer>("RequestSpawn", OnRequestSpawn);
             Alt.OnClient<ServerPlayer, Vector3>("RequestTeleport", OnRequestTeleport);
 
@@ -50,6 +56,14 @@ namespace PlayGermany.Server.Handlers
         private void OnPlayerDead(ServerPlayer player, IEntity killer, uint weapon)
         {
             OnRequestSpawn(player);
+        }
+
+        private async void OnLoginAuthenticate(ServerPlayer player, string password)
+        {
+            if (await _accountService.Authenticate(player.Name, password))
+            {
+                player.Emit("Login:Callback", true);
+            }
         }
 
         private void OnRequestSpawn(ServerPlayer player)

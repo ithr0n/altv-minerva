@@ -1,17 +1,23 @@
 <template>
-    <div id="container">
-        <!--<VuetifyExample />-->
-        <span>{{ debugMsg }}</span>
-        <PlayerHud v-show="showPlayerHud" />
-        <VehicleRadio :playerInVehicle="isPlayerInVehicle" />
-        <VehicleHud v-show="showVehicleHud" />
-        <Notifications />
-    </div>
+    <v-app>
+        <v-main>
+            <span>{{ debugMsg }}</span>
+
+            <!-- toggable components -->
+            <Login v-show="showLogin" />
+            <PlayerHud v-show="showPlayerHud" />
+            <VehicleHud v-show="showVehicleHud" />
+
+            <!-- always rendered components -->
+            <VehicleRadio :playerInVehicle="isPlayerInVehicle" />
+            <Notifications />
+        </v-main>
+    </v-app>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-/*import VuetifyExample from './components/VuetifyExample.vue'*/
+import Login from './components/Login.vue'
 import PlayerHud from './components/PlayerHud.vue'
 import VehicleHud from './components/VehicleHud.vue'
 import VehicleRadio from './components/VehicleRadio.vue'
@@ -21,7 +27,7 @@ export default Vue.extend({
     name: 'App',
 
     components: {
-        /*VuetifyExample,*/
+        Login,
         PlayerHud,
         VehicleHud,
         VehicleRadio,
@@ -29,6 +35,7 @@ export default Vue.extend({
     },
 
     data: () => ({
+        showLogin: false,
         showPlayerHud: false,
         showVehicleHud: false,
         isPlayerInVehicle: false,

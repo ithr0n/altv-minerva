@@ -1,5 +1,6 @@
 import * as alt from 'alt-client'
 
+import './Login'
 import './PlayerHud'
 import './VehicleHud'
 import './VehicleRadio'
@@ -17,13 +18,16 @@ alt.onServer('UiManager:Initialize', async (url: string) => {
     view.focus()
 
     view.on("loaded", () => {
-        alt.emitServer("RequestSpawn")
+        view.emit('ToggleComponent', 'Login', true)
         alt.emit('UiManager:Loaded')
     })
 
-    // VehicleRadio
-    view.on('radio:StationChanged', radioStation => {
-        alt.emitServer('Vehicle:RadioChanged', radioStation);
+    view.on('ui:EmitClient', (eventName, ...args) => {
+        alt.emit(eventName, args)
+    })
+
+    view.on('ui:EmitServer', (eventName, ...args) => {
+        alt.emit(eventName, args)
     })
 })
 

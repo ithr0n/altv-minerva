@@ -65,6 +65,7 @@
     <Content Include="html\src\assets\VehicleRadio\switching4.mp3" />
     <Content Include="html\src\assets\VehicleRadio\switching5.mp3" />
     <Content Include="html\src\assets\VehicleRadio\switching6.mp3" />
+    <Content Include="html\src\components\Login.vue" />
     <Content Include="html\src\components\Notifications.vue" />
     <Content Include="html\src\components\PlayerHud.vue" />
     <Content Include="html\src\components\Phone.vue" />
