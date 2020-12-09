@@ -159,6 +159,7 @@
     <TypeScriptCompile Include="NativeUI\utils\Size.ts" />
     <TypeScriptCompile Include="NativeUI\utils\UUIDV4.ts" />
     <TypeScriptCompile Include="UiManager\index.ts" />
+    <TypeScriptCompile Include="UiManager\Login.ts" />
     <TypeScriptCompile Include="UiManager\Notifications.ts" />
     <TypeScriptCompile Include="UiManager\PlayerHud.ts" />
     <TypeScriptCompile Include="UiManager\VehicleHud.ts" />
