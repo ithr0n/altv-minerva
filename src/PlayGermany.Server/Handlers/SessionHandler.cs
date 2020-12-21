@@ -34,8 +34,9 @@ namespace PlayGermany.Server.Handlers
             AltAsync.OnPlayerConnect += (player, reason) => OnPlayerConnect(player as ServerPlayer, reason);
             Alt.OnPlayerDead += (player, killer, weapon) => OnPlayerDead(player as ServerPlayer, killer, weapon);
             Alt.OnClient<ServerPlayer, string>("Login:Authenticate", OnLoginAuthenticate);
-            Alt.OnClient<ServerPlayer>("RequestSpawn", OnRequestSpawn);
+            AltAsync.OnClient<ServerPlayer, int>("Session:RequestCharacterSpawn", OnRequestCharacterSpawn);
             Alt.OnClient<ServerPlayer, Vector3>("RequestTeleport", OnRequestTeleport);
+            Alt.OnClient<ServerPlayer, Dictionary<string, string>>("Session:CreateNewCharacter", OnCreateNewCharacter);
 
             Logger = logger;
 
@@ -65,7 +66,8 @@ namespace PlayGermany.Server.Handlers
 
             if (!await _accountService.Exists(socialClubId))
             {
-                _ = AltAsync.Do(() => player.Kick("Du hast noch keinen Account auf diesem Server"));
+                //_ = AltAsync.Do(() => player.Kick("Du hast noch keinen Account auf diesem Server"));
+                player.Kick("Du hast noch keinen Account auf diesem Server"); // todo: test if that works in async context
                 return;
             }
 
@@ -74,38 +76,51 @@ namespace PlayGermany.Server.Handlers
 
         private void OnPlayerDead(ServerPlayer player, IEntity killer, uint weapon)
         {
-            OnRequestSpawn(player);
+            OnRequestCharacterSpawn(player, player.Character.Id);
         }
 
         private async void OnLoginAuthenticate(ServerPlayer player, string password)
         {
-            var playerCharacters = new Dictionary<int, string>();
+            var playerCharacters = new List<Dictionary<string, string>>();
 
-            if (await _accountService.Authenticate(
-                    player.SocialClubId,
-                    player.HardwareIdHash,
-                    player.HardwareIdExHash,
-                    password,
-                    out Account account))
+            var account = await _accountService.Authenticate(
+                player.SocialClubId,
+                player.HardwareIdHash,
+                player.HardwareIdExHash,
+                password);
+
+            if (account != null)
             {
                 player.Account = account;
 
                 foreach (var character in _characterService.GetCharacters(account))
                 {
-                    playerCharacters.Add(character.Id, character.Name);
+                    var jsonObjSerialized = new Dictionary<string, string>();
+                    jsonObjSerialized.Add("charId", character.Id.ToString());
+                    jsonObjSerialized.Add("charName", character.Name);
+
+                    playerCharacters.Add(jsonObjSerialized);
                 }
             }
 
             player.Emit("Login:Callback", player.LoggedIn, playerCharacters);
         }
 
-        private void OnRequestSpawn(ServerPlayer player)
+        private async void OnRequestCharacterSpawn(ServerPlayer player, int characterId)
         {
-            player.Model = (uint) PedModel.FreemodeFemale01; // load from db
-            player.Dimension = 0;
-            player.SpawnAsync(SpawnPoint);
+            var character = await _characterService.GetCharacter(characterId);
 
-            player.RoleplayName = $"Spieler {Alt.GetAllPlayers().Count}";
+            if (character == null || character.AccountId != player.Account.SocialClubId)
+            {
+                player.Kick("Ungültiger Charakter");
+                return;
+            }
+
+            player.Character = character;
+            player.Model = Alt.Hash(character.Model); // load from db
+            player.Dimension = 0;
+
+            _ = player.SpawnAsync(SpawnPoint);
 
             player.Emit("PlayerSpawned");
         }
@@ -119,6 +134,37 @@ namespace PlayGermany.Server.Handlers
             else
             {
                 player.Position = targetPosition;
+            }
+        }
+
+        private void OnCreateNewCharacter(ServerPlayer player, Dictionary<string, string> charCreationObj)
+        {
+            if (charCreationObj.TryGetValue("firstName", out string firstName) &&
+                charCreationObj.TryGetValue("lastName", out string lastName) &&
+                charCreationObj.TryGetValue("model", out string model) &&
+                charCreationObj.TryGetValue("appearanceParents", out string appearanceParents) &&
+                charCreationObj.TryGetValue("appearanceFaceFeatures", out string appearanceFaceFeatures) &&
+                charCreationObj.TryGetValue("appearanceDetails", out string appearanceDetails) &&
+                charCreationObj.TryGetValue("appearanceHair", out string appearanceHair) &&
+                charCreationObj.TryGetValue("appearanceClothes", out string appearanceClothes))
+            {
+                var character = new Character();
+                character.AccountId = player.Account.SocialClubId;
+                character.FirstName = firstName;
+                character.LastName = lastName;
+                character.Model = model;
+                character.Armor = 0;
+                character.Health = 200;
+                character.Cash = 500;
+                character.Hunger = 100;
+                character.Thirst = 100;
+                character.AppearanceParents = appearanceParents;
+                character.AppearanceFaceFeatures = appearanceFaceFeatures;
+                character.AppearanceDetails = appearanceDetails;
+                character.AppearanceHair = appearanceHair;
+                character.AppearanceClothes = appearanceClothes;
+
+                _characterService.Create(character);
             }
         }
     }

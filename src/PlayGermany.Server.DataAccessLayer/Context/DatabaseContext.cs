@@ -17,6 +17,17 @@ namespace PlayGermany.Server.DataAccessLayer.Context
 
         public DbSet<Character> Characters { get; set; }
 
+        public DbSet<BankAccount> BankAccounts { get; set; }
+
+        public DbSet<BankAccountAccess> BankAccountAccesses { get; set; }
+
         #endregion
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // combined primary key can only be configured here
+            modelBuilder.Entity<BankAccountAccess>()
+                .HasKey(c => new { c.BankAccountId, c.CharacterId });
+        }
     }
 }

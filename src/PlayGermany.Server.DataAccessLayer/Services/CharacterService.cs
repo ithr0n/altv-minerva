@@ -25,5 +25,28 @@ namespace PlayGermany.Server.DataAccessLayer.Services
 
             return dbContext.Characters.Where(e => e.Account == account).ToList();
         }
+
+        public async Task<Character> GetCharacter(int characterId)
+        {
+            using var dbContext = _dbContextFactory.CreateDbContext();
+
+            return await dbContext.Characters.FindAsync(characterId);
+        }
+
+        public void Create(Character character)
+        {
+            using var dbContext = _dbContextFactory.CreateDbContext();
+
+            dbContext.Characters.Add(character);
+            dbContext.SaveChanges();
+        }
+
+        public void Update(Character character)
+        {
+            using var dbContext = _dbContextFactory.CreateDbContext();
+
+            dbContext.Characters.Update(character);
+            dbContext.SaveChanges();
+        }
     }
 }

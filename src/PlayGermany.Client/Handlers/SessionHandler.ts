@@ -41,11 +41,21 @@ alt.onServer('PlayerSpawned', () => {
     natives.setPedConfigFlag(alt.Player.local.scriptID, 32, true) // Player_FLAG_CAN_FLY_THRU_WINDSCREEN
 })
 
-alt.onServer('Login:Callback', (status: boolean) => {
-    if (status) {
-        UiManager.hideComponent('Login')
-        alt.emitServer('RequestSpawn')
-    } else {
+alt.onServer('Login:Callback', (status: boolean, characters: any[]) => {
+    // characters: { charId, charName }
+
+    if (!status) {
         UiManager.emit('Login:Failed')
+        return
+    }
+
+    UiManager.hideComponent('Login')
+
+    // here we could add character selection view
+    if (characters.length < 1) {
+        // todo: create new character
+        alt.emitServer('Session:CreateNewCharacter')
+    } else {
+        alt.emitServer('Session:RequestCharacterSpawn', characters[0].charId)
     }
 })

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PlayGermany.Server.DataAccessLayer.Models
 {
@@ -13,6 +14,7 @@ namespace PlayGermany.Server.DataAccessLayer.Models
         }
 
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public ulong SocialClubId { get; set; }
 
         public ulong HardwareIdHash { get; set; }

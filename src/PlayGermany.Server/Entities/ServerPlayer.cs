@@ -21,12 +21,17 @@ namespace PlayGermany.Server.Entities
             {
                 if (!GetStreamSyncedMetaData("roleplayName", out string result))
                 {
+                    if (Character != null)
+                    {
+                        SetStreamSyncedMetaData("roleplayName", Character.Name);
+                        return Character.Name;
+                    }
+
                     return string.Empty;
                 }
 
                 return result;
             }
-            set => SetStreamSyncedMetaData("roleplayName", value);
         }
 
         public decimal Cash
@@ -101,6 +106,8 @@ namespace PlayGermany.Server.Entities
         }
 
         public Account Account { get; set; }
+        
+        public Character Character { get; set; }
 
         public bool LoggedIn => Account != null;
     }
