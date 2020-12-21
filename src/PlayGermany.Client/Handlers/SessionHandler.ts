@@ -2,8 +2,15 @@ import * as alt from 'alt-client'
 import * as natives from 'natives'
 import * as AsyncHelper from '../Utils/AsyncHelper'
 import Camera from '../Utils/Camera'
+import * as UiManager from '../UiManager'
 
 let loginCamera: Camera
+
+// Disable idle camera
+let idle = alt.setInterval(() => {
+    natives.invalidateIdleCam(); // Disable player idle camera
+    natives._0x9E4CFFF989258472(); // Disable vehicle idle camera
+}, 5000);
 
 alt.on('connectionComplete', async () => {
     /*await*/ AsyncHelper.RequestModel(alt.hash('mp_f_freemode_01'))
@@ -34,8 +41,11 @@ alt.onServer('PlayerSpawned', () => {
     natives.setPedConfigFlag(alt.Player.local.scriptID, 32, true) // Player_FLAG_CAN_FLY_THRU_WINDSCREEN
 })
 
-// Disable idle camera
-let idle = alt.setInterval(() => {
-    natives.invalidateIdleCam(); // Disable player idle camera
-    natives._0x9E4CFFF989258472(); // Disable vehicle idle camera
-}, 5000);
+alt.onServer('Login:Callback', (status: boolean) => {
+    if (status) {
+        UiManager.hideComponent('Login')
+        alt.emitServer('RequestSpawn')
+    } else {
+        UiManager.emit('Login:Failed')
+    }
+})

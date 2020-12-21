@@ -1,6 +1,7 @@
 import * as alt from 'alt-client'
 import * as natives from 'natives'
 import KeyCodes from '../Utils/KeyCodes'
+import * as UiManager from '../UiManager'
 
 let electric = [
     2445973230,// neon
@@ -33,7 +34,7 @@ alt.everyTick(() => {
         if (lowBeam) lightState = 1
         if (highBeam) lightState = 2
 
-        alt.emit('UiManager:Emit', 'VehicleHud:Update', {
+        UiManager.emit('VehicleHud:Update', {
             gear: vehicle.gear,
             rpm: Math.floor(vehicle.rpm * 10000),
             speed: Math.floor(natives.getEntitySpeed(vehicle.scriptID) * 3.6),
@@ -72,11 +73,11 @@ alt.onServer('playerEnteredVehicle', (vehicle: alt.Vehicle, seat) => {
     const vehicleClass = natives.getVehicleClass(vehicle.scriptID)
 
     if (vehiclesWithHud.includes(vehicleClass)) {
-        alt.emit('UiManager:ShowComponent', 'VehicleHud')
+        UiManager.showComponent('VehicleHud')
     }
 })
 
 alt.onServer('playerLeftVehicle', (vehicle, seat) => {
-    alt.emit('UiManager:HideComponent', 'VehicleHud')
-    alt.emit('UiManager:Emit', 'VehicleHud:Reset')
+    UiManager.hideComponent('VehicleHud')
+    UiManager.emit('VehicleHud:Reset')
 })

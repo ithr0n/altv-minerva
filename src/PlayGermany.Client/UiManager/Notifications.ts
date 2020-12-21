@@ -1,21 +1,42 @@
 import * as alt from 'alt-client'
+import * as UiManager from '../UiManager'
+
+export const notification = (message: string) => {
+    UiManager.emit('Notifications:Notify', message)
+}
+
+export const info = (message: string) => {
+    UiManager.emit('Notifications:Info', message)
+}
+
+export const success = (message: string) => {
+    UiManager.emit('Notifications:Success', message)
+}
+
+export const warning = (message: string) => {
+    UiManager.emit('Notifications:Warning', message)
+}
+
+export const error = (message: string) => {
+    UiManager.emit('Notifications:Error', message)
+}
 
 alt.onServer('UiManager:Notification', (message: string) => {
-    alt.emit('UiManager:Emit', 'Notifications:Notify', message)
+    notification(message)
 })
 
 alt.onServer('UiManager:Info', (message: string) => {
-    alt.emit('UiManager:Emit', 'Notifications:Info', message)
+    info(message)
 })
 
 alt.onServer('UiManager:Success', (message: string) => {
-    alt.emit('UiManager:Emit', 'Notifications:Success', message)
+    success(message)
 })
 
 alt.onServer('UiManager:Warning', (message: string) => {
-    alt.emit('UiManager:Emit', 'Notifications:Warning', message)
+    warning(message)
 })
 
 alt.onServer('UiManager:Error', (message: string) => {
-    alt.emit('UiManager:Emit', 'Notifications:Error', message)
+    error(message)
 })

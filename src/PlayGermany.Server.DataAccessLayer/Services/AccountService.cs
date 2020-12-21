@@ -17,14 +17,14 @@ namespace PlayGermany.Server.DataAccessLayer
             _dbContextFactory = dbContextFactory;
         }
 
-        public Task<Account> FindAccount(string socialClubId)
+        public Task<bool> Exists(ulong socialClubId)
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
 
-            return dbContext.Accounts.FirstOrDefaultAsync(e => e.SocialClubId == socialClubId);
+            return dbContext.Accounts.AnyAsync(e => e.SocialClubId == socialClubId);
         }
 
-        public Task<bool> Authenticate(string socialClubId, string password)
+        public async Task<bool> Authenticate(ulong socialClubId, ulong hardwareIdHash, ulong hardwareIdExHash, string password, out Account playerAccount)
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
             using var alg = SHA512.Create();
@@ -32,7 +32,14 @@ namespace PlayGermany.Server.DataAccessLayer
             alg.ComputeHash(Encoding.UTF8.GetBytes(password));
             var encrypted = BitConverter.ToString(alg.Hash);
 
-            return dbContext.Accounts.AnyAsync(e => e.SocialClubId == socialClubId && e.Password == encrypted);
+            playerAccount = await dbContext.Accounts.SingleAsync(e => 
+                e.SocialClubId == socialClubId && 
+                e.HardwareIdHash == hardwareIdHash &&
+                e.HardwareIdExHash == hardwareIdExHash &&
+                e.BannedUntil <= DateTime.Now &&
+                e.Password == encrypted);
+
+            return playerAccount != null;
         }
     }
 }

@@ -51,7 +51,7 @@ export default Vue.extend({
         this.$alt.on('Login:Failed', () => {
             this.inputDisabled = false
             this.errorMsg =
-                'Anmeldung fehlgeschlagen, bitte überprüfe deine Eingabe.'
+                'Anmeldung fehlgeschlagen! Entweder hast du ein falsches Passwort verwendest oder dein Account ist gesperrt worden. Überprüfe deine Eingabe oder melde dich im Support.'
         })
     },
 

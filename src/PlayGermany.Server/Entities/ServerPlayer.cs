@@ -1,4 +1,5 @@
 ﻿using AltV.Net.Elements.Entities;
+using PlayGermany.Server.DataAccessLayer.Models;
 using PlayGermany.Server.Enums;
 using System;
 
@@ -98,5 +99,9 @@ namespace PlayGermany.Server.Entities
                 SetStreamSyncedMetaData("voiceIndex", (int)value);
             }
         }
+
+        public Account Account { get; set; }
+
+        public bool LoggedIn => Account != null;
     }
 }

@@ -9,10 +9,17 @@ namespace PlayGermany.Server.DataAccessLayer.Models
         public Account()
         {
             Characters = new List<Character>();
+            BannedUntil = DateTime.MinValue;
         }
 
         [Key]
-        public string SocialClubId { get; set; }
+        public ulong SocialClubId { get; set; }
+
+        public ulong HardwareIdHash { get; set; }
+
+        public ulong HardwareIdExHash { get; set; }
+
+        public DateTime BannedUntil { get; set; }
 
         public string Password { get; set; }
 

@@ -1,6 +1,5 @@
 import * as alt from 'alt-client'
 
-import './Login'
 import './PlayerHud'
 import './VehicleHud'
 import './VehicleRadio'
@@ -27,37 +26,38 @@ alt.onServer('UiManager:Initialize', async (url: string) => {
     })
 
     view.on('ui:EmitServer', (eventName, ...args) => {
-        alt.emit(eventName, args)
+        alt.emitServer(eventName, args)
     })
 })
 
-const uiCopyToClipboardHandler = (contents: string) => {
-    view.emit('CopyToClipboard', contents)
-}
-alt.on('UiManager:CopyToClipboard', uiCopyToClipboardHandler)
-alt.onServer('UiManager:CopyToClipboard', uiCopyToClipboardHandler)
-
-alt.on('UiManager:Emit', (eventName: string, ...args: any[]) => {
+export const emit = (eventName: string, ...args: any[]) => {
     if (view === null) return
-    view.emit(eventName, ...args)
-})
+    view.emit(eventName, args)
+}
 
-alt.on('UiManager:ShowComponent', (component: string) => {
+export const showComponent = (component: string) => {
     if (view === null) return
     view.emit('ToggleComponent', component, true)
-})
+}
 
-alt.on('UiManager:HideComponent', (component: string) => {
+export const hideComponent = (component: string) => {
     if (view === null) return
     view.emit('ToggleComponent', component, false)
-})
+}
 
-alt.on('UiManager:ToggleComponent', (component: string) => {
+export const toggleComponent = (component: string) => {
     if (view === null) return
     view.emit('ToggleComponent', component)
-})
+}
 
-alt.on('UiManager:SetAppData', (key: string, value: any) => {
+export const setAppData = (key: string, value: any) => {
     if (view === null) return
     view.emit('SetAppData', key, value)
-})
+}
+
+export const copyToClipboard = (contents: string) => {
+    if (view === null) return
+    view.emit('CopyToClipboard', contents)
+}
+
+alt.onServer('UiManager:CopyToClipboard', copyToClipboard)

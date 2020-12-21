@@ -1,12 +1,13 @@
 import * as alt from 'alt-client'
+import * as UiManager from '../UiManager'
 
 alt.onServer('PlayerSpawned', () => {
-    alt.emit('UiManager:ShowComponent', 'PlayerHud')
-    alt.emit('UiManager:Emit', 'PlayerHud:SetData', 'playerName', alt.Player.local.getStreamSyncedMeta("roleplayName"))
-    alt.emit('UiManager:Emit', 'PlayerHud:SetData', 'cash', alt.Player.local.getStreamSyncedMeta("cash"))
-    alt.emit('UiManager:Emit', 'PlayerHud:SetData', 'hunger', alt.Player.local.getStreamSyncedMeta("hunger"))
-    alt.emit('UiManager:Emit', 'PlayerHud:SetData', 'thirst', alt.Player.local.getStreamSyncedMeta("thirst"))
-    alt.emit('UiManager:Emit', 'PlayerHud:SetData', 'voiceIndex', alt.Player.local.getStreamSyncedMeta("voiceIndex"))
+    UiManager.showComponent('PlayerHud')
+    UiManager.emit('PlayerHud:SetData', 'playerName', alt.Player.local.getStreamSyncedMeta("roleplayName"))
+    UiManager.emit('PlayerHud:SetData', 'cash', alt.Player.local.getStreamSyncedMeta("cash"))
+    UiManager.emit('PlayerHud:SetData', 'hunger', alt.Player.local.getStreamSyncedMeta("hunger"))
+    UiManager.emit('PlayerHud:SetData', 'thirst', alt.Player.local.getStreamSyncedMeta("thirst"))
+    UiManager.emit('PlayerHud:SetData', 'voiceIndex', alt.Player.local.getStreamSyncedMeta("voiceIndex"))
 })
 
 alt.on('streamSyncedMetaChange', (entity: alt.Entity, key: string, value: string) => {
@@ -16,22 +17,22 @@ alt.on('streamSyncedMetaChange', (entity: alt.Entity, key: string, value: string
 
     switch (key) {
         case 'cash': {
-            alt.emit('UiManager:Emit', 'PlayerHud:SetData', 'cash', value)
+            UiManager.emit('PlayerHud:SetData', 'cash', value)
             break;
         }
 
         case 'hunger': {
-            alt.emit('UiManager:Emit', 'PlayerHud:SetData', 'hunger', value)
+            UiManager.emit('PlayerHud:SetData', 'hunger', value)
             break;
         }
 
         case 'thirst': {
-            alt.emit('UiManager:Emit', 'PlayerHud:SetData', 'thirst', value)
+            UiManager.emit('PlayerHud:SetData', 'thirst', value)
             break;
         }
 
         case 'voiceIndex': {
-            alt.emit('UiManager:Emit', 'PlayerHud:SetData', 'voiceIndex', value)
+            UiManager.emit('PlayerHud:SetData', 'voiceIndex', value)
             break;
         }
     }

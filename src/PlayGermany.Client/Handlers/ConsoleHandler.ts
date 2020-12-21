@@ -1,6 +1,7 @@
 import * as alt from 'alt-client'
 import * as natives from 'natives'
 import * as NativesHelper from '../Utils/NativesHelper'
+import * as Notifications from '../UiManager/Notifications'
 
 alt.on('consoleCommand', (command: string, ...args: string[]) => {
     alt.emitServer('ClientConsoleHandler:Command', command, args)
@@ -15,6 +16,6 @@ alt.onServer('ConsoleHandler:TeleportToWaypoint', async () => {
 
         alt.emitServer('RequestTeleport', new alt.Vector3(coords.x, coords.y, z))
     } else {
-        alt.emit('UiManager:Error', 'Du musst zuerst einen Marker setzen!')
+        Notifications.error('Du musst zuerst einen Marker setzen!')
     }
 })

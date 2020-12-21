@@ -1,6 +1,7 @@
 import * as alt from 'alt-client'
 import * as natives from 'natives'
 import KeyCodes from '../Utils/KeyCodes'
+import * as UiManager from '../UiManager'
 
 const player = alt.Player.local;
 let focused = false
@@ -45,7 +46,7 @@ let radioStations = [
 ]
 
 alt.on('UiManager:Loaded', () => {
-    alt.emit('UiManager:Emit', 'radio:SetStations', radioStations)
+    UiManager.emit('radio:SetStations', radioStations)
 })
 
 alt.onServer('playerEnteredVehicle', (vehicle: alt.Vehicle, seat: number) => {
@@ -54,12 +55,12 @@ alt.onServer('playerEnteredVehicle', (vehicle: alt.Vehicle, seat: number) => {
         currentStation = player.vehicle.getStreamSyncedMeta('radioStation')
     }
 
-    alt.emit('UiManager:SetAppData', 'isPlayerInVehicle', true)
-    alt.emit('UiManager:Emit', 'radio:SwitchStation', currentStation);
+    UiManager.setAppData('isPlayerInVehicle', true)
+    UiManager.emit('radio:SwitchStation', currentStation);
 });
 
 alt.onServer('playerLeftVehicle', (vehicle: alt.Vehicle, seat: number) => {
-    alt.emit('UiManager:SetAppData', 'isPlayerInVehicle', false)
+    UiManager.setAppData('isPlayerInVehicle', false)
 })
 
 alt.on('streamSyncedMetaChange', (entity: alt.Entity, key: string, value: string) => {
@@ -69,7 +70,7 @@ alt.on('streamSyncedMetaChange', (entity: alt.Entity, key: string, value: string
 
     if (key === 'radioStation') {
         if (player.vehicle === entity && player.hasMeta('seat') && player.getMeta('seat') !== -1) {
-            alt.emit('UiManager:Emit', 'radio:SwitchStation', value)
+            UiManager.emit('radio:SwitchStation', value)
         } else {
             // later: we can play radio of nearby cars here
         }
