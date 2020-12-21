@@ -17,9 +17,9 @@ namespace PlayGermany.Server.DataAccessLayer.Models
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public ulong SocialClubId { get; set; }
 
-        public ulong HardwareIdHash { get; set; }
+        public ulong? HardwareIdHash { get; set; }
 
-        public ulong HardwareIdExHash { get; set; }
+        public ulong? HardwareIdExHash { get; set; }
 
         public DateTime BannedUntil { get; set; }
 

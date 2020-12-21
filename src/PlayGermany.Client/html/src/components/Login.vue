@@ -40,7 +40,6 @@ export default Vue.extend({
 
     data: () => {
         return {
-            username: '',
             password: '',
             errorMsg: '',
             inputDisabled: false,
@@ -57,9 +56,9 @@ export default Vue.extend({
 
     methods: {
         handleSubmit() {
-            if (this.username.length <= 3 || this.password.length <= 3) {
+            if (this.password.length <= 3) {
                 this.errorMsg =
-                    'Du musst einen gültigen Benutzernamen und ein gültiges Passwort angeben!'
+                    'Du musst ein gültiges Passwort eingeben!'
                 return
             }
 
@@ -69,7 +68,6 @@ export default Vue.extend({
             this.$alt.emit(
                 'ui:EmitServer',
                 'Login:Authenticate',
-                this.username,
                 this.password
             )
         },

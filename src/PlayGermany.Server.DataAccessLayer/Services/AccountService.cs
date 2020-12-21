@@ -32,12 +32,41 @@ namespace PlayGermany.Server.DataAccessLayer.Services
             alg.ComputeHash(Encoding.UTF8.GetBytes(password));
             var encrypted = BitConverter.ToString(alg.Hash);
 
-            return await dbContext.Accounts.SingleAsync(e => 
+            var account = await dbContext.Accounts.SingleOrDefaultAsync(e => 
                 e.SocialClubId == socialClubId && 
-                e.HardwareIdHash == hardwareIdHash &&
-                e.HardwareIdExHash == hardwareIdExHash &&
                 e.BannedUntil <= DateTime.Now &&
                 e.Password == encrypted);
+
+            if (account != null)
+            {
+                // check for faking authentication
+
+                if (account.HardwareIdHash == null)
+                {
+                    account.HardwareIdHash = hardwareIdHash;
+                    dbContext.Accounts.Update(account);
+                }
+                else if (account.HardwareIdHash != hardwareIdHash)
+                {
+                    account = null;
+                }
+
+                if (account.HardwareIdExHash == null)
+                {
+                    account.HardwareIdExHash = hardwareIdExHash;
+                    dbContext.Accounts.Update(account);
+                } else if (account.HardwareIdExHash != hardwareIdExHash)
+                {
+                    account = null;
+                }
+
+                if (account != null)
+                {
+                    dbContext.SaveChanges();
+                }
+            }
+
+            return account;
         }
     }
 }

@@ -1,4 +1,5 @@
 import * as alt from 'alt-client'
+import * as AltHelper from '../Utils/AltHelper'
 
 import './PlayerHud'
 import './VehicleHud'
@@ -18,6 +19,7 @@ alt.onServer('UiManager:Initialize', async (url: string) => {
 
     view.on("loaded", () => {
         view.emit('ToggleComponent', 'Login', true)
+        AltHelper.showCursor()
         alt.emit('UiManager:Loaded')
     })
 
@@ -58,6 +60,11 @@ export const setAppData = (key: string, value: any) => {
 export const copyToClipboard = (contents: string) => {
     if (view === null) return
     view.emit('CopyToClipboard', contents)
+}
+
+export const on = (eventName: string, callback: (...args: any[]) => void) => {
+    if (view === null) return
+    view.on(eventName, (...args) => callback(args))
 }
 
 alt.onServer('UiManager:CopyToClipboard', copyToClipboard)

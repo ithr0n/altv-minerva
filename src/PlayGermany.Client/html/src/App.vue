@@ -5,6 +5,7 @@
 
             <!-- toggable components -->
             <Login v-show="showLogin" />
+            <CharacterCreation v-show="showCharacterCreation" />
             <PlayerHud v-show="showPlayerHud" />
             <VehicleHud v-show="showVehicleHud" />
 
@@ -18,6 +19,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import Login from './components/Login.vue'
+import CharacterCreation from './components/CharacterCreation.vue'
 import PlayerHud from './components/PlayerHud.vue'
 import VehicleHud from './components/VehicleHud.vue'
 import VehicleRadio from './components/VehicleRadio.vue'
@@ -28,6 +30,7 @@ export default Vue.extend({
 
     components: {
         Login,
+        CharacterCreation,
         PlayerHud,
         VehicleHud,
         VehicleRadio,
@@ -36,6 +39,7 @@ export default Vue.extend({
 
     data: () => ({
         showLogin: false,
+        showCharacterCreation: false,
         showPlayerHud: false,
         showVehicleHud: false,
         isPlayerInVehicle: false,

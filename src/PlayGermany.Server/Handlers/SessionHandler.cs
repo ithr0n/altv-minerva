@@ -36,7 +36,7 @@ namespace PlayGermany.Server.Handlers
             Alt.OnClient<ServerPlayer, string>("Login:Authenticate", OnLoginAuthenticate);
             AltAsync.OnClient<ServerPlayer, int>("Session:RequestCharacterSpawn", OnRequestCharacterSpawn);
             Alt.OnClient<ServerPlayer, Vector3>("RequestTeleport", OnRequestTeleport);
-            Alt.OnClient<ServerPlayer, Dictionary<string, string>>("Session:CreateNewCharacter", OnCreateNewCharacter);
+            AltAsync.OnClient<ServerPlayer, Dictionary<string, string>>("Session:CreateNewCharacter", OnCreateNewCharacter);
 
             Logger = logger;
 
@@ -71,7 +71,7 @@ namespace PlayGermany.Server.Handlers
                 return;
             }
 
-            player.EmitLocked("UiManager:Initialize", uiUrl);
+            player.Emit("UiManager:Initialize", uiUrl);
         }
 
         private void OnPlayerDead(ServerPlayer player, IEntity killer, uint weapon)
@@ -117,10 +117,8 @@ namespace PlayGermany.Server.Handlers
             }
 
             player.Character = character;
-            player.Model = Alt.Hash(character.Model); // load from db
-            player.Dimension = 0;
 
-            _ = player.SpawnAsync(SpawnPoint);
+            await SpawnCharacter(player);
 
             player.Emit("PlayerSpawned");
         }
@@ -137,11 +135,11 @@ namespace PlayGermany.Server.Handlers
             }
         }
 
-        private void OnCreateNewCharacter(ServerPlayer player, Dictionary<string, string> charCreationObj)
+        private async void OnCreateNewCharacter(ServerPlayer player, Dictionary<string, string> charCreationObj)
         {
             if (charCreationObj.TryGetValue("firstName", out string firstName) &&
                 charCreationObj.TryGetValue("lastName", out string lastName) &&
-                charCreationObj.TryGetValue("model", out string model) &&
+                charCreationObj.TryGetValue("genderIndex", out string genderIndex) &&
                 charCreationObj.TryGetValue("appearanceParents", out string appearanceParents) &&
                 charCreationObj.TryGetValue("appearanceFaceFeatures", out string appearanceFaceFeatures) &&
                 charCreationObj.TryGetValue("appearanceDetails", out string appearanceDetails) &&
@@ -152,7 +150,7 @@ namespace PlayGermany.Server.Handlers
                 character.AccountId = player.Account.SocialClubId;
                 character.FirstName = firstName;
                 character.LastName = lastName;
-                character.Model = model;
+                character.Model = genderIsMale == "0" ? "mp_m_freemode_01" : "mp_f_freemode_01";
                 character.Armor = 0;
                 character.Health = 200;
                 character.Cash = 500;
@@ -165,7 +163,40 @@ namespace PlayGermany.Server.Handlers
                 character.AppearanceClothes = appearanceClothes;
 
                 _characterService.Create(character);
+
+                player.Character = character;
+
+                await SpawnCharacter(player);
+
+                player.Emit("Session:PlayIntro");
+
+                return;
             }
+
+            player.Kick("Error on character creation!");
+        }
+
+        private async Task SpawnCharacter(ServerPlayer player)
+        {
+            if (player.Character == null)
+            {
+                return;
+            }
+
+            player.Dimension = 100 + player.Id;
+            player.Model = Alt.Hash(player.Character.Model);
+
+            await player.SpawnAsync(SpawnPoint);
+
+            var appearanceData = new List<string> {
+                player.Character.AppearanceParents,
+                player.Character.AppearanceFaceFeatures,
+                player.Character.AppearanceDetails,
+                player.Character.AppearanceHair,
+                player.Character.AppearanceClothes
+            };
+
+            player.Emit("Session:PlayerSpawning", appearanceData);
         }
     }
 }

@@ -6,7 +6,7 @@ import * as natives from 'natives'
  * @param {string} scaleform
  * @returns {Promise<number>} handle
  */
-export const RequestScaleform = async (scaleform: string) => {
+export const RequestScaleform = async (scaleform: string, timeoutMs: number = 10000) => {
     return new Promise((resolve, reject) => {
         /* natives.doesScaleformExist(dictName) does not exists */
 
@@ -14,7 +14,7 @@ export const RequestScaleform = async (scaleform: string) => {
 
         const handle = natives.requestScaleformMovie(scaleform)
 
-        const deadline = new Date().getTime() + 1000 * 10
+        const deadline = new Date().getTime() + timeoutMs
 
         const inter = alt.setInterval(() => {
             if (natives.hasScaleformMovieLoaded(handle)) {
@@ -23,7 +23,7 @@ export const RequestScaleform = async (scaleform: string) => {
                 resolve(handle)
             } else if (deadline < new Date().getTime()) {
                 alt.clearInterval(inter)
-                const error = `Error: Async loading failed for scaleform: ${scaleform}`
+                const error = `Error: Async loading failed for scaleformMovie: ${scaleform}`
                 alt.log(error)
                 reject(new Error(error)) // probably better resolve(false)
             }
@@ -36,7 +36,7 @@ export const RequestScaleform = async (scaleform: string) => {
  * @param {string} dictName
  * @returns {Promise<boolean>} loaded
  */
-export const RequestAnimDict = (dictName: string) => {
+export const RequestAnimDict = (dictName: string, timeoutMs: number = 10000) => {
     return new Promise((resolve, reject) => {
         if (!natives.doesAnimDictExist(dictName)) {
             reject(new Error(`Animation dictionary does not exist: ${dictName}`))
@@ -50,7 +50,7 @@ export const RequestAnimDict = (dictName: string) => {
 
         natives.requestAnimDict(dictName)
 
-        const deadline = new Date().getTime() + 1000 * 10
+        const deadline = new Date().getTime() + timeoutMs
 
         const inter = alt.setInterval(() => {
             if (natives.hasAnimDictLoaded(dictName)) {
@@ -59,7 +59,7 @@ export const RequestAnimDict = (dictName: string) => {
                 resolve(true)
             } else if (deadline < new Date().getTime()) {
                 alt.clearInterval(inter)
-                const error = `Error: Async loading failed for animation dictionary: ${dictName}`
+                const error = `Error: Async loading failed for animDict: ${dictName}`
                 alt.log(error)
                 reject(new Error(error)) // probably better resolve(false)
             }
@@ -72,7 +72,7 @@ export const RequestAnimDict = (dictName: string) => {
  * @param {number} model
  * @returns {Promise<boolean>} loaded
  */
-export const RequestModel = async (model: number) => {
+export const RequestModel = async (model: number, timeoutMs: number = 10000) => {
     return new Promise((resolve, reject) => {
         if (!natives.isModelValid(model)) {
             reject(new Error(`Model does not exist: ${model}`))
@@ -86,7 +86,7 @@ export const RequestModel = async (model: number) => {
 
         natives.requestModel(model)
 
-        const deadline = new Date().getTime() + 1000 * 10
+        const deadline = new Date().getTime() + timeoutMs
 
         const inter = alt.setInterval(() => {
             if (natives.hasModelLoaded(model)) {
@@ -103,7 +103,7 @@ export const RequestModel = async (model: number) => {
     })
 }
 
-export const RequestNamedPtfxAsset = (assetName: string) => {
+export const RequestNamedPtfxAsset = (assetName: string, timeoutMs: number = 10000) => {
     return new Promise((resolve, reject) => {
         if (natives.hasNamedPtfxAssetLoaded(assetName)) {
             return resolve(true);
@@ -111,19 +111,49 @@ export const RequestNamedPtfxAsset = (assetName: string) => {
 
         natives.requestNamedPtfxAsset(assetName);
 
+        const deadline = new Date().getTime() + timeoutMs
+
         let inter = alt.setInterval(() => {
             if (natives.hasNamedPtfxAssetLoaded(assetName)) {
                 alt.clearInterval(inter);
                 //alt.log('Asset loaded: ' + assetName);
                 return resolve(true);
+            } else if (deadline < new Date().getTime()) {
+                alt.clearInterval(inter)
+                const error = `Error: Async loading failed for namedPtfxAsset: ${assetName}`
+                alt.log(error)
+                reject(new Error(error)) // probably better resolve(false)
             }
-            //alt.log('Requesting asset: ' + assetName);
         }, 10);
     });
 }
 
 export const Wait = (timeout: number) => {
-    return new Promise((resolve) => {
-        alt.setTimeout(resolve, timeout);
+    return new Promise(resolve => {
+        alt.setTimeout(() => {
+            resolve(true)
+        }, timeout);
     })
+}
+
+export const WaitUntil = (action: (...args: any[]) => boolean, timeoutMs: number = 10000, ...args: any[]) => {
+    return new Promise((resolve, reject) => {
+        const deadline = new Date().getTime() + timeoutMs
+
+        const et = alt.everyTick(() => {
+          if (!action(...args)) {
+            if (deadline < new Date().getTime()) {
+                alt.clearEveryTick(et)
+                const error = `Error: Async waiting for callback failed!!!`
+                alt.log(error)
+                reject(new Error(error)) // probably better resolve(false)
+            }
+
+            return
+          };
+          
+          alt.clearEveryTick(et);
+          resolve(true);
+        });
+      });
 }
