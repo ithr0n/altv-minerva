@@ -18,7 +18,7 @@
         "types": [
             "webpack-env",
             "vuetify",
-            "howl"
+            "howler"
         ],
         "paths": {
             "@/*": [

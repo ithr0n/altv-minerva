@@ -16,12 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Handlers\ServerConsoleHandler.cs" />
     <Compile Remove="Kernel.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Handlers\ServerConsoleHandler.cs" />
   </ItemGroup>
 
   <ItemGroup>

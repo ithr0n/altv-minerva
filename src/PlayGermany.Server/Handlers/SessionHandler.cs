@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
-using AltV.Net.Enums;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PlayGermany.Server.DataAccessLayer.Models;
@@ -150,7 +148,7 @@ namespace PlayGermany.Server.Handlers
                 character.AccountId = player.Account.SocialClubId;
                 character.FirstName = firstName;
                 character.LastName = lastName;
-                character.Model = genderIsMale == "0" ? "mp_m_freemode_01" : "mp_f_freemode_01";
+                character.Model = genderIndex == "0" ? "mp_m_freemode_01" : "mp_f_freemode_01";
                 character.Armor = 0;
                 character.Health = 200;
                 character.Cash = 500;

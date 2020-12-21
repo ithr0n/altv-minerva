@@ -14,6 +14,7 @@ using PlayGermany.Server.Handlers;
 using PlayGermany.Server.ScheduledJobs.Base;
 using PlayGermany.Server.Entities.Factories;
 using PlayGermany.Server.EntitySync.Streamers;
+using PlayGermany.Server.DataAccessLayer.Services;
 
 namespace PlayGermany.Server
 {
@@ -111,10 +112,16 @@ namespace PlayGermany.Server
             services.AddSingleton<StaticBlipsStreamer>();
 
             // register handlers
+            services.AddSingletonAndInstanciate<ClientConsoleHandler>();
+            services.AddSingletonAndInstanciate<ServerConsoleHandler>();
             services.AddSingletonAndInstanciate<SessionHandler>();
             services.AddSingletonAndInstanciate<VehicleHandler>();
-            services.AddSingletonAndInstanciate<ClientConsoleHandler>();
             services.AddSingletonAndInstanciate<VoiceHandler>();
+
+            // register services
+            services.AddScoped<AccountService>();
+            services.AddScoped<BankAccountService>();
+            services.AddScoped<CharacterService>();
 
             // custom
             services.AddSingleton<WorldData>();

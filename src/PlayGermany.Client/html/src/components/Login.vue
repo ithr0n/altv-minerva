@@ -8,17 +8,17 @@
             <v-form>
                 <v-text-field
                     required
-                    type="password"
                     v-model="password"
+                    type="password"
                     label="Passwort"
                     :disabled="inputDisabled"
                 />
 
                 <v-btn
-                    @click="handleSubmit"
                     type="submit"
                     :disabled="inputDisabled"
                     :loading="inputDisabled"
+                    @click="handleSubmit"
                     >Anmelden</v-btn
                 >
             </v-form>
@@ -57,19 +57,14 @@ export default Vue.extend({
     methods: {
         handleSubmit() {
             if (this.password.length <= 3) {
-                this.errorMsg =
-                    'Du musst ein gültiges Passwort eingeben!'
+                this.errorMsg = 'Du musst ein gültiges Passwort eingeben!'
                 return
             }
 
             this.errorMsg = ''
             this.inputDisabled = true
 
-            this.$alt.emit(
-                'ui:EmitServer',
-                'Login:Authenticate',
-                this.password
-            )
+            this.$alt.emit('ui:EmitServer', 'Login:Authenticate', this.password)
         },
     },
 })
