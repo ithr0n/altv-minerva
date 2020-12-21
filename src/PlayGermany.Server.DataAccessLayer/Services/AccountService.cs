@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PlayGermany.Server.DataAccessLayer
+namespace PlayGermany.Server.DataAccessLayer.Services
 {
     public class AccountService
     {

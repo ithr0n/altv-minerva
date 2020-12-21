@@ -11,6 +11,7 @@ namespace PlayGermany.Server.DataAccessLayer.Models
         [Key]
         public int Id { get; set; }
 
+        public int AccountId { get; set; }
         public Account Account { get; set; }
 
         public string FirstName { get; set; }
@@ -22,5 +23,8 @@ namespace PlayGermany.Server.DataAccessLayer.Models
         public ushort Armor { get; set; }
 
         public decimal Cash { get; set; }
+
+        [NotMapped]
+        public string Name => $"{FirstName} {LastName}";
     }
 }

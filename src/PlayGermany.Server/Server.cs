@@ -27,6 +27,7 @@ namespace PlayGermany.Server
         public ILogger<Server> Logger { get; }
 
         public Server()
+            : base(new ActionTickSchedulerFactory())
         {
             Configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())

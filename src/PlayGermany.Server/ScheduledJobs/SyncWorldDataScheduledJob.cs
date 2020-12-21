@@ -1,5 +1,8 @@
 ﻿using AltV.Net;
+using AltV.Net.Async;
+using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
+using PlayGermany.Server.Callbacks;
 using PlayGermany.Server.Entities;
 using PlayGermany.Server.ScheduledJobs.Base;
 using System;
@@ -35,8 +38,7 @@ namespace PlayGermany.Server.ScheduledJobs
                 _worldData.Clock += DateTime.Now - _lastTick;
             }
 
-            foreach (var player in Alt.GetAllPlayers())
-            {
+            var callback = new FunctionCallback<IPlayer>((player) => {
                 player.SetDateTime(
                     _worldData.Clock.Day,
                     _worldData.Clock.Month,
@@ -62,7 +64,9 @@ namespace PlayGermany.Server.ScheduledJobs
                   native.setForcePedFootstepsTracks(false);
                 }
                 */
-            }
+            });
+
+            Alt.ForEachPlayers(callback);
 
             _lastTick = DateTime.Now;
         }

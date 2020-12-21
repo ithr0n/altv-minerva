@@ -1,12 +1,15 @@
-﻿using System.Numerics;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Threading.Tasks;
 using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using PlayGermany.Server.DataAccessLayer;
 using PlayGermany.Server.DataAccessLayer.Models;
+using PlayGermany.Server.DataAccessLayer.Services;
 using PlayGermany.Server.Entities;
 
 namespace PlayGermany.Server.Handlers
@@ -14,15 +17,21 @@ namespace PlayGermany.Server.Handlers
     public class SessionHandler
     {
         private readonly AccountService _accountService;
+        private readonly CharacterService _characterService;
 
         private ILogger<SessionHandler> Logger { get; }
         public Vector3 SpawnPoint { get; }
 
-        public SessionHandler(ILogger<SessionHandler> logger, IConfiguration configuration, AccountService accountService)
+        public SessionHandler(
+            ILogger<SessionHandler> logger,
+            IConfiguration configuration,
+            AccountService accountService,
+            CharacterService characterService)
         {
             _accountService = accountService;
+            _characterService = characterService;
 
-            Alt.OnPlayerConnect += (player, reason) => OnPlayerConnect(player as ServerPlayer, reason);
+            AltAsync.OnPlayerConnect += (player, reason) => OnPlayerConnect(player as ServerPlayer, reason);
             Alt.OnPlayerDead += (player, killer, weapon) => OnPlayerDead(player as ServerPlayer, killer, weapon);
             Alt.OnClient<ServerPlayer, string>("Login:Authenticate", OnLoginAuthenticate);
             Alt.OnClient<ServerPlayer>("RequestSpawn", OnRequestSpawn);
@@ -40,7 +49,7 @@ namespace PlayGermany.Server.Handlers
             }
         }
 
-        private async void OnPlayerConnect(ServerPlayer player, string reason)
+        private async Task OnPlayerConnect(ServerPlayer player, string reason)
         {
             var uiUrl = "http://resource/client/html/index.html";
 
@@ -48,16 +57,19 @@ namespace PlayGermany.Server.Handlers
             uiUrl = "http://localhost:8080/index.html";
 #endif
 
-            Logger.LogInformation("Connection: SID {socialClub} with IP {ip}", player.SocialClubId, player.Ip);
+            var socialClubId = player.SocialClubId;
+            var ip = player.Ip;
+
+            Logger.LogInformation("Connection: SID {socialClub} with IP {ip}", socialClubId, ip);
             Logger.LogDebug("Requesting UI from {url}", uiUrl);
 
-            if (!await _accountService.Exists(player.SocialClubId))
+            if (!await _accountService.Exists(socialClubId))
             {
-                player.Kick("Du hast noch keinen Account auf diesem Server");
+                _ = AltAsync.Do(() => player.Kick("Du hast noch keinen Account auf diesem Server"));
                 return;
             }
 
-            player.Emit("UiManager:Initialize", uiUrl);
+            player.EmitLocked("UiManager:Initialize", uiUrl);
         }
 
         private void OnPlayerDead(ServerPlayer player, IEntity killer, uint weapon)
@@ -67,6 +79,8 @@ namespace PlayGermany.Server.Handlers
 
         private async void OnLoginAuthenticate(ServerPlayer player, string password)
         {
+            var playerCharacters = new Dictionary<int, string>();
+
             if (await _accountService.Authenticate(
                     player.SocialClubId,
                     player.HardwareIdHash,
@@ -75,9 +89,14 @@ namespace PlayGermany.Server.Handlers
                     out Account account))
             {
                 player.Account = account;
+
+                foreach (var character in _characterService.GetCharacters(account))
+                {
+                    playerCharacters.Add(character.Id, character.Name);
+                }
             }
 
-            player.Emit("Login:Callback", player.LoggedIn);
+            player.Emit("Login:Callback", player.LoggedIn, playerCharacters);
         }
 
         private void OnRequestSpawn(ServerPlayer player)

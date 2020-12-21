@@ -1,50 +1,54 @@
-﻿using AltV.Net;
+﻿using System;
+using System.Threading.Tasks;
+using AltV.Net;
+using AltV.Net.Elements.Entities;
 using Microsoft.Extensions.Logging;
+using PlayGermany.Server.Callbacks;
 using PlayGermany.Server.Entities;
 using PlayGermany.Server.ScheduledJobs.Base;
-using System;
 
 namespace PlayGermany.Server.ScheduledJobs
 {
     public class CharacterStatsScheduledJob
         : BaseScheduledJob
-    {
-        private readonly Random _random;
-
-        private ILogger<CharacterStatsScheduledJob> Logger { get; }
-
-        public CharacterStatsScheduledJob(ILogger<CharacterStatsScheduledJob> logger)
-            : base(TimeSpan.FromMinutes(1))
         {
-            _random = new Random();
-            Logger = logger;
-        }
+            private readonly Random _random;
 
-        public override void Action()
-        {
-            foreach (var player in Alt.GetAllPlayers())
+            private ILogger<CharacterStatsScheduledJob> Logger { get; }
+
+            public CharacterStatsScheduledJob(ILogger<CharacterStatsScheduledJob> logger) : base(TimeSpan.FromMinutes(1))
             {
-                var serverPlayer = player as ServerPlayer;
+                _random = new Random();
+                Logger = logger;
+            }
 
-                if (serverPlayer != null)
+            public override void Action()
+            {
+                var callback = new FunctionCallback<IPlayer>((player) =>
                 {
-                    var newHunger = serverPlayer.Hunger - _random.Next(2, 7);
-                    var newThirst = serverPlayer.Thirst - _random.Next(4, 11);
+                    var serverPlayer = player as ServerPlayer;
 
-                    serverPlayer.Hunger = Math.Max(newHunger, 0);
-                    serverPlayer.Thirst = Math.Max(newThirst, 0);
-
-                    if (serverPlayer.Hunger == 0)
+                    if (serverPlayer != null)
                     {
-                        serverPlayer.Health -= 10;
-                    }
+                        var newHunger = serverPlayer.Hunger - _random.Next(2, 7);
+                        var newThirst = serverPlayer.Thirst - _random.Next(4, 11);
 
-                    if (serverPlayer.Thirst == 0)
-                    {
-                        serverPlayer.Health -= 30;
+                        serverPlayer.Hunger = Math.Max(newHunger, 0);
+                        serverPlayer.Thirst = Math.Max(newThirst, 0);
+
+                        if (serverPlayer.Hunger == 0)
+                        {
+                            serverPlayer.Health -= 10;
+                        }
+
+                        if (serverPlayer.Thirst == 0)
+                        {
+                            serverPlayer.Health -= 30;
+                        }
                     }
-                }
+                });
+
+                Alt.ForEachPlayers(callback);
             }
         }
-    }
 }
