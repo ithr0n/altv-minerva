@@ -11,7 +11,7 @@ namespace PlayGermany.Server.ScheduledJobs.Base
     {
         private readonly ConcurrentBag<BaseScheduledJob> _scheduledJobs;
         private readonly Thread _worker;
-        private readonly int _minimalInterval = 1;
+        private readonly int _minimalIntervalMs = 500;
 
         public CancellationTokenSource Cancellation { get; private set; }
         private ILogger<ScheduleJobManager> Logger { get; }
@@ -71,7 +71,7 @@ namespace PlayGermany.Server.ScheduledJobs.Base
 
                 if (!Cancellation.IsCancellationRequested)
                 {
-                    Thread.Sleep(_minimalInterval * 1000);
+                    Thread.Sleep(_minimalIntervalMs);
                 }
             }
         }
