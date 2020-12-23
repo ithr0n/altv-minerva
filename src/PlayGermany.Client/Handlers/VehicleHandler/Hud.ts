@@ -1,7 +1,7 @@
 import * as alt from 'alt-client'
 import * as natives from 'natives'
-import KeyCodes from '../Utils/KeyCodes'
-import * as UiManager from '../UiManager'
+import KeyCodes from '../../Utils/KeyCodes'
+import * as UiManager from '../../UiManager'
 
 let electric = [
     2445973230,// neon

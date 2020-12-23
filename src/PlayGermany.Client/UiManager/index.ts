@@ -3,7 +3,6 @@ import * as AltHelper from '../Utils/AltHelper'
 
 import './PlayerHud'
 import './VehicleHud'
-import './VehicleRadio'
 import './Notifications'
 
 let view: alt.WebView = null

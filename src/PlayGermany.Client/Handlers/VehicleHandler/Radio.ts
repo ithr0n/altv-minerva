@@ -1,12 +1,11 @@
 import * as alt from 'alt-client'
 import * as natives from 'natives'
-import KeyCodes from '../Utils/KeyCodes'
-import * as UiManager from '../UiManager'
+import KeyCodes from '../../Utils/KeyCodes'
+import * as UiManager from '../../UiManager'
 
-const player = alt.Player.local;
-let focused = false
+let radioUiActive = false
 
-let radioStations = [
+const radioStations = [
     {
         name: 'Play-Germany Radio',
         url: 'http://gtaradio.play-germany.de:8000/stream',
@@ -50,14 +49,16 @@ alt.on('UiManager:Loaded', () => {
 })
 
 alt.onServer('playerEnteredVehicle', (vehicle: alt.Vehicle, seat: number) => {
+    const player = alt.Player.local
+
     let currentStation = 0
     if (player.vehicle.hasStreamSyncedMeta('radioStation')) {
         currentStation = player.vehicle.getStreamSyncedMeta('radioStation')
     }
 
     UiManager.setAppData('isPlayerInVehicle', true)
-    UiManager.emit('radio:SwitchStation', currentStation);
-});
+    UiManager.emit('radio:SwitchStation', currentStation)
+})
 
 alt.onServer('playerLeftVehicle', (vehicle: alt.Vehicle, seat: number) => {
     UiManager.setAppData('isPlayerInVehicle', false)
@@ -68,6 +69,8 @@ alt.on('streamSyncedMetaChange', (entity: alt.Entity, key: string, value: string
         return
     }
 
+    const player = alt.Player.local
+
     if (key === 'radioStation') {
         if (player.vehicle === entity && player.hasMeta('seat') && player.getMeta('seat') !== -1) {
             UiManager.emit('radio:SwitchStation', value)
@@ -77,39 +80,21 @@ alt.on('streamSyncedMetaChange', (entity: alt.Entity, key: string, value: string
     }
 })
 // alt.on('syncedMetaChange', (entity, key, value) => {
-//     if (entity != player.vehicle) return;
-//     const pedInSeat = native.getPedInVehicleSeat(player.vehicle.scriptID, -1);
-//     if (key != 'radioStation') return;
-//     if (pedInSeat == player.scriptID) return;
+//     if (entity != player.vehicle) return
+//     const pedInSeat = native.getPedInVehicleSeat(player.vehicle.scriptID, -1)
+//     if (key != 'radioStation') return
+//     if (pedInSeat == player.scriptID) return
 
-//     let radioStation = value;
+//     let radioStation = value
 
 //     if (browser && mounted) {
-//         browser.emit('switchRadio', radioStation);
+//         browser.emit('switchRadio', radioStation)
 //     }
-// });
-
-alt.everyTick(() => {
-    if (player.vehicle) {
-        natives.disableControlAction(0, 85, true);
-    } else {
-        natives.enableControlAction(0, 85, true);
-    }
-
-    if (focused) {
-        natives.disableControlAction(0, 99, true);
-        natives.disableControlAction(0, 100, true);
-    } else {
-        natives.enableControlAction(0, 99, true);
-        natives.enableControlAction(0, 100, true);
-    }
-
-    if (natives.isPedSittingInAnyVehicle(player.scriptID)) {
-        natives.setRadioToStationName('OFF');
-    }
-});
+// })
 
 alt.on('keydown', key => {
+    const player = alt.Player.local
+
     if (!player.vehicle) {
         return
     }
@@ -117,19 +102,46 @@ alt.on('keydown', key => {
     if (key === KeyCodes.Q_KEY && player.hasMeta('seat')) {
         if ([-1, 0].includes(+player.getMeta('seat'))) {
             // driver or first passenger
-            focused = true
+            radioUiActive = true
         }
     }
-});
+})
 
 alt.on('keyup', key => {
+    const player = alt.Player.local
+
     if (!player.vehicle) {
         return
     }
 
     if (key === KeyCodes.Q_KEY && player.hasMeta('seat')) {
         if ([-1, 0].includes(+player.getMeta('seat'))) {
-            focused = false
+            radioUiActive = false
         }
     }
-});
+})
+
+
+alt.everyTick(() => {
+    const player = alt.Player.local
+
+    if (player.vehicle) {
+        // disable native radio wheel (Q)
+        natives.disableControlAction(0, 85, true)
+    } else {
+        natives.enableControlAction(0, 85, true)
+    }
+
+    if (radioUiActive) {
+        // disable weapon switch on mouse wheel if UI is focused
+        natives.disableControlAction(0, 99, true)
+        natives.disableControlAction(0, 100, true)
+    } else {
+        natives.enableControlAction(0, 99, true)
+        natives.enableControlAction(0, 100, true)
+    }
+
+    if (natives.isPedSittingInAnyVehicle(player.scriptID)) {
+        natives.setRadioToStationName('OFF')
+    }
+})
