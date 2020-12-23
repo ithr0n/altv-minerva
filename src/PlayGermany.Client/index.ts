@@ -16,3 +16,11 @@ import './EntitySync/MarkersStreamer'
 import './UiManager'
 
 alt.log('Resource has been loaded.')
+
+alt.everyTick(() => {
+    // disable attacks without aiming
+    if (natives.isControlPressed(0, 25)) {
+        natives.disableControlAction(0, 24, true)
+        natives.disableControlAction(0, 140, true)
+    }
+})
