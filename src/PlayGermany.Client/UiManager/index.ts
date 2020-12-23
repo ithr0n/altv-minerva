@@ -2,7 +2,6 @@ import * as alt from 'alt-client'
 import * as AltHelper from '../Utils/AltHelper'
 
 import './PlayerHud'
-import './VehicleHud'
 import './Notifications'
 
 let view: alt.WebView = null
