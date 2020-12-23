@@ -10,7 +10,7 @@ namespace PlayGermany.Server.DataAccessLayer.Services
 
         public InventoryService(IDbContextFactory<DatabaseContext> dbContextFactory)
         {
-            _dbContextFactory = dbContextFactory
+            _dbContextFactory = dbContextFactory;
         }
 
         public Inventory CreateNew()

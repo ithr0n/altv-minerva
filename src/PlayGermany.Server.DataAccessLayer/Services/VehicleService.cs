@@ -11,7 +11,7 @@ namespace PlayGermany.Server.DataAccessLayer.Services
 
         public VehicleService(IDbContextFactory<DatabaseContext> dbContextFactory)
         {
-            _dbContextFactory = dbContextFactory
+            _dbContextFactory = dbContextFactory;
         }
 
         public Vehicle CreateNewVehicle(Vehicle vehicle, float vehicleInventoryMaxWeight, Item keyItem)

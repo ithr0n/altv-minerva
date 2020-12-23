@@ -19,10 +19,15 @@ let electric = [
 let handbrakeActive = false
 
 alt.on('keydown', (key) => {
-    if (key === KeyCodes.VK_SPACE) handbrakeActive = true
+    if (key === KeyCodes.VK_SPACE) {
+        handbrakeActive = true
+    }
 })
+
 alt.on('keyup', (key) => {
-    if (key === KeyCodes.VK_SPACE) handbrakeActive = false
+    if (key === KeyCodes.VK_SPACE) {
+        handbrakeActive = false
+    }
 })
 
 alt.everyTick(() => {
@@ -49,7 +54,7 @@ alt.everyTick(() => {
     }
 })
 
-const vehiclesWithHud: number[] = [
+const vehicleTypesWithHudEnabled: number[] = [
     0, // compacts
     1, // sedans
     2, // suvs
@@ -72,7 +77,7 @@ const vehiclesWithHud: number[] = [
 alt.onServer('playerEnteredVehicle', (vehicle: alt.Vehicle, seat) => {
     const vehicleClass = natives.getVehicleClass(vehicle.scriptID)
 
-    if (vehiclesWithHud.includes(vehicleClass)) {
+    if (vehicleTypesWithHudEnabled.includes(vehicleClass)) {
         UiManager.showComponent('VehicleHud')
     }
 })
