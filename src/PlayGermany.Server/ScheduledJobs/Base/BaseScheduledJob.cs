@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace PlayGermany.Server.ScheduledJobs.Base
 {
@@ -18,6 +19,6 @@ namespace PlayGermany.Server.ScheduledJobs.Base
             LastExecution = DateTime.MinValue;
         }
 
-        public abstract void Action();
+        public abstract Task Action();
     }
 }

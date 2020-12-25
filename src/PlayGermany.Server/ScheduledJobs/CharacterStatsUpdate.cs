@@ -22,9 +22,9 @@ namespace PlayGermany.Server.ScheduledJobs
                 Logger = logger;
             }
 
-            public override void Action()
+            public override async Task Action()
             {
-                var callback = new FunctionCallback<IPlayer>((player) =>
+                var callback = new AsyncFunctionCallback<IPlayer>((player) =>
                 {
                     var serverPlayer = player as ServerPlayer;
 
@@ -43,9 +43,11 @@ namespace PlayGermany.Server.ScheduledJobs
                             serverPlayer.Health -= Math.Min((ushort) 30, serverPlayer.Health);
                         }
                     }
+
+                    return Task.CompletedTask;
                 });
 
-                Alt.ForEachPlayers(callback);
+                await Alt.ForEachPlayers(callback);
             }
         }
 }

@@ -12,7 +12,7 @@ namespace PlayGermany.Server.PlayerBuffs
         public DemoBuff(int maxHealthModifier)
             : base(TimeSpan.Zero)
         {
-            
+            _maxHealthModifier = maxHealthModifier;
         }
 
         public override void OnApplied(ServerPlayer player)

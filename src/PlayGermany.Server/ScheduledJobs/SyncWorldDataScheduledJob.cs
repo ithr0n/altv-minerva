@@ -6,6 +6,7 @@ using PlayGermany.Server.Callbacks;
 using PlayGermany.Server.Entities;
 using PlayGermany.Server.ScheduledJobs.Base;
 using System;
+using System.Threading.Tasks;
 
 namespace PlayGermany.Server.ScheduledJobs
 {
@@ -24,7 +25,7 @@ namespace PlayGermany.Server.ScheduledJobs
             Alt.OnPlayerConnect += (player, reason) => OnPlayerConnect(player as ServerPlayer, reason);
         }
 
-        public override void Action()
+        public override async Task Action()
         {
             if (_lastTick == DateTime.MinValue)
             {
@@ -38,7 +39,7 @@ namespace PlayGermany.Server.ScheduledJobs
                 _worldData.Clock += DateTime.Now - _lastTick;
             }
 
-            var callback = new FunctionCallback<IPlayer>((player) => {
+            var callback = new AsyncFunctionCallback<IPlayer>((player) => {
                 player.SetDateTime(
                     _worldData.Clock.Day,
                     _worldData.Clock.Month,
@@ -64,9 +65,11 @@ namespace PlayGermany.Server.ScheduledJobs
                   native.setForcePedFootstepsTracks(false);
                 }
                 */
+
+                return Task.CompletedTask;
             });
 
-            Alt.ForEachPlayers(callback);
+            await Alt.ForEachPlayers(callback);
 
             _lastTick = DateTime.Now;
         }

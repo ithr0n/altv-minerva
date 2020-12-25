@@ -28,12 +28,13 @@ namespace PlayGermany.Server.ServerJobs
                 _dbContextFactory = dbContextFactory;
             }
 
-            public void OnSave()
+            public Task OnSave()
             {
-                Task.Run(async() =>
+                // characters
+                var playersTask = Task.Run(async() =>
                 {
                     var charsToUpdate = new List<Character>();
-                    var callback = new FunctionCallback<IPlayer>((player) =>
+                    var callback = new AsyncFunctionCallback<IPlayer>((player) =>
                     {
                         var serverPlayer = (ServerPlayer) player;
 
@@ -53,19 +54,21 @@ namespace PlayGermany.Server.ServerJobs
 
                             charsToUpdate.Add(serverPlayer.Character);
                         }
+
+                        return Task.CompletedTask;
                     });
 
-                    Alt.ForEachPlayers(callback);
+                    await Alt.ForEachPlayers(callback);
 
                     using var dbContext = _dbContextFactory.CreateDbContext();
                     dbContext.Characters.UpdateRange(charsToUpdate);
                     await dbContext.SaveChangesAsync();
                 });
 
-                Task.Run(async() =>
+                var vehiclesTask = Task.Run(async() =>
                 {
                     var vehiclesToUpdate = new List<DataAccessLayer.Models.Vehicle>();
-                    var callback = new FunctionCallback<IVehicle>((vehicle) =>
+                    var callback = new AsyncFunctionCallback<IVehicle>((vehicle) =>
                     {
                         var serverVehicle = (ServerVehicle) vehicle;
 
@@ -80,14 +83,18 @@ namespace PlayGermany.Server.ServerJobs
 
                             vehiclesToUpdate.Add(serverVehicle.DbEntity);
                         }
+
+                        return Task.CompletedTask;
                     });
 
-                    Alt.ForEachVehicles(callback);
+                    await Alt.ForEachVehicles(callback);
 
                     using var dbContext = _dbContextFactory.CreateDbContext();
                     dbContext.Vehicles.UpdateRange(vehiclesToUpdate);
                     await dbContext.SaveChangesAsync();
                 });
+
+                return Task.WhenAll(playersTask, vehiclesTask);
             }
 
             public void OnShutdown()

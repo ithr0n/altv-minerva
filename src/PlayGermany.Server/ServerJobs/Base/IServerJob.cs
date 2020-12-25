@@ -1,10 +1,12 @@
-﻿namespace PlayGermany.Server.ServerJobs.Base
+﻿using System.Threading.Tasks;
+
+namespace PlayGermany.Server.ServerJobs.Base
 {
     public interface IServerJob
     {
         void OnStartup();
 
-        void OnSave();
+        Task OnSave();
 
         void OnShutdown();
     }

@@ -70,16 +70,16 @@ namespace PlayGermany.Server
 
         public override void OnStop()
         {
-            var serverJobs = _serviceProvider.GetServices<IServerJob>();
-            foreach (var job in serverJobs)
-            {
-                job.OnShutdown();
-            }
-
             var scheduledJobsManager = _serviceProvider.GetService<ScheduleJobManager>();
             if (scheduledJobsManager != null)
             {
                 scheduledJobsManager.Cancellation.Cancel();
+            }
+            
+            var serverJobs = _serviceProvider.GetServices<IServerJob>();
+            foreach (var job in serverJobs)
+            {
+                job.OnShutdown();
             }
         }
 

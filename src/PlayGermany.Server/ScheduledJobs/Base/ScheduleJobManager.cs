@@ -4,46 +4,34 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace PlayGermany.Server.ScheduledJobs.Base
 {
     public class ScheduleJobManager
     {
-        private readonly ConcurrentBag<BaseScheduledJob> _scheduledJobs;
-        private readonly Thread _worker;
+        private readonly List<Action> _scheduledJobs;
         private readonly int _minimalIntervalMs = 500;
+        private readonly ParallelOptions _parallelOptions;
 
         public CancellationTokenSource Cancellation { get; private set; }
         private ILogger<ScheduleJobManager> Logger { get; }
 
         public ScheduleJobManager(ILogger<ScheduleJobManager> logger, IEnumerable<BaseScheduledJob> scheduledJobs)
         {
-            _scheduledJobs = new ConcurrentBag<BaseScheduledJob>(scheduledJobs);
+            _scheduledJobs = new List<Action>();
 
-            _worker = new Thread(OnWork) { IsBackground = true };
+            _parallelOptions = new ParallelOptions
+            {
+                MaxDegreeOfParallelism = 3,
+                CancellationToken = Cancellation.Token
+            };
+
             Logger = logger;
-        }
 
-        public void EnableWorker()
-        {
-            if (_worker != null && !_worker.IsAlive)
+            foreach(var job in scheduledJobs)
             {
-                Cancellation = new CancellationTokenSource();
-                _worker.Start();
-            }
-        }
-
-        private void OnWork()
-        {
-            while (!Cancellation.IsCancellationRequested)
-            {
-                foreach (var job in _scheduledJobs)
-                {
-                    if (Cancellation.IsCancellationRequested)
-                    {
-                        break;
-                    }
-
+                _scheduledJobs.Add(() => {
                     if (job.LastExecution == DateTime.MinValue)
                     {
                         // skip first execution directly on server startup
@@ -67,18 +55,26 @@ namespace PlayGermany.Server.ScheduledJobs.Base
                             Logger.LogError($"{ex.InnerException.Message}\n{ex.InnerException.StackTrace}");
                         }
                     }
-                }
-
-                if (!Cancellation.IsCancellationRequested)
-                {
-                    Thread.Sleep(_minimalIntervalMs);
-                }
+                });
             }
         }
 
-        public BaseScheduledJob GetJob(string id)
+        public void EnableWorker()
         {
-            return _scheduledJobs.FirstOrDefault(c => c.Id == id);
+            Task.Run(() => DoWork());
+        }
+
+        private async Task DoWork()
+        {
+            while (!Cancellation.IsCancellationRequested)
+            {
+                Parallel.Invoke(_parallelOptions, _scheduledJobs.ToArray());
+
+                if (!Cancellation.IsCancellationRequested)
+                {
+                    await Task.Delay(_minimalIntervalMs);
+                }
+            }
         }
     }
 }

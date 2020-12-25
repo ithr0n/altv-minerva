@@ -1,36 +1,42 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PlayGermany.Server.ScheduledJobs.Base;
 using PlayGermany.Server.ServerJobs.Base;
-using System;
-using System.Collections.Generic;
 
 namespace PlayGermany.Server.ScheduledJobs
 {
     public class WorldSaverScheduledJob
         : BaseScheduledJob
-    {
-        private readonly IEnumerable<IServerJob> _serverJobs;
-
-        private ILogger<WorldSaverScheduledJob> Logger { get; }
-
-        public WorldSaverScheduledJob(ILogger<WorldSaverScheduledJob> logger, IConfiguration serverConfig, IEnumerable<IServerJob> serverJobs)
-            : base(TimeSpan.FromMilliseconds(double.Parse(serverConfig.GetSection("World:SaveInterval")?.Value ?? "300000")))
         {
-            // if config not present then default of 5 minutes is applied in base constructor
+            private readonly IEnumerable<IServerJob> _serverJobs;
 
-            Logger = logger;
-            _serverJobs = serverJobs;
-        }
+            private ILogger<WorldSaverScheduledJob> Logger { get; }
 
-        public override void Action()
-        {
-            foreach (var job in _serverJobs)
+            public WorldSaverScheduledJob(ILogger<WorldSaverScheduledJob> logger, IConfiguration serverConfig, IEnumerable<IServerJob> serverJobs) : base(TimeSpan.FromMilliseconds(double.Parse(serverConfig.GetSection("World:SaveInterval")?.Value ?? "300000")))
             {
-                job.OnSave();
+                // if config not present then default of 5 minutes is applied in base constructor
+
+                Logger = logger;
+                _serverJobs = serverJobs;
             }
 
-            Logger.LogTrace("World save at {CurrentDate}", DateTime.Now);
+            public override async Task Action()
+            {
+                Logger.LogTrace("World save initiated at {CurrentDate}", DateTime.Now);
+
+                var taskList = new List<Task>();
+
+                foreach (var job in _serverJobs)
+                {
+                    taskList.Add(job.OnSave());
+                }
+
+                await Task.WhenAll(taskList.ToArray());
+
+                Logger.LogTrace("World save completed at {CurrentDate}", DateTime.Now);
+            }
         }
-    }
 }

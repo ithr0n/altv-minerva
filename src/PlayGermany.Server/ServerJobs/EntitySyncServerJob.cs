@@ -1,4 +1,5 @@
-﻿using AltV.Net.EntitySync;
+﻿using System.Threading.Tasks;
+using AltV.Net.EntitySync;
 using AltV.Net.EntitySync.ServerEvent;
 using AltV.Net.EntitySync.SpatialPartitions;
 using Microsoft.Extensions.Logging;
@@ -16,8 +17,9 @@ namespace PlayGermany.Server.ServerJobs
             Logger = logger;
         }
 
-        public void OnSave()
+        public Task OnSave()
         {
+            return Task.CompletedTask;
         }
 
         public void OnShutdown()
