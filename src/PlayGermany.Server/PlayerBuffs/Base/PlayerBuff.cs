@@ -7,6 +7,8 @@ namespace PlayGermany.Server.PlayerBuffs.Base
     {
         public TimeSpan TickInterval { get; }
 
+        public DateTime AppliedAt { get; set; }
+
         public PlayerBuff(TimeSpan tickInterval)
         {
             TickInterval = tickInterval;

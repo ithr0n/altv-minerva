@@ -121,6 +121,7 @@ namespace PlayGermany.Server.Entities
             public void ApplyBuff(PlayerBuff buff)
             {
                 buff.OnApplied(this);
+                buff.AppliedAt = DateTime.Now;
                 _buffs.Add(buff);
             }
 
