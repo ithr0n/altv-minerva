@@ -1,6 +1,6 @@
 namespace PlayGermany.Server.DataAccessLayer.Enums
 {
-    public enum ItemType
+    public enum ItemImplementationType
     {
         WaterBottle = 0
     }

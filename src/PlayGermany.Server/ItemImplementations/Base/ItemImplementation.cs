@@ -2,11 +2,11 @@ using PlayGermany.Server.DataAccessLayer.Enums;
 using PlayGermany.Server.DataAccessLayer.Models;
 using PlayGermany.Server.Entities;
 
-namespace PlayGermany.Server.ItemTypes.Base
+namespace PlayGermany.Server.ItemImplementations.Base
 {
-    public abstract class ItemTypeBase
+    public abstract class ItemImplementation
     {
-        public ItemType Type { get; }
+        public DataAccessLayer.Enums.ItemImplementationType Type { get; }
 
         public virtual bool OnBeforeUsed(ServerPlayer player)
         {

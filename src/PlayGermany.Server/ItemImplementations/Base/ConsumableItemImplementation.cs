@@ -1,17 +1,17 @@
 using System;
 using PlayGermany.Server.Entities;
 
-namespace PlayGermany.Server.ItemTypes.Base
+namespace PlayGermany.Server.ItemImplementations.Base
 {
-    public abstract class ConsumableItemTypeBase
-        : ItemTypeBase
+    public abstract class ConsumableItemImplementation
+        : ItemImplementation
     {
         private readonly int _hungerModifier;
         private readonly int _thirstModifier;
         private readonly int _alcoholModifier;
         private readonly int _drugsModifier;
 
-        public ConsumableItemTypeBase(
+        public ConsumableItemImplementation(
             int hungerModifier = 0, 
             int thirstModifier = 0, 
             int alcoholModifier = 0, 

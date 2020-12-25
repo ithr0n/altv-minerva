@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using AltV.Net.Elements.Entities;
 using PlayGermany.Server.DataAccessLayer.Models;
 using PlayGermany.Server.Enums;
+using PlayGermany.Server.PlayerBuffs.Base;
 
 namespace PlayGermany.Server.Entities
 {
@@ -12,6 +14,8 @@ namespace PlayGermany.Server.Entities
             {
                 Hunger = 100;
                 Thirst = 100;
+
+                _buffs = new List<PlayerBuff>();
             }
 
             public string RoleplayName
@@ -109,5 +113,30 @@ namespace PlayGermany.Server.Entities
             public bool IsLoggedIn => IsConnected && Account != null;
             
             public bool IsSpawned => IsLoggedIn && Character != null;
+
+            #region Buffs
+
+            private List<PlayerBuff> _buffs;
+
+            public void ApplyBuff(PlayerBuff buff)
+            {
+                buff.OnApplied(this);
+                _buffs.Add(buff);
+            }
+
+            public bool RemoveBuff(PlayerBuff buff)
+            {
+                if (!_buffs.Contains(buff))
+                {
+                    return false;
+                }
+
+                buff.OnRemoved(this);
+                _buffs.Remove(buff);
+
+                return true;
+            }
+
+            #endregion
         }
 }

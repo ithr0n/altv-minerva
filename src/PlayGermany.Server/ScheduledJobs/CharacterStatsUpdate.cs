@@ -9,14 +9,14 @@ using PlayGermany.Server.ScheduledJobs.Base;
 
 namespace PlayGermany.Server.ScheduledJobs
 {
-    public class CharacterStatsScheduledJob
+    public class CharacterStatsUpdate
         : BaseScheduledJob
         {
             private readonly Random _random;
 
-            private ILogger<CharacterStatsScheduledJob> Logger { get; }
+            private ILogger<CharacterStatsUpdate> Logger { get; }
 
-            public CharacterStatsScheduledJob(ILogger<CharacterStatsScheduledJob> logger) : base(TimeSpan.FromMinutes(1))
+            public CharacterStatsUpdate(ILogger<CharacterStatsUpdate> logger) : base(TimeSpan.FromMinutes(1))
             {
                 _random = new Random();
                 Logger = logger;

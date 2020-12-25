@@ -1,9 +1,9 @@
-using PlayGermany.Server.ItemTypes.Base;
+using PlayGermany.Server.ItemImplementations.Base;
 
-namespace PlayGermany.Server.ItemTypes
+namespace PlayGermany.Server.ItemImplementations
 {
     public class WaterBottle
-        : ConsumableItemTypeBase
+        : ConsumableItemImplementation
     {
         public WaterBottle()
             : base(thirstModifier: 10)
