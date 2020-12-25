@@ -34,5 +34,7 @@ namespace PlayGermany.Server.Entities
                 SetStreamSyncedMetaData("indicators", (int)value);
             }
         }
+
+        public DataAccessLayer.Models.Vehicle DbEntity { get; set; }
     }
 }

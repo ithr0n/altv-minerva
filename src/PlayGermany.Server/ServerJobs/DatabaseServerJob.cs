@@ -37,9 +37,12 @@ namespace PlayGermany.Server.ServerJobs
                     {
                         var serverPlayer = (ServerPlayer) player;
 
+                        serverPlayer.Character.Position = serverPlayer.Position;
+                        serverPlayer.Character.Rotation = serverPlayer.Rotation;
+
                         serverPlayer.Character.Health = serverPlayer.Health;
                         serverPlayer.Character.Armor = serverPlayer.Armor;
-                        serverPlayer.Character.Position = serverPlayer.Position;
+
                         serverPlayer.Character.Cash = serverPlayer.Cash;
                         serverPlayer.Character.Thirst = serverPlayer.Thirst;
                         serverPlayer.Character.Hunger = serverPlayer.Hunger;
@@ -52,6 +55,34 @@ namespace PlayGermany.Server.ServerJobs
 
                     using var dbContext = _dbContextFactory.CreateDbContext();
                     dbContext.Characters.UpdateRange(charsToUpdate);
+                    await dbContext.SaveChangesAsync();
+                });
+                
+                Task.Run(async() =>
+                {
+                    var vehiclesToUpdate = new List<DataAccessLayer.Models.Vehicle>();
+                    var callback = new FunctionCallback<IVehicle>((vehicle) =>
+                    {
+                        var serverVehicle = (ServerVehicle) vehicle;
+
+                        if (serverVehicle.DbEntity != null)
+                        {
+                            serverVehicle.DbEntity.Position = serverVehicle.Position;
+                            serverVehicle.DbEntity.Rotation = serverVehicle.Rotation;
+
+                            serverVehicle.DbEntity.Locked = serverVehicle.LockState != AltV.Net.Enums.VehicleLockState.Unlocked;
+                            // serverVehicle.DbEntity.Fuel = serverVehicle.Fuel;
+                            // serverVehicle.DbEntity.Mileage = serverVehicle.Mileage;
+                            
+
+                            vehiclesToUpdate.Add(serverVehicle.DbEntity);
+                        }
+                    });
+
+                    Alt.ForEachVehicles(callback);
+
+                    using var dbContext = _dbContextFactory.CreateDbContext();
+                    dbContext.Vehicles.UpdateRange(vehiclesToUpdate);
                     await dbContext.SaveChangesAsync();
                 });
             }
