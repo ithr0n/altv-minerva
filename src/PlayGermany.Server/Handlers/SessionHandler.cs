@@ -101,7 +101,7 @@ namespace PlayGermany.Server.Handlers
                 }
             }
 
-            player.Emit("Login:Callback", player.LoggedIn, playerCharacters);
+            player.Emit("Login:Callback", player.IsLoggedIn, playerCharacters);
         }
 
         private async void OnRequestCharacterSpawn(ServerPlayer player, int characterId)

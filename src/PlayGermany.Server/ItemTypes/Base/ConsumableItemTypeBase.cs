@@ -1,3 +1,4 @@
+using System;
 using PlayGermany.Server.Entities;
 
 namespace PlayGermany.Server.ItemTypes.Base
@@ -24,7 +25,10 @@ namespace PlayGermany.Server.ItemTypes.Base
 
         public override void OnAfterUsed(ServerPlayer player)
         {
-            // to do
+            player.Hunger = (ushort) Math.Max(player.Hunger + _hungerModifier, 0);
+            player.Thirst = (ushort) Math.Max(player.Thirst + _thirstModifier, 0);
+            // player.Alcohol = (ushort) Math.Max(player.Alcohol + _alcoholModifier, 0);
+            // player.Drugs = (ushort) Math.Max(player.Drugs + _drugsModifier, 0);
         }
     }
 }

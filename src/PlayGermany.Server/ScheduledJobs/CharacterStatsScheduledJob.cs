@@ -28,22 +28,19 @@ namespace PlayGermany.Server.ScheduledJobs
                 {
                     var serverPlayer = player as ServerPlayer;
 
-                    if (serverPlayer != null)
+                    if (serverPlayer != null && serverPlayer.IsSpawned && !serverPlayer.IsDead)
                     {
-                        var newHunger = serverPlayer.Hunger - _random.Next(2, 7);
-                        var newThirst = serverPlayer.Thirst - _random.Next(4, 11);
+                        serverPlayer.Hunger -= Math.Max((ushort) _random.Next(2, 7), (ushort) 0);
+                        serverPlayer.Thirst -= Math.Max((ushort) _random.Next(4, 11), (ushort) 0);
 
-                        serverPlayer.Hunger = Math.Max(newHunger, 0);
-                        serverPlayer.Thirst = Math.Max(newThirst, 0);
-
-                        if (serverPlayer.Hunger == 0)
+                        if (serverPlayer.Hunger <= 0)
                         {
-                            serverPlayer.Health -= 10;
+                            serverPlayer.Health -= Math.Min((ushort) 10, serverPlayer.Health);
                         }
 
-                        if (serverPlayer.Thirst == 0)
+                        if (serverPlayer.Thirst <= 0)
                         {
-                            serverPlayer.Health -= 30;
+                            serverPlayer.Health -= Math.Min((ushort) 30, serverPlayer.Health);
                         }
                     }
                 });

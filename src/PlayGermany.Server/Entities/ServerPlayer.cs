@@ -1,114 +1,113 @@
-﻿using AltV.Net.Elements.Entities;
+﻿using System;
+using AltV.Net.Elements.Entities;
 using PlayGermany.Server.DataAccessLayer.Models;
 using PlayGermany.Server.Enums;
-using System;
 
 namespace PlayGermany.Server.Entities
 {
     public class ServerPlayer
         : Player
-    {
-        public ServerPlayer(IntPtr nativePointer, ushort id)
-            : base(nativePointer, id)
         {
-            Hunger = 100;
-            Thirst = 100;
-        }
-
-        public string RoleplayName
-        {
-            get
+            public ServerPlayer(IntPtr nativePointer, ushort id) : base(nativePointer, id)
             {
-                if (!GetStreamSyncedMetaData("roleplayName", out string result))
+                Hunger = 100;
+                Thirst = 100;
+            }
+
+            public string RoleplayName
+            {
+                get
                 {
-                    if (Character != null)
+                    if (!GetStreamSyncedMetaData("roleplayName", out string result))
                     {
-                        SetStreamSyncedMetaData("roleplayName", Character.Name);
-                        return Character.Name;
+                        if (Character != null)
+                        {
+                            SetStreamSyncedMetaData("roleplayName", Character.Name);
+                            return Character.Name;
+                        }
+
+                        return string.Empty;
                     }
 
-                    return string.Empty;
+                    return result;
                 }
-
-                return result;
             }
-        }
 
-        public decimal Cash
-        {
-            get
+            public decimal Cash
             {
-                if (!GetStreamSyncedMetaData("cash", out decimal result))
+                get
                 {
-                    return 0;
+                    if (!GetStreamSyncedMetaData("cash", out decimal result))
+                    {
+                        return 0;
+                    }
+
+                    return result;
                 }
-
-                return result;
+                set => SetStreamSyncedMetaData("cash", value);
             }
-            set => SetStreamSyncedMetaData("cash", value);
-        }
 
-        public int Hunger
-        {
-            get
+            public ushort Hunger
             {
-                if (!GetStreamSyncedMetaData("hunger", out int result))
+                get
                 {
-                    return 0;
+                    if (!GetStreamSyncedMetaData("hunger", out ushort result))
+                    {
+                        return 0;
+                    }
+
+                    return result;
                 }
-
-                return result;
-            }
-            set
-            {
-                var newValue = Math.Min(value, 0);
-                newValue = Math.Max(newValue, 100);
-
-                SetStreamSyncedMetaData("hunger", newValue);
-            }
-        }
-
-        public int Thirst
-        {
-            get
-            {
-                if (!GetStreamSyncedMetaData("thirst", out int result))
+                set
                 {
-                    return 0;
+                    var newValue = Math.Min(value, (ushort) 100);
+
+                    SetStreamSyncedMetaData("hunger", newValue);
                 }
-
-                return result;
             }
-            set
-            {
-                var newValue = Math.Min(value, 0);
-                newValue = Math.Max(newValue, 100);
 
-                SetStreamSyncedMetaData("thirst", newValue);
-            }
-        }
-
-        public PlayerVoiceLevel VoiceLevel
-        {
-            get
+            public ushort Thirst
             {
-                if (!GetStreamSyncedMetaData("voiceIndex", out int result))
+                get
                 {
-                    return PlayerVoiceLevel.Mute;
+                    if (!GetStreamSyncedMetaData("thirst", out ushort result))
+                    {
+                        return 0;
+                    }
+
+                    return result;
                 }
+                set
+                {
+                    var newValue = Math.Min(value, (ushort) 100);
 
-                return (PlayerVoiceLevel)result;
+                    SetStreamSyncedMetaData("thirst", newValue);
+                }
             }
-            set
+
+            public PlayerVoiceLevel VoiceLevel
             {
-                SetStreamSyncedMetaData("voiceIndex", (int)value);
+                get
+                {
+                    if (!GetStreamSyncedMetaData("voiceIndex", out int result))
+                    {
+                        return PlayerVoiceLevel.Mute;
+                    }
+
+                    return (PlayerVoiceLevel) result;
+                }
+                set
+                {
+                    SetStreamSyncedMetaData("voiceIndex", (int) value);
+                }
             }
+
+            public Account Account { get; set; }
+
+            public Character Character { get; set; }
+
+            public bool IsLoggedIn => IsConnected && Account != null;
+            
+            public bool IsSpawned => IsLoggedIn && Character != null;
         }
-
-        public Account Account { get; set; }
-        
-        public Character Character { get; set; }
-
-        public bool LoggedIn => Account != null;
-    }
 }

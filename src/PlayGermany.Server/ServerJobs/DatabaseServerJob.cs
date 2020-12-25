@@ -37,18 +37,22 @@ namespace PlayGermany.Server.ServerJobs
                     {
                         var serverPlayer = (ServerPlayer) player;
 
-                        serverPlayer.Character.Position = serverPlayer.Position;
-                        serverPlayer.Character.Rotation = serverPlayer.Rotation;
+                        if (serverPlayer.IsSpawned)
+                        {
+                            serverPlayer.Character.Position = serverPlayer.Position;
+                            serverPlayer.Character.Rotation = serverPlayer.Rotation;
 
-                        serverPlayer.Character.Health = serverPlayer.Health;
-                        serverPlayer.Character.Armor = serverPlayer.Armor;
+                            serverPlayer.Character.Health = serverPlayer.Health;
+                            serverPlayer.Character.Armor = serverPlayer.Armor;
 
-                        serverPlayer.Character.Cash = serverPlayer.Cash;
-                        serverPlayer.Character.Thirst = serverPlayer.Thirst;
-                        serverPlayer.Character.Hunger = serverPlayer.Hunger;
-                        // serverPlayer.Character.Drugs = serverPlayer.Drugs;
+                            serverPlayer.Character.Cash = serverPlayer.Cash;
+                            serverPlayer.Character.Thirst = serverPlayer.Thirst;
+                            serverPlayer.Character.Hunger = serverPlayer.Hunger;
+                            // serverPlayer.Character.Alcohol = serverPlayer.Alcohol;
+                            // serverPlayer.Character.Drugs = serverPlayer.Drugs;
 
-                        charsToUpdate.Add(serverPlayer.Character);
+                            charsToUpdate.Add(serverPlayer.Character);
+                        }
                     });
 
                     Alt.ForEachPlayers(callback);
@@ -57,7 +61,7 @@ namespace PlayGermany.Server.ServerJobs
                     dbContext.Characters.UpdateRange(charsToUpdate);
                     await dbContext.SaveChangesAsync();
                 });
-                
+
                 Task.Run(async() =>
                 {
                     var vehiclesToUpdate = new List<DataAccessLayer.Models.Vehicle>();
@@ -73,7 +77,6 @@ namespace PlayGermany.Server.ServerJobs
                             serverVehicle.DbEntity.Locked = serverVehicle.LockState != AltV.Net.Enums.VehicleLockState.Unlocked;
                             // serverVehicle.DbEntity.Fuel = serverVehicle.Fuel;
                             // serverVehicle.DbEntity.Mileage = serverVehicle.Mileage;
-                            
 
                             vehiclesToUpdate.Add(serverVehicle.DbEntity);
                         }
