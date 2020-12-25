@@ -36,6 +36,7 @@ namespace PlayGermany.Server.ScheduledJobs.Base
                     {
                         // skip first execution directly on server startup
                         job.LastExecution = DateTime.Now;
+                        return;
                     }
 
                     try
