@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PlayGermany.Server.DataAccessLayer.Context;
@@ -19,11 +16,11 @@ namespace PlayGermany.Server.DataAccessLayer.Services
             _dbContextFactory = dbContextFactory;
         }
 
-        public List<Character> GetCharacters(Account account)
+        public Task<List<Character>> GetCharacters(Account account)
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
 
-            return dbContext.Characters.Where(e => e.Account == account).ToList();
+            return dbContext.Characters.Where(e => e.Account == account).ToListAsync();
         }
 
         public async Task<Character> GetCharacter(int characterId)
@@ -33,20 +30,20 @@ namespace PlayGermany.Server.DataAccessLayer.Services
             return await dbContext.Characters.FindAsync(characterId);
         }
 
-        public void Create(Character character)
+        public async Task Create(Character character)
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
 
             dbContext.Characters.Add(character);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
         }
 
-        public void Update(Character character)
+        public async Task Update(Character character)
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
 
             dbContext.Characters.Update(character);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
         }
     }
 }

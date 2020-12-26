@@ -1,23 +1,21 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace PlayGermany.Server.ScheduledJobs.Base
 {
-    public class ScheduleJobManager
+    public class ScheduledJobManager
     {
         private readonly List<Action> _scheduledJobs;
         private readonly int _minimalIntervalMs = 500;
         private readonly ParallelOptions _parallelOptions;
 
         public CancellationTokenSource Cancellation { get; private set; }
-        private ILogger<ScheduleJobManager> Logger { get; }
+        private ILogger<ScheduledJobManager> Logger { get; }
 
-        public ScheduleJobManager(ILogger<ScheduleJobManager> logger, IEnumerable<BaseScheduledJob> scheduledJobs)
+        public ScheduledJobManager(ILogger<ScheduledJobManager> logger, IEnumerable<ScheduledJob> scheduledJobs)
         {
             _scheduledJobs = new List<Action>();
 

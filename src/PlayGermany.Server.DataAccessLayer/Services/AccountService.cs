@@ -62,7 +62,7 @@ namespace PlayGermany.Server.DataAccessLayer.Services
 
                 if (account != null)
                 {
-                    dbContext.SaveChanges();
+                    await dbContext.SaveChangesAsync();
                 }
             }
 

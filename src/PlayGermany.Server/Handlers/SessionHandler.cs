@@ -91,7 +91,7 @@ namespace PlayGermany.Server.Handlers
             {
                 player.Account = account;
 
-                foreach (var character in _characterService.GetCharacters(account))
+                foreach (var character in await _characterService.GetCharacters(account))
                 {
                     var jsonObjSerialized = new Dictionary<string, string>();
                     jsonObjSerialized.Add("charId", character.Id.ToString());
@@ -160,7 +160,7 @@ namespace PlayGermany.Server.Handlers
                 character.AppearanceHair = appearanceHair;
                 character.AppearanceClothes = appearanceClothes;
 
-                _characterService.Create(character);
+                await _characterService.Create(character);
 
                 player.Character = character;
 

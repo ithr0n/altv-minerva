@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PlayGermany.Server.DataAccessLayer.Context;
 using PlayGermany.Server.DataAccessLayer.Models;
@@ -16,7 +17,7 @@ namespace PlayGermany.Server.DataAccessLayer.Services
             _dbContextFactory = dbContextFactory;
         }
 
-        public KeyChain CreateNewChain(Item keyItem)
+        public async Task<KeyChain> CreateNewChain(Item keyItem)
         {
             if (keyItem.Id == 0)
             {
@@ -30,12 +31,12 @@ namespace PlayGermany.Server.DataAccessLayer.Services
                 Item = keyItem
             };
 
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             return chain;
         }
 
-        public KeyChain AddToChain(ILockableEntity entity, KeyChain keyChain)
+        public async Task<KeyChain> AddToChain(ILockableEntity entity, KeyChain keyChain)
         {
             if (entity == null || entity.KeyData == null)
             {
@@ -54,12 +55,12 @@ namespace PlayGermany.Server.DataAccessLayer.Services
                 keyChain.Keys.Add(entity.KeyData);
             }
 
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             return keyChain;
         }
 
-        public KeyChain RemoveFromChain(ILockableEntity entity, KeyChain keyChain)
+        public async Task<KeyChain> RemoveFromChain(ILockableEntity entity, KeyChain keyChain)
         {
             if (entity == null || entity.KeyData == null)
             {
@@ -78,7 +79,7 @@ namespace PlayGermany.Server.DataAccessLayer.Services
                 keyChain.Keys.Remove(entity.KeyData);
             }
 
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             return keyChain;
         }

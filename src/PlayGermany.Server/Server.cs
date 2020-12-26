@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PlayGermany.Server.DataAccessLayer.Context;
-using PlayGermany.Server.Entities;
 using PlayGermany.Server.ServerJobs.Base;
 using PlayGermany.Server.Extensions;
 using System.IO;
@@ -56,7 +55,7 @@ namespace PlayGermany.Server
                 job.OnStartup();
             }
 
-            var scheduledJobsManager = _serviceProvider.GetService<ScheduleJobManager>();
+            var scheduledJobsManager = _serviceProvider.GetService<ScheduledJobManager>();
             if (scheduledJobsManager != null)
             {
                 scheduledJobsManager.EnableWorker();
@@ -70,7 +69,7 @@ namespace PlayGermany.Server
 
         public override void OnStop()
         {
-            var scheduledJobsManager = _serviceProvider.GetService<ScheduleJobManager>();
+            var scheduledJobsManager = _serviceProvider.GetService<ScheduledJobManager>();
             if (scheduledJobsManager != null)
             {
                 scheduledJobsManager.Cancellation.Cancel();
@@ -103,8 +102,8 @@ namespace PlayGermany.Server
 
             // register all server and scheduled jobs
             services.AddAllTypes<IServerJob>();
-            services.AddAllTypes<BaseScheduledJob>();
-            services.AddSingletonAndInstanciate<ScheduleJobManager>();
+            services.AddAllTypes<ScheduledJob>();
+            services.AddSingletonAndInstanciate<ScheduledJobManager>();
 
             // register streamers
             services.AddSingleton<PropsStreamer>();

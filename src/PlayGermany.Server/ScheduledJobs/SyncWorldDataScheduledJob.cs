@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace PlayGermany.Server.ScheduledJobs
 {
     public class SyncWorldDataScheduledJob
-        : BaseScheduledJob
+        : ScheduledJob
     {
         private readonly WorldData _worldData;
 

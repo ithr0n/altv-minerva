@@ -10,7 +10,7 @@ using PlayGermany.Server.ScheduledJobs.Base;
 namespace PlayGermany.Server.ScheduledJobs
 {
     public class CharacterStatsUpdate
-        : BaseScheduledJob
+        : ScheduledJob
         {
             private readonly Random _random;
 

@@ -9,7 +9,7 @@ using PlayGermany.Server.ServerJobs.Base;
 namespace PlayGermany.Server.ScheduledJobs
 {
     public class WorldSaverScheduledJob
-        : BaseScheduledJob
+        : ScheduledJob
         {
             private readonly IEnumerable<IServerJob> _serverJobs;
 

@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PlayGermany.Server.DataAccessLayer.Context;
 using PlayGermany.Server.DataAccessLayer.Models;
@@ -14,7 +15,7 @@ namespace PlayGermany.Server.DataAccessLayer.Services
             _dbContextFactory = dbContextFactory;
         }
 
-        public Vehicle CreateNewVehicle(Vehicle vehicle, float vehicleInventoryMaxWeight, Item keyItem)
+        public async Task<Vehicle> CreateNewVehicle(Vehicle vehicle, float vehicleInventoryMaxWeight, Item keyItem)
         {
             if (vehicle == null || vehicle.Id != 0)
             {
@@ -39,7 +40,7 @@ namespace PlayGermany.Server.DataAccessLayer.Services
             };
 
             dbContext.Vehicles.Add(vehicle);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             return vehicle;
         }

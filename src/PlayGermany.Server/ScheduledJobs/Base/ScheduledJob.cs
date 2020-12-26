@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace PlayGermany.Server.ScheduledJobs.Base
 {
-    public abstract class BaseScheduledJob
+    public abstract class ScheduledJob
     {
         public string Id { get; }
 
@@ -11,7 +11,7 @@ namespace PlayGermany.Server.ScheduledJobs.Base
 
         public DateTime LastExecution { get; set; }
 
-        public BaseScheduledJob(TimeSpan interval)
+        public ScheduledJob(TimeSpan interval)
         {
             Interval = interval;
 

@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PlayGermany.Server.DataAccessLayer.Context;
 using PlayGermany.Server.DataAccessLayer.Models;
@@ -13,7 +14,7 @@ namespace PlayGermany.Server.DataAccessLayer.Services
             _dbContextFactory = dbContextFactory;
         }
 
-        public BankAccount NewBankAccountForCharacter(Character owner)
+        public async Task<BankAccount> NewBankAccountForCharacter(Character owner)
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
 
@@ -32,7 +33,7 @@ namespace PlayGermany.Server.DataAccessLayer.Services
 
             dbContext.BankAccountAccesses.Add(bankAccAccess);
 
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             return bankAcc;
         }
