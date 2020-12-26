@@ -16,7 +16,8 @@ namespace PlayGermany.Server.ScheduledJobs
 
             private ILogger<CharacterStatsUpdate> Logger { get; }
 
-            public CharacterStatsUpdate(ILogger<CharacterStatsUpdate> logger) : base(TimeSpan.FromMinutes(1))
+            public CharacterStatsUpdate(ILogger<CharacterStatsUpdate> logger)
+                : base(TimeSpan.FromMinutes(1))
             {
                 _random = new Random();
                 Logger = logger;
@@ -24,7 +25,7 @@ namespace PlayGermany.Server.ScheduledJobs
 
             public override async Task Action()
             {
-                var callback = new AsyncFunctionCallback<IPlayer>((player) =>
+                var callback = new AsyncFunctionCallback<IPlayer>(async (player) =>
                 {
                     var serverPlayer = player as ServerPlayer;
 
@@ -44,7 +45,7 @@ namespace PlayGermany.Server.ScheduledJobs
                         }
                     }
 
-                    return Task.CompletedTask;
+                    await Task.CompletedTask;
                 });
 
                 await Alt.ForEachPlayers(callback);

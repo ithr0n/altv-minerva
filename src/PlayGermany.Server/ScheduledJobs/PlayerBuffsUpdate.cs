@@ -25,27 +25,16 @@ namespace PlayGermany.Server.ScheduledJobs
 
             public override async Task Action()
             {
-                var callback = new AsyncFunctionCallback<IPlayer>((player) =>
+                var callback = new AsyncFunctionCallback<IPlayer>(async (player) =>
                 {
                     var serverPlayer = player as ServerPlayer;
 
                     if (serverPlayer != null && serverPlayer.IsSpawned && !serverPlayer.IsDead)
                     {
-                        serverPlayer.Hunger -= Math.Max((ushort) _random.Next(2, 7), (ushort) 0);
-                        serverPlayer.Thirst -= Math.Max((ushort) _random.Next(4, 11), (ushort) 0);
-
-                        if (serverPlayer.Hunger <= 0)
-                        {
-                            serverPlayer.Health -= Math.Min((ushort) 10, serverPlayer.Health);
-                        }
-
-                        if (serverPlayer.Thirst <= 0)
-                        {
-                            serverPlayer.Health -= Math.Min((ushort) 30, serverPlayer.Health);
-                        }
+                        
                     }
 
-                    return Task.CompletedTask;
+                    await Task.CompletedTask;
                 });
 
                 await Alt.ForEachPlayers(callback);
