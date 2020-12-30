@@ -17,15 +17,7 @@ namespace PlayGermany.Server
 
         public bool ClockPaused
         {
-            get
-            {
-                if (!Alt.GetSyncedMetaData("clockPaused", out bool clockPaused))
-                {
-                    return false;
-                }
-
-                return clockPaused;
-            }
+            get => Alt.GetSyncedMetaData("clockPaused", out bool clockPaused) && clockPaused;
             set => Alt.SetSyncedMetaData("clockPaused", value);
         }
 
@@ -59,15 +51,7 @@ namespace PlayGermany.Server
 
         public bool Blackout
         {
-            get
-            {
-                if (!Alt.GetSyncedMetaData("blackout", out bool blackout))
-                {
-                    return false;
-                }
-
-                return blackout;
-            }
+            get => Alt.GetSyncedMetaData("blackout", out bool blackout) && blackout;
             set => Alt.SetSyncedMetaData("blackout", value);
         }
     }
