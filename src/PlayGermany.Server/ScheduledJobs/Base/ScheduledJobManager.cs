@@ -17,6 +17,9 @@ namespace PlayGermany.Server.ScheduledJobs.Base
 
         public ScheduledJobManager(ILogger<ScheduledJobManager> logger, IEnumerable<ScheduledJob> scheduledJobs)
         {
+            Cancellation = new CancellationTokenSource();
+            Logger = logger;
+
             _scheduledJobs = new List<Action>();
 
             _parallelOptions = new ParallelOptions
@@ -24,9 +27,7 @@ namespace PlayGermany.Server.ScheduledJobs.Base
                 MaxDegreeOfParallelism = 3,
                 CancellationToken = Cancellation.Token
             };
-
-            Logger = logger;
-
+            
             foreach(var job in scheduledJobs)
             {
                 _scheduledJobs.Add(() => {
