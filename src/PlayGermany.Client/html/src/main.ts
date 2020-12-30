@@ -7,7 +7,6 @@ import VueVisible from 'vue-visible'
 import VueClipboard from 'vue-clipboard2'
 import Toast, { TYPE } from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
-import store from './store'
 
 Vue.config.productionTip = false
 
@@ -61,6 +60,5 @@ Vue.use(Toast, {
 
 new Vue({
     vuetify,
-    store,
     render: h => h(App),
 }).$mount('#app')

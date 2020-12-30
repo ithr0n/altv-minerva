@@ -12,7 +12,7 @@
                     v-model="firstName"
                     label="Vorname"
                 />
-                
+
                 <v-text-field
                     required
                     type="text"
@@ -29,11 +29,7 @@
 
                 <!-- radio buttons: gender -->
 
-                <v-btn
-                    @click="handleSubmit"
-                    type="submit"
-                    >Erstellen</v-btn
-                >
+                <v-btn @click="handleSubmit" type="submit">Erstellen</v-btn>
             </v-form>
         </v-row>
 
@@ -62,15 +58,13 @@ export default Vue.extend({
         }
     },
 
-    mounted() {
-    },
+    mounted() {},
 
     methods: {
         handleSubmit() {
             if (this.firstName.length <= 3) {
-                this.errorMsg =
-                    'Du musst einen gültigen Vornamen eingeben!'
-                    // validation: on input fields instead of block error message
+                this.errorMsg = 'Du musst einen gültigen Vornamen eingeben!'
+                // validation: on input fields instead of block error message
                 return
             }
 

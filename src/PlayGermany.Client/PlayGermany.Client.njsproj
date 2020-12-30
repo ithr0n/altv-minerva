@@ -66,6 +66,7 @@
     <Content Include="html\src\assets\VehicleRadio\switching4.mp3" />
     <Content Include="html\src\assets\VehicleRadio\switching5.mp3" />
     <Content Include="html\src\assets\VehicleRadio\switching6.mp3" />
+    <Content Include="html\src\components\CharacterCreation.vue" />
     <Content Include="html\src\components\Login.vue" />
     <Content Include="html\src\components\Notifications.vue" />
     <Content Include="html\src\components\PlayerHud.vue" />
@@ -91,8 +92,6 @@
     <Folder Include="html\src\assets\VehicleRadio\" />
     <Folder Include="html\src\components\" />
     <Folder Include="html\src\plugins\" />
-    <Folder Include="html\src\store\" />
-    <Folder Include="html\src\store\modules\" />
     <Folder Include="Handlers\" />
     <Folder Include="NativeUI\" />
     <Folder Include="NativeUI\enums\" />
@@ -120,8 +119,6 @@
     <TypeScriptCompile Include="html\src\shims-alt.d.ts" />
     <TypeScriptCompile Include="html\src\shims-tsx.d.ts" />
     <TypeScriptCompile Include="html\src\shims-vue.d.ts" />
-    <TypeScriptCompile Include="html\src\store\index.ts" />
-    <TypeScriptCompile Include="html\src\store\modules\playerHud.ts" />
     <TypeScriptCompile Include="loadIpls.ts" />
     <TypeScriptCompile Include="NativeUI\enums\Alignment.ts" />
     <TypeScriptCompile Include="NativeUI\enums\BadgeStyle.ts" />
