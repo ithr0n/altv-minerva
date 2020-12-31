@@ -8,7 +8,7 @@ namespace PlayGermany.Server.ItemImplementations
         public WaterBottle()
             : base(thirstModifier: 10)
         {
-            
+
         }
     }
 }

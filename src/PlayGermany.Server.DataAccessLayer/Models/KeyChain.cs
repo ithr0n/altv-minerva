@@ -10,7 +10,7 @@ namespace PlayGermany.Server.DataAccessLayer.Models
         {
             Keys = new List<KeyData>();
         }
-        
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }

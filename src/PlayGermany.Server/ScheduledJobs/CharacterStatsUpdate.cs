@@ -11,44 +11,44 @@ namespace PlayGermany.Server.ScheduledJobs
 {
     public class CharacterStatsUpdate
         : ScheduledJob
+    {
+        private readonly Random _random;
+
+        private ILogger<CharacterStatsUpdate> Logger { get; }
+
+        public CharacterStatsUpdate(ILogger<CharacterStatsUpdate> logger)
+            : base(TimeSpan.FromMinutes(1))
         {
-            private readonly Random _random;
+            _random = new Random();
+            Logger = logger;
+        }
 
-            private ILogger<CharacterStatsUpdate> Logger { get; }
-
-            public CharacterStatsUpdate(ILogger<CharacterStatsUpdate> logger)
-                : base(TimeSpan.FromMinutes(1))
+        public override async Task Action()
+        {
+            var callback = new AsyncFunctionCallback<IPlayer>(async (player) =>
             {
-                _random = new Random();
-                Logger = logger;
-            }
+                var serverPlayer = player as ServerPlayer;
 
-            public override async Task Action()
-            {
-                var callback = new AsyncFunctionCallback<IPlayer>(async (player) =>
+                if (serverPlayer != null && serverPlayer.IsSpawned && !serverPlayer.IsDead)
                 {
-                    var serverPlayer = player as ServerPlayer;
+                    serverPlayer.Hunger -= Math.Max((ushort)_random.Next(2, 7), (ushort)0);
+                    serverPlayer.Thirst -= Math.Max((ushort)_random.Next(4, 11), (ushort)0);
 
-                    if (serverPlayer != null && serverPlayer.IsSpawned && !serverPlayer.IsDead)
+                    if (serverPlayer.Hunger <= 0)
                     {
-                        serverPlayer.Hunger -= Math.Max((ushort) _random.Next(2, 7), (ushort) 0);
-                        serverPlayer.Thirst -= Math.Max((ushort) _random.Next(4, 11), (ushort) 0);
-
-                        if (serverPlayer.Hunger <= 0)
-                        {
-                            serverPlayer.Health -= Math.Min((ushort) 10, serverPlayer.Health);
-                        }
-
-                        if (serverPlayer.Thirst <= 0)
-                        {
-                            serverPlayer.Health -= Math.Min((ushort) 30, serverPlayer.Health);
-                        }
+                        serverPlayer.Health -= Math.Min((ushort)10, serverPlayer.Health);
                     }
 
-                    await Task.CompletedTask;
-                });
+                    if (serverPlayer.Thirst <= 0)
+                    {
+                        serverPlayer.Health -= Math.Min((ushort)30, serverPlayer.Health);
+                    }
+                }
 
-                await Alt.ForEachPlayers(callback);
-            }
+                await Task.CompletedTask;
+            });
+
+            await Alt.ForEachPlayers(callback);
         }
+    }
 }

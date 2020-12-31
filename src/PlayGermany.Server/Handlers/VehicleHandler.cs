@@ -40,9 +40,9 @@ namespace PlayGermany.Server.Handlers
 
         private void OnToggleIndicator(ServerPlayer player, int indicatorFlag)
         {
-			if (player.IsInVehicle && player.Seat == 1)
-			{
-				var veh = (ServerVehicle)player.Vehicle;
+            if (player.IsInVehicle && player.Seat == 1)
+            {
+                var veh = (ServerVehicle)player.Vehicle;
 
                 if (veh.ActiveIndicators == (VehicleIndicator)indicatorFlag)
                 {
@@ -52,8 +52,8 @@ namespace PlayGermany.Server.Handlers
                 {
                     veh.ActiveIndicators = (VehicleIndicator)indicatorFlag;
                 }
-			}
-		}
+            }
+        }
 
         private void OnToggleSiren(ServerPlayer player)
         {

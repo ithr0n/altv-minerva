@@ -16,11 +16,13 @@ namespace PlayGermany.Server.DataAccessLayer.Services
             _dbContextFactory = dbContextFactory;
         }
 
-        public Task<List<Character>> GetCharacters(Account account)
+        public async Task<List<Character>> GetCharacters(Account account)
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
 
-            return dbContext.Characters.Where(e => e.Account == account).ToListAsync();
+            var characters = await dbContext.Characters.Where(e => e.Account == account).ToListAsync();
+
+            return characters;
         }
 
         public async Task<Character> GetCharacter(int characterId)

@@ -8,34 +8,29 @@ alt.on('connectionComplete', () => {
     alt.setWeatherSyncActive(true)
     natives.clearOverrideWeather()
     natives.setWeatherTypeNowPersist(WeatherType[currentWeatherId])
+
+    alt.setMsPerGameMinute(60000) // one minute in game equals to one real minute
 })
 
 alt.on('globalSyncedMetaChange', (key: string, value: any, oldValue: any) => {
-    if (key === 'clockPaused') {
-        natives.pauseClock(value)
-        return
-    }
-
-    if (key === 'weather') {
-        if (value !== oldValue) {
-            changeWeather(++currentWeatherId, false)
+    switch (key) {
+        case 'clockPaused': {
+            natives.pauseClock(value)
+            return
         }
 
-        return
-    }
+        case 'weather': {
+            if (value !== oldValue) {
+                changeWeather(++currentWeatherId, false)
+            }
 
-    if (key === 'overrideWeather') {
-        if (value === null) {
-            natives.clearOverrideWeather()
-        } else {
-            natives.setOverrideWeather(WeatherType[++value])
+            return
         }
-        return
-    }
 
-    if (key === 'blackout') {
-        natives.setArtificialLightsState(!!value)
-        return
+        case 'blackout': {
+            natives.setArtificialLightsState(!!value)
+            return
+        }
     }
 })
 

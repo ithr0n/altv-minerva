@@ -17,12 +17,12 @@ namespace PlayGermany.Server.PlayerBuffs
 
         public override void OnApplied(ServerPlayer player)
         {
-            player.MaxHealth = (ushort) Math.Max(player.MaxHealth + _maxHealthModifier, 0);
+            player.MaxHealth = (ushort)Math.Max(player.MaxHealth + _maxHealthModifier, 0);
         }
 
         public override void OnRemoved(ServerPlayer player)
         {
-            player.MaxHealth = (ushort) Math.Max(player.MaxHealth - _maxHealthModifier, 0);
+            player.MaxHealth = (ushort)Math.Max(player.MaxHealth - _maxHealthModifier, 0);
         }
     }
 }

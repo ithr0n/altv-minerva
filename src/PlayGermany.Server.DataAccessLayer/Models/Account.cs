@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PlayGermany.Server.DataAccessLayer.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -21,17 +22,16 @@ namespace PlayGermany.Server.DataAccessLayer.Models
 
         public ulong? HardwareIdExHash { get; set; }
 
-        public DateTime BannedUntil { get; set; }
+        public DateTime? BannedUntil { get; set; }
 
         public string Password { get; set; }
 
-        public int AdminLevel { get; set; }
+        public AdminLevel AdminLevel { get; set; }
 
         public DateTime Created { get; set; }
 
-        public DateTime LastLogin { get; set; }
+        public DateTime? LastLogin { get; set; }
 
         public ICollection<Character> Characters { get; set; }
-
     }
 }

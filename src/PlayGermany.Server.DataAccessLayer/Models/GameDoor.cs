@@ -7,14 +7,14 @@ namespace PlayGermany.Server.DataAccessLayer.Models
 {
     public class GameDoor
         : PositionRotationEntityBase, ILockableEntity
-        {
-            [Key]
-            [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-            public int Id { get; set; }
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
 
-            public bool Locked { get; set; }
+        public bool Locked { get; set; }
 
-            public Guid KeyDataId { get; set; }
-            public KeyData KeyData { get; set; }
-        }
+        public Guid KeyDataId { get; set; }
+        public KeyData KeyData { get; set; }
+    }
 }

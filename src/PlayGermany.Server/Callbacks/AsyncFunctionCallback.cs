@@ -8,17 +8,17 @@ namespace PlayGermany.Server.Callbacks
     public class AsyncFunctionCallback<T>
         : IAsyncBaseObjectCallback<T>
         where T : IBaseObject
+    {
+        private readonly Func<T, Task> _callback;
+
+        public AsyncFunctionCallback(Func<T, Task> callback)
         {
-            private readonly Func<T, Task> _callback;
-
-            public AsyncFunctionCallback(Func<T, Task> callback)
-            {
-                _callback = callback;
-            }
-
-            public Task OnBaseObject(T baseObject)
-            {
-                return _callback(baseObject);
-            }
+            _callback = callback;
         }
+
+        public Task OnBaseObject(T baseObject)
+        {
+            return _callback(baseObject);
+        }
+    }
 }

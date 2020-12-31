@@ -9,7 +9,7 @@ namespace PlayGermany.Server.EntitySync.WritableData
         public int Alpha { get; set; }
 
         public WritableRgba(int red, int green, int blue, int alpha)
-            : base(red,green,blue)
+            : base(red, green, blue)
         {
             Alpha = alpha;
         }

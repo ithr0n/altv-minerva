@@ -39,7 +39,7 @@ namespace PlayGermany.Server.Managers
         public async Task<ItemImplementation> GetImplementation(Item item)
         {
             var itemDefinition = item.ItemDefinition;
-            
+
             if (itemDefinition == null)
             {
                 using var dbContext = _dbContextFactory.CreateDbContext();
@@ -51,13 +51,13 @@ namespace PlayGermany.Server.Managers
 
         public ItemImplementation GetImplementation(ItemDefinition itemDefinition)
         {
-            var element = _itemImplementations.FirstOrDefault(e => e.Item1 == (ItemImplementationType) itemDefinition.ItemImplementationType);
-            
+            var element = _itemImplementations.FirstOrDefault(e => e.Item1 == (ItemImplementationType)itemDefinition.ItemImplementationType);
+
             if (element == default(ValueTuple<ItemImplementationType, ItemImplementation>))
             {
                 throw new NotSupportedException($"ItemImplementation {Enum.GetName(element.Item1)} not registered");
             }
-            
+
             return element.Item2;
         }
     }

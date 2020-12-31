@@ -74,7 +74,7 @@ namespace PlayGermany.Server
             {
                 scheduledJobsManager.Cancellation.Cancel();
             }
-            
+
             var serverJobs = _serviceProvider.GetServices<IServerJob>();
             foreach (var job in serverJobs)
             {
@@ -84,21 +84,17 @@ namespace PlayGermany.Server
 
         private void ConfigureServices(ServiceCollection services)
         {
-            services.AddLogging(config =>
-            {
-                config.AddConfiguration(Configuration.GetSection("Logging"));
-                config.AddDebug();
-                config.AddConsole();
-            });
+            services.AddLogging(config => config
+                .AddConfiguration(Configuration.GetSection("Logging"))
+                .AddDebug()
+                .AddConsole());
 
-            services.AddDbContextFactory<DatabaseContext>(options =>
-            {
-                options.UseMySql(Configuration.GetConnectionString("Database"), MariaDbServerVersion.LatestSupportedServerVersion);
-            });
+            services.AddDbContextFactory<DatabaseContext>(options => options
+                .UseMySql(Configuration.GetConnectionString("Database"), MariaDbServerVersion.LatestSupportedServerVersion));
 
-            services.AddScoped(p => p
+            /*services.AddScoped(p => p
                 .GetRequiredService<IDbContextFactory<DatabaseContext>>()
-                .CreateDbContext());
+                .CreateDbContext());*/
 
             // register all server and scheduled jobs
             services.AddAllTypes<IServerJob>();

@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    <v-app id="vueApp">
         <v-main>
             <span>{{ debugMsg }}</span>
 
@@ -52,23 +52,7 @@ export default Vue.extend({
         this.$alt.on(
             'ToggleComponent',
             (component: string, state?: boolean) => {
-                _me.debugMsg = 'test'
-                if (_me.$data.hasOwnProperty('show' + component)) {
-                    if (typeof state === 'undefined') {
-                        _me.debugMsg =
-                            'state was undefined (component: ' + component + ')'
-                        const oldState = _me.$data['show' + component]
-                        _me.$data['show' + component] = !oldState
-                    } else {
-                        _me.debugMsg =
-                            'set ' + component + ' ' + state
-                                ? 'visible'
-                                : 'hidden'
-                        _me.$data['show' + component] = state
-                    }
-                } else {
-                    _me.debugMsg = 'missing property: show' + component
-                }
+                _me.toggleComponent(component, state)
             }
         )
 
@@ -80,7 +64,34 @@ export default Vue.extend({
             this.$data[key] = value
         })
 
-        this.$alt.emit('loaded')
+        this.$nextTick(() => {
+            setTimeout(() => {
+                this.$alt.emit('ui:Loaded')
+            }, 200)
+        })
+    },
+
+    methods: {
+        toggleComponent(component: string, state?: boolean) {
+            this.debugMsg = 'test'
+
+            if (this.$data.hasOwnProperty('show' + component)) {
+                if (typeof state === 'undefined') {
+                    this.debugMsg =
+                        'state was undefined (component: ' + component + ')'
+                    const oldState = this.$data['show' + component]
+
+                    this.$data['show' + component] = !oldState
+                } else {
+                    this.debugMsg =
+                        'set ' + component + ' ' + state ? 'visible' : 'hidden'
+
+                    this.$data['show' + component] = state
+                }
+            } else {
+                this.debugMsg = 'missing property: show' + component
+            }
+        },
     },
 })
 </script>
@@ -88,6 +99,15 @@ export default Vue.extend({
 <style>
 * {
     user-select: none;
+}
+
+*,
+*:focus {
+    outline: none;
+}
+
+#vueApp {
+    background: transparent;
 }
 
 #copyArea {

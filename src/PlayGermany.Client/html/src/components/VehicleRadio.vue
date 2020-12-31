@@ -70,7 +70,7 @@ export default Vue.extend({
         currentRadio() {
             this.$alt.emit(
                 'ui:EmitServer',
-                'Vehicle: RadioChanged',
+                'Vehicle:RadioChanged',
                 this.currentRadio
             )
         },

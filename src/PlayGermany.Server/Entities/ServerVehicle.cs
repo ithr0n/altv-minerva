@@ -15,7 +15,7 @@ namespace PlayGermany.Server.Entities
 
         public ServerVehicle(uint model, Position position, Rotation rotation)
             : base(model, position, rotation)
-        { 
+        {
         }
 
         public VehicleIndicator ActiveIndicators

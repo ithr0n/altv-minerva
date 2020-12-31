@@ -15,6 +15,8 @@ import './EntitySync/MarkersStreamer'
 
 import './UiManager'
 
+import './teststuff'
+
 alt.log('Resource has been loaded.')
 
 alt.everyTick(() => {

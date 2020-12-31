@@ -44,7 +44,8 @@ const radioStations = [
     }
 ]
 
-alt.on('UiManager:Loaded', () => {
+UiManager.on('ui:Loaded', () => {
+    alt.log('radio stations set')
     UiManager.emit('radio:SetStations', radioStations)
 })
 

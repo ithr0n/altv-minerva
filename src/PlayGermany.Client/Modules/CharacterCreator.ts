@@ -4,8 +4,6 @@ import * as NativeUI from '../NativeUI/NativeUi'
 import Camera from '../Utils/Camera'
 import * as data from '../Data/CharacterCreatorData'
 
-const player = alt.Player.local
-
 // i am so sorry for this ugly code, but it's still most clear way
 // https://wiki.rage.mp/index.php?title=Male_Torso_Top_Combinations
 // https://wiki.rage.mp/index.php?title=Female_Torso_Top_Combinations
@@ -27,10 +25,16 @@ const uglyClothesDefinitions = [
     ],
 ]
 
-export default class CharacterCreator {
+export const CharCreatorCamPos = new alt.Vector3(402.97583, -999.5868, -98.51465)
+export const CharCreatorPedPos = new alt.Vector3(402.93603515625, -996.7662963867188, -100.00023651123047)
+export const CharCreatorPedHeading = 180
+
+export class CharacterCreator {
     private currentGender: number
     private selectedClothingPack: number
-    private genderUpdateTimeout: number
+    private pedHandle: number
+
+    private lastGenderUpdate: Date
 
     private similarities: string[]
     private angles: string[]
@@ -73,17 +77,13 @@ export default class CharacterCreator {
     private lipstickColorItem: NativeUI.UIMenuListItem
     private chestHairColorItem: NativeUI.UIMenuListItem
 
-    private readonly cameraPos = new alt.Vector3(402.97583, -999.5868, -98.51465)
-    private readonly pedPos = new alt.Vector3(402.93603515625, -996.7662963867188, -99.00023651123047)
-    private readonly pedHeading = 180
-
     private onCloseCallback: (appearanceData: any) => void
 
     constructor() {
         // init members
         this.currentGender = 0
         this.selectedClothingPack = 0
-        this.genderUpdateTimeout = 0
+        this.lastGenderUpdate = new Date()
 
         this.similarities = []
         this.angles = []
@@ -149,35 +149,35 @@ export default class CharacterCreator {
 
     resetPedClothesToDefault() {
         natives.setPedComponentVariation(
-            player.scriptID,
+            this.pedHandle,
             4,
             this.currentGender === 0 ? uglyClothesDefinitions[0][0][0] : uglyClothesDefinitions[1][0][0],
             0,
             2,
         ) // pants
         natives.setPedComponentVariation(
-            player.scriptID,
+            this.pedHandle,
             6,
             this.currentGender === 0 ? uglyClothesDefinitions[0][0][1] : uglyClothesDefinitions[1][0][1],
             0,
             2,
         ) // shoes
         natives.setPedComponentVariation(
-            player.scriptID,
+            this.pedHandle,
             8,
             this.currentGender === 0 ? uglyClothesDefinitions[0][0][2] : uglyClothesDefinitions[1][0][2],
             0,
             2,
         ) // undershirt
         natives.setPedComponentVariation(
-            player.scriptID,
+            this.pedHandle,
             11,
             this.currentGender === 0 ? uglyClothesDefinitions[0][0][3] : uglyClothesDefinitions[1][0][3],
             0,
             2,
         ) // top
         natives.setPedComponentVariation(
-            player.scriptID,
+            this.pedHandle,
             3,
             this.currentGender === 0 ? uglyClothesDefinitions[0][0][4] : uglyClothesDefinitions[1][0][4],
             0,
@@ -200,35 +200,35 @@ export default class CharacterCreator {
             this.selectedClothingPack = index // required for saving data
 
             natives.setPedComponentVariation(
-                player.scriptID,
+                this.pedHandle,
                 4,
                 this.currentGender === 0 ? uglyClothesDefinitions[0][index][0] : uglyClothesDefinitions[1][index][0],
                 0,
                 2,
             ) // pants
             natives.setPedComponentVariation(
-                player.scriptID,
+                this.pedHandle,
                 6,
                 this.currentGender === 0 ? uglyClothesDefinitions[0][index][1] : uglyClothesDefinitions[1][index][1],
                 0,
                 2,
             ) // shoes
             natives.setPedComponentVariation(
-                player.scriptID,
+                this.pedHandle,
                 8,
                 this.currentGender === 0 ? uglyClothesDefinitions[0][index][2] : uglyClothesDefinitions[1][index][2],
                 0,
                 2,
             ) // undershirt
             natives.setPedComponentVariation(
-                player.scriptID,
+                this.pedHandle,
                 11,
                 this.currentGender === 0 ? uglyClothesDefinitions[0][index][3] : uglyClothesDefinitions[1][index][3],
                 0,
                 2,
             ) // top
             natives.setPedComponentVariation(
-                player.scriptID,
+                this.pedHandle,
                 3,
                 this.currentGender === 0 ? uglyClothesDefinitions[0][index][4] : uglyClothesDefinitions[1][index][4],
                 0,
@@ -280,7 +280,7 @@ export default class CharacterCreator {
                     for (let i = 0; i < data.appearanceNames.length; i++) {
                         this.appearanceItems[i].Index = CharacterCreator.getRandomInt(
                             0,
-                            natives.getPedHeadOverlayValue(player.scriptID, i) - 1,
+                            natives.getPedHeadOverlayValue(this.pedHandle, i) - 1,
                         )
                         this.appearanceOpacityItems[i].Index = CharacterCreator.getRandomInt(0, 100)
                         this.updateAppearance(i)
@@ -327,47 +327,36 @@ export default class CharacterCreator {
         // Charcreator = 1
         this.creatorMainMenu.ListChange.on((item, listIndex) => {
             if (item === this.genderItem) {
-                if (this.genderUpdateTimeout) return
-
                 // too fast changes will crash the game, so prevent it
-                this.genderUpdateTimeout = alt.setTimeout(() => {
-                    this.currentGender = listIndex
+                const compareDate = new Date(this.lastGenderUpdate.getTime() + 1000)
 
-                    // mp.players.local.clearTasksImmediately();
-                    // applyCreatorOutfit();
-                    this.angleItem.Index = 0
-                    this.zoomItem.Index = 0
-                    this.resetParentsMenu(true)
-                    this.resetFeaturesMenu(true)
-                    this.resetAppearanceMenu(true)
+                if (compareDate > new Date()) {
+                    const oldIndex = listIndex === 0 ? 1 : 0
+                    this.genderItem.Index = oldIndex
+                    return
+                }
 
-                    this.creatorHairMenu.Clear()
-                    this.fillHairMenu()
-                    this.creatorHairMenu.RefreshIndex()
+                this.lastGenderUpdate = new Date()
 
-                    alt.emitServer('Session:SetPedModel', listIndex === 0 ? 'mp_m_freemode_01' : 'mp_f_freemode_01')
+                this.currentGender = listIndex
 
-                    alt.setTimeout(() => {
-                        // re-apply clothes
-                        this.resetPedClothesToDefault()
+                // mp.players.local.clearTasksImmediately();
+                // applyCreatorOutfit();
+                this.resetFeaturesMenu(true)
+                this.resetAppearanceMenu(true)
 
-                        // invisible bug fix
-                        natives.setEntityCoords(
-                            player.scriptID,
-                            this.pedPos.x,
-                            this.pedPos.y,
-                            this.pedPos.z - 1,
-                            true,
-                            false,
-                            false,
-                            true,
-                        )
+                this.creatorHairMenu.Clear()
+                this.fillHairMenu()
+                this.creatorHairMenu.RefreshIndex()
 
-                        this.genderUpdateTimeout = 0
-                    }, 100)
-                }, 200)
+                if (this.pedHandle) {
+                    natives.deleteEntity(this.pedHandle)
+                }
+
+                const model = listIndex === 0 ? 'mp_m_freemode_01' : 'mp_f_freemode_01'
+                this.createPed(model)
             } else if (item === this.angleItem) {
-                natives.setEntityHeading(player.scriptID, this.angleItem.SelectedValue)
+                natives.setEntityHeading(this.pedHandle, this.angleItem.SelectedValue)
                 // mp.players.local.clearTasksImmediately();
             } else if (item === this.zoomItem) {
                 this.camera.fov = 50 - this.zoomItem.SelectedValue * 2
@@ -451,7 +440,7 @@ export default class CharacterCreator {
                     this.hide()
 
                     this.onCloseCallback({
-                        GenderIsMale: this.currentGender,
+                        GenderIndex: this.currentGender,
                         Parents: parentData,
                         Features: featureData,
                         Appearance: appearanceData,
@@ -509,39 +498,39 @@ export default class CharacterCreator {
             if (item === this.hairItem) {
                 const hairStyle = data.hairList[this.currentGender][listIndex]
                 // mp.players.local.setComponentVariation(2, hairStyle.ID, 0, 2);
-                natives.setPedComponentVariation(player.scriptID, 2, hairStyle.ID, 0, 2)
+                natives.setPedComponentVariation(this.pedHandle, 2, hairStyle.ID, 0, 2)
             } else {
                 switch (this.creatorHairMenu.CurrentSelection) {
                     case 1: // hair color
-                        natives.setPedHairColor(player.scriptID, listIndex, this.hairHighlightItem.Index)
+                        natives.setPedHairColor(this.pedHandle, listIndex, this.hairHighlightItem.Index)
                         break
 
                     case 2: // hair highlight color
-                        natives.setPedHairColor(player.scriptID, this.hairColorItem.Index, listIndex)
+                        natives.setPedHairColor(this.pedHandle, this.hairColorItem.Index, listIndex)
                         break
 
                     case 3: // eyebrow color
-                        natives.setPedHeadOverlayColor(player.scriptID, 2, 1, listIndex, 0)
+                        natives.setPedHeadOverlayColor(this.pedHandle, 2, 1, listIndex, 0)
                         break
 
                     case 4: // facial hair color
-                        natives.setPedHeadOverlayColor(player.scriptID, 1, 1, listIndex, 0)
+                        natives.setPedHeadOverlayColor(this.pedHandle, 1, 1, listIndex, 0)
                         break
 
                     case 5: // eye color
-                        natives.setPedEyeColor(player.scriptID, listIndex)
+                        natives.setPedEyeColor(this.pedHandle, listIndex)
                         break
 
                     case 6: // blush color
-                        natives.setPedHeadOverlayColor(player.scriptID, 5, 2, listIndex, 0)
+                        natives.setPedHeadOverlayColor(this.pedHandle, 5, 2, listIndex, 0)
                         break
 
                     case 7: // lipstick color
-                        natives.setPedHeadOverlayColor(player.scriptID, 8, 2, listIndex, 0)
+                        natives.setPedHeadOverlayColor(this.pedHandle, 8, 2, listIndex, 0)
                         break
 
                     case 8: // chest hair color
-                        natives.setPedHeadOverlayColor(player.scriptID, 10, 1, listIndex, 0)
+                        natives.setPedHeadOverlayColor(this.pedHandle, 10, 1, listIndex, 0)
                         break
 
                     default:
@@ -710,7 +699,7 @@ export default class CharacterCreator {
 
     updateParents() {
         natives.setPedHeadBlendData(
-            player.scriptID,
+            this.pedHandle,
             this.fatherItem.Index,
             this.motherItem.Index,
             0,
@@ -725,31 +714,31 @@ export default class CharacterCreator {
     }
 
     updateFaceFeature(index: number) {
-        natives.setPedFaceFeature(player.scriptID, index, this.featureItems[index].SelectedValue)
+        natives.setPedFaceFeature(this.pedHandle, index, this.featureItems[index].SelectedValue)
     }
 
     updateAppearance(index: number) {
         const overlayID = this.appearanceItems[index].Index === 0 ? 255 : this.appearanceItems[index].Index - 1
         // mp.players.local.setHeadOverlay(index, overlayID, appearanceOpacityItems[index].Index * 0.01, colorForOverlayIdx(index), 0);
-        natives.setPedHeadOverlay(player.scriptID, index, overlayID, this.appearanceOpacityItems[index].Index * 0.01)
+        natives.setPedHeadOverlay(this.pedHandle, index, overlayID, this.appearanceOpacityItems[index].Index * 0.01)
     }
 
     updateHairAndColors() {
         // mp.players.local.setComponentVariation(2, hairList.hairList[currentGender][hairItem.Index].ID, 0, 2);
         natives.setPedComponentVariation(
-            player.scriptID,
+            this.pedHandle,
             2,
             data.hairList[this.currentGender][this.hairItem.Index].ID,
             0,
             2,
         )
-        natives.setPedHairColor(player.scriptID, this.hairColorItem.Index, this.hairHighlightItem.Index)
-        natives.setPedEyeColor(player.scriptID, this.eyeColorItem.Index)
-        natives.setPedHeadOverlayColor(player.scriptID, 1, 1, this.beardColorItem.Index, 0) // maybe not working?
-        natives.setPedHeadOverlayColor(player.scriptID, 2, 1, this.eyebrowColorItem.Index, 0)
-        natives.setPedHeadOverlayColor(player.scriptID, 5, 2, this.blushColorItem.Index, 0)
-        natives.setPedHeadOverlayColor(player.scriptID, 8, 2, this.lipstickColorItem.Index, 0)
-        natives.setPedHeadOverlayColor(player.scriptID, 10, 1, this.chestHairColorItem.Index, 0)
+        natives.setPedHairColor(this.pedHandle, this.hairColorItem.Index, this.hairHighlightItem.Index)
+        natives.setPedEyeColor(this.pedHandle, this.eyeColorItem.Index)
+        natives.setPedHeadOverlayColor(this.pedHandle, 1, 1, this.beardColorItem.Index, 0) // maybe not working?
+        natives.setPedHeadOverlayColor(this.pedHandle, 2, 1, this.eyebrowColorItem.Index, 0)
+        natives.setPedHeadOverlayColor(this.pedHandle, 5, 2, this.blushColorItem.Index, 0)
+        natives.setPedHeadOverlayColor(this.pedHandle, 8, 2, this.lipstickColorItem.Index, 0)
+        natives.setPedHeadOverlayColor(this.pedHandle, 10, 1, this.chestHairColorItem.Index, 0)
     }
 
     resetParentsMenu(refresh = false) {
@@ -803,30 +792,43 @@ export default class CharacterCreator {
     show(callback: (appearanceData: any) => void) {
         if (this.creatorMainMenu.Visible) return false
 
-        this.updateParents()
-        this.resetPedClothesToDefault()
+        this.onCloseCallback = callback
 
-        this.camera = new Camera(this.cameraPos, new alt.Vector3(0, 0, 0), 50)
-        this.camera.pointAtCoord(this.pedPos)
+        this.createPed('mp_m_freemode_01')
+
+        this.camera = new Camera(CharCreatorCamPos, new alt.Vector3(0, 0, 0), 50)
+        this.camera.pointAtCoord(new alt.Vector3(CharCreatorPedPos.x, CharCreatorPedPos.y, CharCreatorPedPos.z + 1))
         this.camera.render()
 
-        natives.setEntityAlpha(player.scriptID, 255, false)
-        natives.setEntityHeading(player.scriptID, this.pedHeading)
-        natives.setEntityInvincible(player.scriptID, true)
-        natives.freezeEntityPosition(player.scriptID, true)
-        natives.displayRadar(false)
 
         this.creatorMainMenu.Visible = true
 
         return true
     }
 
+    createPed(model: string) {
+        if (this.pedHandle) {
+            natives.deleteEntity(this.pedHandle)
+        }
+
+        this.pedHandle = natives.createPed(2, alt.hash(model), CharCreatorPedPos.x, CharCreatorPedPos.y, CharCreatorPedPos.z, CharCreatorPedHeading, false, false)
+
+        this.resetPedClothesToDefault()
+        this.updateParents()
+
+        //natives.setEntityCoords(this.pedHandle, CharCreatorPedPos.x, CharCreatorPedPos.y, CharCreatorPedPos.z - 1, true, false, false, true)
+        //natives.setEntityHeading(this.pedHandle, CharCreatorPedHeading)
+        natives.setEntityInvincible(this.pedHandle, true)
+        natives.freezeEntityPosition(this.pedHandle, true)
+    }
+
     hide() {
         this.camera.destroy()
 
-        natives.setEntityAlpha(player.scriptID, 0, false)
-        natives.setEntityInvincible(player.scriptID, false)
-        natives.freezeEntityPosition(player.scriptID, false)
+        if (this.pedHandle) {
+            natives.deleteEntity(this.pedHandle);
+        }
+
         natives.displayRadar(true)
 
         this.creatorMainMenu.Visible = false
@@ -839,3 +841,5 @@ export default class CharacterCreator {
         return this.creatorMainMenu.Visible
     }
 }
+
+export default CharacterCreator

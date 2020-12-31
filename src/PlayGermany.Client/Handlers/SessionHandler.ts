@@ -5,7 +5,7 @@ import Camera from '../Utils/Camera'
 import * as AltHelper from '../Utils/AltHelper'
 import * as UiManager from '../UiManager'
 import * as NewCharacterIntro from '../Modules/NewCharacterIntro'
-import CharacterCreator from 'Modules/CharacterCreator'
+import CharacterCreator from '../Modules/CharacterCreator'
 
 let loginCamera: Camera
 
@@ -20,33 +20,25 @@ alt.on('connectionComplete', async () => {
     /*await*/ AsyncHelper.RequestModel(alt.hash('mp_m_freemode_01'))
 
     loginCamera = new Camera(new alt.Vector3(-637.12085, 4433.934, 26.870361), new alt.Vector3(0, 0, 271.66), 20)
+
+    alt.toggleGameControls(false)
+    alt.toggleVoiceControls(false)
+
+    natives.displayRadar(false)
+})
+
+alt.onServer('Session:Initialize', (uiUrl: string) => {
     loginCamera.render()
 
-    natives.setEntityAlpha(alt.Player.local.scriptID, 0, false)
-    natives.setEntityInvincible(alt.Player.local.scriptID, true)
-    natives.freezeEntityPosition(alt.Player.local.scriptID, true)
-    natives.displayRadar(false)
-
-    natives.pauseClock(true)
+    alt.setTimeout(() => {
+        UiManager.initialize(uiUrl)
+    }, 1000)
 })
 
-alt.onServer('Session:PlayerSpawning', (appearance: string[]) => {
-    loginCamera.destroy()
-
-    initializeCharacter(appearance)
+UiManager.on('ui:Loaded', () => {
+    UiManager.showComponent('Login')
+    AltHelper.webviewControls()
 })
-
-let charCreationObj = {
-    firstName: '',
-    lastName: '',
-    birthday: new Date(),
-    genderIndex: 0,
-    appearanceParents: '',
-    appearanceFaceFeatures: '',
-    appearanceDetails: '',
-    appearanceHair: '',
-    appearanceClothes: ''
-}
 
 alt.onServer('Login:Callback', (status: boolean, characters: any[]) => {
     // characters: { charId, charName }
@@ -57,44 +49,63 @@ alt.onServer('Login:Callback', (status: boolean, characters: any[]) => {
     }
 
     UiManager.hideComponent('Login')
-    AltHelper.showCursor(false)
+    AltHelper.webviewControls(false)
 
     // here we could add character selection view
     if (characters.length < 1) {
-        // todo: create new character
-        const charCreator = new CharacterCreator()
-        charCreator.show((data) => {
-            UiManager.showComponent('CharacterCreation')
-            AltHelper.showCursor()
-
-            charCreationObj.genderIndex = data.GenderIndex
-            charCreationObj.appearanceParents = data.Parents
-            charCreationObj.appearanceFaceFeatures = data.Features
-            charCreationObj.appearanceDetails = data.Appearance
-            charCreationObj.appearanceHair = data.Hair
-            charCreationObj.appearanceClothes = data.Clothes
-        })
-        
+        AltHelper.webviewControls()
+        UiManager.showComponent('CharacterCreation')
     } else {
         alt.emitServer('Session:RequestCharacterSpawn', characters[0].charId)
     }
 })
 
-UiManager.on('CharacterCreation:Submit', (firstName: string, lastName: string, birthday: Date) => {
+UiManager.on('CharacterCreation:Submit', (firstName: string, lastName: string, birthday: string) => {
     UiManager.hideComponent('CharacterCreation')
-    AltHelper.showCursor(false)
+    AltHelper.webviewControls(false)
 
-    charCreationObj.firstName = firstName
-    charCreationObj.lastName = lastName
-    charCreationObj.birthday = birthday
+    loginCamera.destroy()
+    loginCamera = null
 
-    alt.emitServer('Session:CreateNewCharacter', charCreationObj)
+    let charCreationObj = {
+        firstName,
+        lastName,
+        birthday,
+        genderIndex: 0,
+        appearanceParents: '',
+        appearanceFaceFeatures: '',
+        appearanceDetails: '',
+        appearanceHair: '',
+        appearanceClothes: ''
+    }
+
+    const charCreator = new CharacterCreator()
+
+    charCreator.show((data) => {
+        charCreationObj.genderIndex = data.GenderIndex
+        charCreationObj.appearanceParents = data.Parents
+        charCreationObj.appearanceFaceFeatures = data.Features
+        charCreationObj.appearanceDetails = data.Appearance
+        charCreationObj.appearanceHair = data.Hair
+        charCreationObj.appearanceClothes = data.Clothes
+
+        alt.emitServer('Session:CreateNewCharacter', JSON.stringify(charCreationObj))
+    })
 })
 
-alt.onServer('Session:PlayIntro', async () => {
+alt.onServer('Session:PlayIntro', async (newCharacterId: number, appearanceData: string[]) => {
+    await initializeCharacter(appearanceData)
     await NewCharacterIntro.Execute()
 
-    // ...
+    alt.emitServer('Session:RequestCharacterSpawn', newCharacterId)
+})
+
+alt.onServer('Session:PlayerSpawning', (appearance: string[]) => {
+    if (loginCamera) {
+        loginCamera.destroy()
+    }
+
+    initializeCharacter(appearance)
 })
 
 const initializeCharacter = (appearance: string[]) => {
@@ -155,10 +166,4 @@ const initializeCharacter = (appearance: string[]) => {
     natives.setEntityInvincible(alt.Player.local.scriptID, false)
     natives.freezeEntityPosition(alt.Player.local.scriptID, false)
     natives.displayRadar(true)
-
-    // apply default flags
-    natives.setPedConfigFlag(alt.Player.local.scriptID, 241, true) // PED_FLAG_DISABLE_STOPPING_VEH_ENGINE
-    natives.setPedConfigFlag(alt.Player.local.scriptID, 429, true) // PED_FLAG_DISABLE_STARTING_VEH_ENGINE
-    natives.setPedConfigFlag(alt.Player.local.scriptID, 184, true) // PED_FLAG_DISABLE_SHUFFLING_TO_DRIVER_SEAT
-    natives.setPedConfigFlag(alt.Player.local.scriptID, 32, true) // Player_FLAG_CAN_FLY_THRU_WINDSCREEN
 }

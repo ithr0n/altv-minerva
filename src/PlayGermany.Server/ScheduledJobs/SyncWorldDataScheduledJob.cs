@@ -39,7 +39,8 @@ namespace PlayGermany.Server.ScheduledJobs
                 _worldData.Clock += DateTime.Now - _lastTick;
             }
 
-            var callback = new AsyncFunctionCallback<IPlayer>(async (player) => {
+            var callback = new AsyncFunctionCallback<IPlayer>(async (player) =>
+            {
                 player.SetDateTime(
                     _worldData.Clock.Day,
                     _worldData.Clock.Month,

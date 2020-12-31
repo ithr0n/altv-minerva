@@ -27,10 +27,11 @@ namespace PlayGermany.Server.ScheduledJobs.Base
                 MaxDegreeOfParallelism = 3,
                 CancellationToken = Cancellation.Token
             };
-            
-            foreach(var job in scheduledJobs)
+
+            foreach (var job in scheduledJobs)
             {
-                _scheduledJobs.Add(() => {
+                _scheduledJobs.Add(() =>
+                {
                     if (job.LastExecution == DateTime.MinValue)
                     {
                         // skip first execution directly on server startup

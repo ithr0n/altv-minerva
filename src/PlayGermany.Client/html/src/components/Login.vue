@@ -1,21 +1,22 @@
 <template>
     <v-container fill-height fluid>
-        <v-row align="left" justify="center">
-            <v-banner elevation="10">Play Germany - Anmeldung</v-banner>
+        <v-row justify="center">
+            <v-banner elevation="10" color="grey lighten-1"
+                >Play Germany - Anmeldung</v-banner
+            >
         </v-row>
 
         <v-row align="center" justify="center">
-            <v-form>
+            <v-form class="formStyle">
                 <v-text-field
-                    required
                     v-model="password"
+                    required
                     type="password"
                     label="Passwort"
                     :disabled="inputDisabled"
                 />
 
                 <v-btn
-                    type="submit"
                     :disabled="inputDisabled"
                     :loading="inputDisabled"
                     @click="handleSubmit"
@@ -25,8 +26,12 @@
         </v-row>
 
         <v-row align="center" justify="center">
-            <v-alert dense type="error" v-if="errorMsg.length > 0">
-                {{ errorMsg }}
+            <v-alert
+                v-if="errorMsg.length > 0"
+                dense
+                type="error"
+                v-html="errorMsg"
+            >
             </v-alert>
         </v-row>
     </v-container>
@@ -50,7 +55,7 @@ export default Vue.extend({
         this.$alt.on('Login:Failed', () => {
             this.inputDisabled = false
             this.errorMsg =
-                'Anmeldung fehlgeschlagen! Entweder hast du ein falsches Passwort verwendest oder dein Account ist gesperrt worden. Überprüfe deine Eingabe oder melde dich im Support.'
+                'Anmeldung fehlgeschlagen!<br/>Entweder hast du ein falsches Passwort verwendet oder dein Account ist gesperrt worden.<br/>Überprüfe deine Eingabe oder melde dich im Support.'
         })
     },
 
@@ -70,4 +75,10 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+.formStyle {
+    background: rgba(180, 180, 180, 1);
+    border-radius: 5px;
+    padding: 30px;
+}
+</style>

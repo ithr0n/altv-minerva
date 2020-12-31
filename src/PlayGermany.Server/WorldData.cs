@@ -35,20 +35,6 @@ namespace PlayGermany.Server
             set => Alt.SetSyncedMetaData("weather", (uint)value);
         }
 
-        public WeatherType? OverrideWeather
-        {
-            get
-            {
-                if (!Alt.GetSyncedMetaData("overrideWeather", out uint weatherId) || !Enum.IsDefined(typeof(WeatherType), weatherId))
-                {
-                    return null;
-                }
-
-                return (WeatherType)weatherId;
-            }
-            set => Alt.SetSyncedMetaData("overrideWeather", value.HasValue ? (uint)value : null);
-        }
-
         public bool Blackout
         {
             get => Alt.GetSyncedMetaData("blackout", out bool blackout) && blackout;

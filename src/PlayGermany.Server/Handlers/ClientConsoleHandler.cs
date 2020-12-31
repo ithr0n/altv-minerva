@@ -1,7 +1,10 @@
 ﻿using AltV.Net;
+using AltV.Net.Async;
 using AltV.Net.Data;
+using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using Microsoft.Extensions.Logging;
+using PlayGermany.Server.Callbacks;
 using PlayGermany.Server.Entities;
 using PlayGermany.Server.EntitySync.Streamers;
 using PlayGermany.Server.Enums;
@@ -27,7 +30,7 @@ namespace PlayGermany.Server.Handlers
             Logger = logger;
             PropsStreamer = propsStreamer;
             _worldData = worldData;
-            Alt.OnClient<ServerPlayer, string, string[]>("ClientConsoleHandler:Command", OnCommand);
+            AltAsync.OnClient<ServerPlayer, string, string[]>("ClientConsoleHandler:Command", OnCommand);
         }
 
         private async void OnCommand(ServerPlayer player, string command, string[] args = null)
@@ -55,10 +58,15 @@ namespace PlayGermany.Server.Handlers
 
                 case "players":
                     {
-                        Alt.GetAllPlayers().ToList().ForEach(otherPlayer =>
+                        var lambda = new AsyncFunctionCallback<IPlayer>(async (IPlayer otherPlayer) =>
                         {
-                            player.Notify(((ServerPlayer)otherPlayer).RoleplayName);
+                            if (otherPlayer is ServerPlayer serverPlayer)
+                            {
+                                player.Notify(serverPlayer.RoleplayName);
+                            }
                         });
+
+                        await Alt.ForEachPlayers(lambda);
 
                         break;
                     }
@@ -73,18 +81,23 @@ namespace PlayGermany.Server.Handlers
 
                         var target = Alt.GetAllPlayers().SingleOrDefault(player => ((ServerPlayer)player).RoleplayName.Contains(args[0]));
 
-                        if (target != null)
+                        if (target != null && target != this)
                         {
-                            if (target == this)
+                            lock (target)
                             {
-                                return;
-                            }
+                                if (target != null && target.Exists)
+                                {
+                                    player.Position = target.Position + new Position(1, 1, 0.5f);
 
-                            player.Position = target.Position + new AltV.Net.Data.Position(1, 1, 0.5f);
-
-                            if (target.IsInVehicle)
-                            {
-                                player.Emit("VehicleHandler:TeleportInto", target.Vehicle);
+                                    if (target.IsInVehicle)
+                                    {
+                                        player.Emit("VehicleHandler:TeleportInto", target.Vehicle);
+                                    }
+                                }
+                                else
+                                {
+                                    player.Notify("Da ging etwas schief...", NotificationType.Warning);
+                                }
                             }
                         }
                         else
@@ -125,7 +138,10 @@ namespace PlayGermany.Server.Handlers
                         var pos = player.Position + new AltV.Net.Data.Position(3, 0, 0);
                         try
                         {
-                            _ = new ServerVehicle(hash, pos, player.Rotation);
+                            await AltAsync.Do(() =>
+                            {
+                                _ = new ServerVehicle(hash, pos, player.Rotation);
+                            });
                         }
                         catch (Exception ex)
                         {
@@ -142,12 +158,14 @@ namespace PlayGermany.Server.Handlers
                             player.Notify("Du musst einen Wert (0-100) angeben!", NotificationType.Error);
                             return;
                         }
+
                         if (!player.IsInVehicle)
                         {
                             player.Notify("Du musst in einem Fahrzeug sitzen!", NotificationType.Error);
                             return;
                         }
-                        player.Vehicle.SetStreamSyncedMetaData("EnginePowerMultiplier", engineMultiplier);
+
+                        await player.Vehicle.SetStreamSyncedMetaDataAsync("EnginePowerMultiplier", engineMultiplier);
 
                         break;
                     }
@@ -205,24 +223,14 @@ namespace PlayGermany.Server.Handlers
                         {
                             await Task.Delay(500);
 
-                            foreach (var p in Alt.GetAllPlayers())
+                            var lambda = new AsyncFunctionCallback<IPlayer>(async (IPlayer p) =>
                             {
                                 p.Emit("World:SetWeatherImmediately");
-                            }
+                                await Task.CompletedTask;
+                            });
+
+                            await Alt.ForEachPlayers(lambda);
                         }
-
-                        break;
-                    }
-
-                case "overrideweather":
-                    {
-                        if (args.Length < 1 || !uint.TryParse(args[0], out uint weatherId))
-                        {
-                            player.Notify("Du musst eine Wetter ID angeben!", NotificationType.Error);
-                            return;
-                        }
-
-                        _worldData.OverrideWeather = (WeatherType)weatherId;
 
                         break;
                     }
@@ -242,12 +250,23 @@ namespace PlayGermany.Server.Handlers
                             _worldData.ClockPaused = clockEnabled;
                         }
 
+                        var lambda = new AsyncFunctionCallback<IPlayer>(async (IPlayer p) =>
+                        {
+                            await p.SetDateTimeAsync(_worldData.Clock);
+                        });
+
+                        await Alt.ForEachPlayers(lambda);
+
                         break;
                     }
 
                 case "blackout":
                     {
-                        _worldData.Blackout = !_worldData.Blackout;
+                        lock (_worldData)
+                        {
+                            _worldData.Blackout = !_worldData.Blackout;
+                        }
+
                         break;
                     }
 

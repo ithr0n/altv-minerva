@@ -9,6 +9,11 @@ export function showCursor(show: boolean = true) {
     alt.showCursor(show)
 }
 
+export function webviewControls(enable: boolean = true) {
+    showCursor(enable)
+    alt.toggleGameControls(!enable)
+}
+
 export function random(min: number, max: number) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }

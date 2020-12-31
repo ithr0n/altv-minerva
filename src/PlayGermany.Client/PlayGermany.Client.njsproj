@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="EntitySync\" />
+    <Folder Include="Handlers\VehicleHandler\" />
     <Folder Include="html\" />
     <Folder Include="html\public\" />
     <Folder Include="html\public\assets\" />
@@ -93,6 +94,7 @@
     <Folder Include="html\src\components\" />
     <Folder Include="html\src\plugins\" />
     <Folder Include="Handlers\" />
+    <Folder Include="Modules\" />
     <Folder Include="NativeUI\" />
     <Folder Include="NativeUI\enums\" />
     <Folder Include="NativeUI\items\" />
@@ -111,7 +113,12 @@
     <TypeScriptCompile Include="Handlers\KeyHandler.ts" />
     <TypeScriptCompile Include="Handlers\PedHandler.ts" />
     <TypeScriptCompile Include="Handlers\SessionHandler.ts" />
-    <TypeScriptCompile Include="Handlers\VehicleHandler.ts" />
+    <TypeScriptCompile Include="Handlers\VehicleHandler\EnginePowerModification.ts" />
+    <TypeScriptCompile Include="Handlers\VehicleHandler\Hud.ts" />
+    <TypeScriptCompile Include="Handlers\VehicleHandler\index.ts" />
+    <TypeScriptCompile Include="Handlers\VehicleHandler\Radio.ts" />
+    <TypeScriptCompile Include="Handlers\VehicleHandler\Signals.ts" />
+    <TypeScriptCompile Include="Handlers\VehicleHandler\Teleportation.ts" />
     <TypeScriptCompile Include="Handlers\WorldDataHandler.ts" />
     <TypeScriptCompile Include="html\src\main.ts" />
     <TypeScriptCompile Include="html\src\plugins\alt.ts" />
@@ -120,6 +127,8 @@
     <TypeScriptCompile Include="html\src\shims-tsx.d.ts" />
     <TypeScriptCompile Include="html\src\shims-vue.d.ts" />
     <TypeScriptCompile Include="loadIpls.ts" />
+    <TypeScriptCompile Include="Modules\CharacterCreator.ts" />
+    <TypeScriptCompile Include="Modules\NewCharacterIntro.ts" />
     <TypeScriptCompile Include="NativeUI\enums\Alignment.ts" />
     <TypeScriptCompile Include="NativeUI\enums\BadgeStyle.ts" />
     <TypeScriptCompile Include="NativeUI\enums\ChangeDirection.ts" />
@@ -155,12 +164,10 @@
     <TypeScriptCompile Include="NativeUI\utils\Screen.ts" />
     <TypeScriptCompile Include="NativeUI\utils\Size.ts" />
     <TypeScriptCompile Include="NativeUI\utils\UUIDV4.ts" />
+    <TypeScriptCompile Include="teststuff.ts" />
     <TypeScriptCompile Include="UiManager\index.ts" />
-    <TypeScriptCompile Include="UiManager\Login.ts" />
     <TypeScriptCompile Include="UiManager\Notifications.ts" />
     <TypeScriptCompile Include="UiManager\PlayerHud.ts" />
-    <TypeScriptCompile Include="UiManager\VehicleHud.ts" />
-    <TypeScriptCompile Include="UiManager\VehicleRadio.ts" />
     <TypeScriptCompile Include="Utils\AltHelper.ts" />
     <TypeScriptCompile Include="Utils\AsyncHelper.ts" />
     <TypeScriptCompile Include="Utils\Camera.ts" />
