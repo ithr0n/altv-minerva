@@ -1,5 +1,4 @@
 import * as alt from 'alt-client'
-import * as AltHelper from '../Utils/AltHelper'
 
 import './PlayerHud'
 import './Notifications'
@@ -22,7 +21,7 @@ export const initialize = (url: string) => {
 
 export const emit = (eventName: string, ...args: any[]) => {
     if (!view) return
-    view.emit(eventName, args)
+    view.emit(eventName, ...args)
 }
 
 export const showComponent = (component: string) => {
@@ -54,7 +53,7 @@ export const on = (eventName: string, callback: (...args: any[]) => void) => {
     eventCallbacks.push({ event: eventName, callback })
 
     if (view) {
-        view.on(eventName, (...args) => callback(args))
+        view.on(eventName, (...args) => callback(...args))
     }
 }
 

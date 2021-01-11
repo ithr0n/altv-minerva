@@ -2,7 +2,7 @@
 using PlayGermany.Server.Enums;
 using System.Numerics;
 
-namespace PlayGermany.Server.Entities
+namespace PlayGermany.Server.EntitySync.Entities
 {
     public class StaticBlip
         : Entity

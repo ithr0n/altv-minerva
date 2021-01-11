@@ -30,29 +30,33 @@ alt.on('keyup', (key) => {
     }
 })
 
-alt.everyTick(() => {
-    let vehicle = alt.Player.local.vehicle
+alt.setInterval(() => {
+    const vehicle = alt.Player.local.vehicle
 
     if (vehicle) {
-        const [_, lowBeam, highBeam] = natives.getVehicleLightsState(vehicle.scriptID, undefined, undefined)
-        let lightState = 0
-        if (lowBeam) lightState = 1
-        if (highBeam) lightState = 2
+        const vehicleClass = natives.getVehicleClass(vehicle.scriptID)
 
-        UiManager.emit('VehicleHud:Update', {
-            gear: vehicle.gear,
-            rpm: Math.floor(vehicle.rpm * 10000),
-            speed: Math.floor(natives.getEntitySpeed(vehicle.scriptID) * 3.6),
-            isElectric: electric.includes(vehicle.model),
-            isEngineRunning: natives.getIsVehicleEngineRunning(vehicle.scriptID),
-            isVehicleOnAllWheels: natives.isVehicleOnAllWheels(vehicle.scriptID),
-            isHandbrakeActive: handbrakeActive,
-            lightState,
-            fuelPercentage: 80, // todo
-            seatbelt: false // todo
-        })
+        if (vehicleTypesWithHudEnabled.includes(vehicleClass)) {
+            const [_, lowBeam, highBeam] = natives.getVehicleLightsState(vehicle.scriptID, undefined, undefined)
+            let lightState = 0
+            if (lowBeam) lightState = 1
+            if (highBeam) lightState = 2
+
+            UiManager.emit('VehicleHud:Update', {
+                gear: vehicle.gear,
+                rpm: Math.floor(vehicle.rpm * 10000),
+                speed: Math.floor(natives.getEntitySpeed(vehicle.scriptID) * 3.6),
+                isElectric: electric.includes(vehicle.model),
+                isEngineRunning: natives.getIsVehicleEngineRunning(vehicle.scriptID),
+                isVehicleOnAllWheels: natives.isVehicleOnAllWheels(vehicle.scriptID),
+                isHandbrakeActive: handbrakeActive,
+                lightState,
+                fuelPercentage: 80, // todo
+                seatbelt: false // todo
+            })
+        }
     }
-})
+}, 42)
 
 const vehicleTypesWithHudEnabled: number[] = [
     0, // compacts
@@ -74,7 +78,7 @@ const vehicleTypesWithHudEnabled: number[] = [
     20, // commercials
 ]
 
-alt.onServer('playerEnteredVehicle', (vehicle: alt.Vehicle, seat) => {
+alt.on('enteredVehicle', (vehicle: alt.Vehicle, seat) => {
     const vehicleClass = natives.getVehicleClass(vehicle.scriptID)
 
     if (vehicleTypesWithHudEnabled.includes(vehicleClass)) {
@@ -82,7 +86,7 @@ alt.onServer('playerEnteredVehicle', (vehicle: alt.Vehicle, seat) => {
     }
 })
 
-alt.onServer('playerLeftVehicle', (vehicle, seat) => {
+alt.on('leftVehicle', (vehicle, seat) => {
     UiManager.hideComponent('VehicleHud')
     UiManager.emit('VehicleHud:Reset')
 })

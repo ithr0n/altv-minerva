@@ -1,6 +1,6 @@
 ﻿using AltV.Net;
 using Microsoft.Extensions.Logging;
-using PlayGermany.Server.Entities;
+using PlayGermany.Server.EntitySync.Entities;
 using PlayGermany.Server.EntitySync.WritableData;
 using PlayGermany.Server.Enums;
 using System.Numerics;

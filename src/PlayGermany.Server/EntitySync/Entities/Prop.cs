@@ -3,7 +3,7 @@ using PlayGermany.Server.EntitySync.WritableData;
 using PlayGermany.Server.Enums;
 using System.Numerics;
 
-namespace PlayGermany.Server.Entities
+namespace PlayGermany.Server.EntitySync.Entities
 {
     public class Prop
         : Entity

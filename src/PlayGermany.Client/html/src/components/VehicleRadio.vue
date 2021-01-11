@@ -21,6 +21,46 @@ const PlayerBeep: Howl = new Howl({
     format: ['mp3'],
 })
 
+const radioStations = [
+    {
+        name: 'Play-Germany Radio',
+        url: 'http://gtaradio.play-germany.de:8000/stream',
+        image: 'playgermany.png',
+    },
+    {
+        name: '011.FM - Country Roads',
+        url: 'http://listen.011fm.com:8016/stream09',
+        image: '011-fm.png',
+    },
+    {
+        name: 'Insanity Radio 103.2FM',
+        url: 'https://stream.cor.insanityradio.com/insanity320.mp3',
+        image: 'insanity.png',
+    },
+    {
+        name: 'B4B Disco Funk',
+        url: 'https://radio9.pro-fhi.net/radio/9164/stream',
+        image: 'b4b.png',
+    },
+    {
+        name: 'One Love Hip Hop Radio',
+        url: 'http://listen.one.hiphop/live.mp3',
+        image: 'onelove.png',
+        volume: 60,
+    },
+    {
+        name: 'ADR.FM',
+        url: 'http://192.111.140.6:9683/stream',
+        image: 'adr.png',
+    },
+    {
+        name: 'SWR1',
+        url:
+            'http://swr-swr1-bw.cast.addradio.de/swr/swr1/bw/mp3/64/stream.mp3',
+        image: 'swr1.png',
+    },
+]
+
 class RadioStation {
     constructor(
         public Name: string,
@@ -84,6 +124,8 @@ export default Vue.extend({
     },
 
     mounted() {
+        this.setRadioStations(radioStations)
+
         window.addEventListener('wheel', event => {
             if (this.playerInVehicle && this.focused) {
                 const delta = Math.sign(event.deltaY)
@@ -103,15 +145,11 @@ export default Vue.extend({
             }
         })
 
-        this.$alt.on('radio:SwitchStation', radioStation => {
+        this.$alt.on('VehicleRadio:SwitchStation', radioStation => {
             this.gotoStation(radioStation)
         })
 
-        this.$alt.on('radio:SetStations', (stations: any[]) => {
-            this.setRadioStations(stations)
-        })
-
-        this.$alt.on('radio:StopPlaying', () => {
+        this.$alt.on('VehicleRadio:StopPlaying', () => {
             this.stopSwitching()
             this.stopRadio()
         })

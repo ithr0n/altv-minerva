@@ -3,6 +3,7 @@ using AltV.Net.Elements.Entities;
 using PlayGermany.Server.DataAccessLayer.Models;
 using PlayGermany.Server.Enums;
 using PlayGermany.Server.PlayerBuffs.Base;
+using PlayGermany.Server.PlayerJobs.Base;
 
 namespace PlayGermany.Server.Entities
 {
@@ -37,11 +38,11 @@ namespace PlayGermany.Server.Entities
             }
         }
 
-        public decimal Cash
+        public uint Cash
         {
             get
             {
-                if (!GetStreamSyncedMetaData("cash", out decimal result))
+                if (!GetStreamSyncedMetaData("cash", out uint result))
                 {
                     return 0;
                 }
@@ -111,6 +112,8 @@ namespace PlayGermany.Server.Entities
         public Character Character { get; set; }
 
         public BuffCollection Buffs { get; }
+
+        public PlayerJob CurrentJob { get; set; }
 
         public bool IsLoggedIn => IsConnected && Account != null;
 

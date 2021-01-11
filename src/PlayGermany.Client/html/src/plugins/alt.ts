@@ -7,8 +7,9 @@ declare module '*.vue' {
 }
 
 const install = (app: typeof _Vue) => {
-    if ('alt' in window) app.prototype.$alt = alt
-    else
+    if ('alt' in window) {
+        app.prototype.$alt = alt
+    } else {
         app.prototype.$alt = {
             emit: (eventName: string, ...args: any[]) => {
                 console.log(`[ALT]::[EMIT] - ${eventName} - ${args}`)
@@ -20,6 +21,7 @@ const install = (app: typeof _Vue) => {
                 console.log(`[ALT]::[ON] - ${eventName}`)
             },
         }
+    }
 }
 
 export default {

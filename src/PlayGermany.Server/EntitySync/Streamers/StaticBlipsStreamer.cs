@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
-using PlayGermany.Server.Entities;
+using PlayGermany.Server.EntitySync.Entities;
 using System.Numerics;
 
 namespace PlayGermany.Server.EntitySync.Streamers
 {
     public class StaticBlipsStreamer
-        : Streamer<Entities.StaticBlip>
+        : Streamer<StaticBlip>
     {
         public StaticBlipsStreamer(ILogger<StaticBlipsStreamer> logger)
             : base(logger)

@@ -64,6 +64,8 @@ namespace PlayGermany.Server.Handlers
                             {
                                 player.Notify(serverPlayer.RoleplayName);
                             }
+
+                            await Task.CompletedTask;
                         });
 
                         await Alt.ForEachPlayers(lambda);

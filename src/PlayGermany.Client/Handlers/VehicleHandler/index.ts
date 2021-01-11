@@ -7,7 +7,7 @@ import './Radio'
 import './Signals'
 import './Teleportation'
 
-alt.onServer('playerEnteredVehicle', (vehicle: alt.Vehicle, seat: number) => {
+alt.on('enteredVehicle', (vehicle: alt.Vehicle, seat: number) => {
     alt.Player.local.setMeta('seat', seat)
 
      // apply flags everytime (because they can change)
@@ -17,10 +17,10 @@ alt.onServer('playerEnteredVehicle', (vehicle: alt.Vehicle, seat: number) => {
     natives.setPedConfigFlag(alt.Player.local.scriptID, 32, true) // Player_FLAG_CAN_FLY_THRU_WINDSCREEN
 })
 
-alt.onServer('playerLeftVehicle', (vehicle: alt.Vehicle, seat: number) => {
+alt.on('leftVehicle', (vehicle: alt.Vehicle, seat: number) => {
     alt.Player.local.deleteMeta('seat')
 })
 
-alt.onServer('playerChangedVehicleSeat', (vehicle: alt.Vehicle, oldSeat: number, newSeat: number) => {
+alt.on('changedVehicleSeat', (vehicle: alt.Vehicle, oldSeat: number, newSeat: number) => {
     alt.Player.local.setMeta('seat', newSeat)
 })

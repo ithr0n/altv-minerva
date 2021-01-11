@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PlayGermany.Server.Callbacks;
 using PlayGermany.Server.DataAccessLayer.Context;
-using PlayGermany.Server.DataAccessLayer.Enums;
 using PlayGermany.Server.DataAccessLayer.Models;
 using PlayGermany.Server.Entities;
 using PlayGermany.Server.ServerJobs.Base;
@@ -35,7 +34,7 @@ namespace PlayGermany.Server.ServerJobs
             var playersTask = Task.Run(async () =>
             {
                 var charsToUpdate = new List<Character>();
-                var callback = new AsyncFunctionCallback<IPlayer>((player) =>
+                var callback = new AsyncFunctionCallback<IPlayer>(async (player) =>
                 {
                     var serverPlayer = (ServerPlayer)player;
 
@@ -56,7 +55,7 @@ namespace PlayGermany.Server.ServerJobs
                         charsToUpdate.Add(serverPlayer.Character);
                     }
 
-                    return Task.CompletedTask;
+                    await Task.CompletedTask;
                 });
 
                 await Alt.ForEachPlayers(callback);
@@ -69,7 +68,7 @@ namespace PlayGermany.Server.ServerJobs
             var vehiclesTask = Task.Run(async () =>
             {
                 var vehiclesToUpdate = new List<DataAccessLayer.Models.Vehicle>();
-                var callback = new AsyncFunctionCallback<IVehicle>((vehicle) =>
+                var callback = new AsyncFunctionCallback<IVehicle>(async (vehicle) =>
                 {
                     var serverVehicle = (ServerVehicle)vehicle;
 
@@ -85,7 +84,7 @@ namespace PlayGermany.Server.ServerJobs
                         vehiclesToUpdate.Add(serverVehicle.DbEntity);
                     }
 
-                    return Task.CompletedTask;
+                    await Task.CompletedTask;
                 });
 
                 await Alt.ForEachVehicles(callback);
@@ -107,19 +106,21 @@ namespace PlayGermany.Server.ServerJobs
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
 
-            dbContext.Database.EnsureDeleted();
-            Logger.LogWarning("Database dropped");
+            // dbContext.Database.EnsureDeleted();
+            // Logger.LogWarning("Database dropped");
 
             dbContext.Database.EnsureCreated();
             Logger.LogInformation("Database created");
 
             // seedings
+            /*
             dbContext.Accounts.Add(new Account
             {
                 SocialClubId = 305176062,
                 AdminLevel = AdminLevel.Owner,
                 Password = "ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff"
             });
+            */
 
             dbContext.SaveChanges();
         }

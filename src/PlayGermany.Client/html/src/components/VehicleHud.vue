@@ -233,19 +233,17 @@ export default Vue.extend({
     },
 
     mounted() {
-        const _me = this
-
         this.$alt.on('VehicleHud:Update', (data: any) => {
-            _me.isEngineRunning = data.isEngineRunning
-            _me.isHandbrakeActive = data.isHandbrakeActive
-            _me.isVehicleOnAllWheels = data.isVehicleOnAllWheels
-            _me.lightState = data.lightState
-            _me.rpm = data.rpm
-            _me.speed = data.speed
-            _me.gear = data.gear
-            _me.isElectric = data.isElectric
-            _me.seatbelt = data.seatbelt
-            _me.fuelPercentage = data.fuelPercentage
+            this.isEngineRunning = data.isEngineRunning
+            this.isHandbrakeActive = data.isHandbrakeActive
+            this.isVehicleOnAllWheels = data.isVehicleOnAllWheels
+            this.lightState = data.lightState
+            this.rpm = data.rpm
+            this.speed = data.speed
+            this.gear = data.gear
+            this.isElectric = data.isElectric
+            this.seatbelt = data.seatbelt
+            this.fuelPercentage = data.fuelPercentage
         })
 
         this.$alt.on('VehicleHud:Reset', () => {

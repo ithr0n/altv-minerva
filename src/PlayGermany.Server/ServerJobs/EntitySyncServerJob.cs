@@ -17,9 +17,9 @@ namespace PlayGermany.Server.ServerJobs
             Logger = logger;
         }
 
-        public Task OnSave()
+        public async Task OnSave()
         {
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
 
         public void OnShutdown()

@@ -15,6 +15,22 @@ let idle = alt.setInterval(() => {
     natives._0x9E4CFFF989258472(); // Disable vehicle idle camera
 }, 5000);
 
+alt.on('gameEntityCreate', (entity: alt.Entity) => {
+    if (entity instanceof alt.Player) {
+        if (!entity.getSyncedMeta("isDead")) {
+            // clear bloody peds after respawn
+            natives.clearPedBloodDamage(entity.scriptID)
+        }
+    }
+})
+
+alt.on('syncedMetaChange', (entity: alt.Entity, key: string, value: any) => {
+    if (entity instanceof alt.Player && key === 'isDead' && !value) {
+        // clear bloody peds after respawn
+        natives.clearPedBloodDamage(entity.scriptID)
+    }
+})
+
 alt.on('connectionComplete', async () => {
     /*await*/ AsyncHelper.RequestModel(alt.hash('mp_f_freemode_01'))
     /*await*/ AsyncHelper.RequestModel(alt.hash('mp_m_freemode_01'))

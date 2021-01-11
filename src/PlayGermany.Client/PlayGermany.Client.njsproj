@@ -15,7 +15,7 @@
     <!--<StartupFile>html\node_modules\@vue\cli-service\bin\vue-cli-service.js</StartupFile>-->
     <!--<ScriptArguments>serve</ScriptArguments>-->
     <StartupFile>index.ts</StartupFile>
-    <StartWebBrowser>false</StartWebBrowser>
+    <StartWebBrowser>False</StartWebBrowser>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -31,6 +31,8 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
+  <ItemDefinitionGroup>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="index.ts" />
     <Content Include=".multilinterrc.json" />
@@ -82,6 +84,7 @@
     <Content Include="tsconfig.json" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Data\" />
     <Folder Include="EntitySync\" />
     <Folder Include="Handlers\VehicleHandler\" />
     <Folder Include="html\" />
@@ -104,14 +107,21 @@
     <Folder Include="Utils\" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Data\CharacterCreatorData.ts" />
+    <TypeScriptCompile Include="Data\Clothes.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="EntitySync\MarkersStreamer.ts" />
+    <TypeScriptCompile Include="EntitySync\PedsStreamer.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="EntitySync\StaticBlipsStreamer.ts" />
     <TypeScriptCompile Include="EntitySync\PropsStreamer.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Handlers\ConsoleHandler.ts" />
     <TypeScriptCompile Include="Handlers\KeyHandler.ts" />
-    <TypeScriptCompile Include="Handlers\PedHandler.ts" />
+    <TypeScriptCompile Include="Modules\HardcoreRoleplay.ts" />
     <TypeScriptCompile Include="Handlers\SessionHandler.ts" />
     <TypeScriptCompile Include="Handlers\VehicleHandler\EnginePowerModification.ts" />
     <TypeScriptCompile Include="Handlers\VehicleHandler\Hud.ts" />
@@ -129,6 +139,7 @@
     <TypeScriptCompile Include="loadIpls.ts" />
     <TypeScriptCompile Include="Modules\CharacterCreator.ts" />
     <TypeScriptCompile Include="Modules\NewCharacterIntro.ts" />
+    <TypeScriptCompile Include="Modules\Player.ts" />
     <TypeScriptCompile Include="NativeUI\enums\Alignment.ts" />
     <TypeScriptCompile Include="NativeUI\enums\BadgeStyle.ts" />
     <TypeScriptCompile Include="NativeUI\enums\ChangeDirection.ts" />

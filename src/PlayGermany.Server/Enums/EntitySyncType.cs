@@ -8,6 +8,7 @@
         Prop = 2,
         HelpText = 3, // implementation missing
         StaticBlip = 4,
-        DynamicBlip = 5 // implementation missing
+        DynamicBlip = 5, // implementation missing
+        Ped = 6 // implementation missing
     }
 }

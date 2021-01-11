@@ -3,7 +3,7 @@ using PlayGermany.Server.EntitySync.WritableData;
 using PlayGermany.Server.Enums;
 using System.Numerics;
 
-namespace PlayGermany.Server.EntitySync
+namespace PlayGermany.Server.EntitySync.Entities
 {
     /// <summary>
     /// DynamicMarker class that stores all data related to a single marker.

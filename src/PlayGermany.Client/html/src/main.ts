@@ -8,6 +8,12 @@ import VueClipboard from 'vue-clipboard2'
 import Toast, { TYPE } from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
 
+Vue.config.errorHandler = (err, _vm, info) => {
+    console.log('VUE ERROR')
+    console.log(err)
+    console.log(info)
+}
+
 Vue.config.productionTip = false
 
 Vue.use(alt)

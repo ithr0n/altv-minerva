@@ -28,11 +28,11 @@ namespace PlayGermany.Server.DataAccessLayer.Models
 
         public ushort Armor { get; set; }
 
-        public decimal Cash { get; set; }
+        public uint Cash { get; set; }
 
-        public int Hunger { get; set; }
+        public uint Hunger { get; set; }
 
-        public int Thirst { get; set; }
+        public uint Thirst { get; set; }
 
         public string AppearanceParents { get; set; }
 

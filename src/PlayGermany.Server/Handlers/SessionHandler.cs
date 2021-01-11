@@ -25,6 +25,8 @@ namespace PlayGermany.Server.Handlers
         private readonly CharacterService _characterService;
 
         private ILogger<SessionHandler> Logger { get; }
+        private IConfiguration Configuration { get; }
+
         public Vector3 SpawnPoint { get; }
 
         public SessionHandler(
@@ -44,7 +46,7 @@ namespace PlayGermany.Server.Handlers
             Alt.OnClient<ServerPlayer, Vector3>("RequestTeleport", OnRequestTeleport);
 
             Logger = logger;
-
+            Configuration = configuration;
             if (
                 float.TryParse(configuration.GetSection("World:SpawnPoint:X").Value, out float spX) &&
                 float.TryParse(configuration.GetSection("World:SpawnPoint:Y").Value, out float spY) &&
@@ -59,9 +61,10 @@ namespace PlayGermany.Server.Handlers
         {
             var uiUrl = "http://resource/client/html/index.html";
 
-#if DEBUG
-            uiUrl = "http://localhost:8080/index.html";
-#endif
+            if (bool.TryParse(Configuration.GetSection("Game:DebugUI").Value, out bool debugUi) && debugUi)
+            {
+                uiUrl = "http://localhost:8080/index.html";
+            }
 
             var socialClubId = player.SocialClubId;
             var ip = player.Ip;
