@@ -14,6 +14,7 @@ using Minerva.Server.ScheduledJobs.Base;
 using Minerva.Server.Entities.Factories;
 using Minerva.Server.EntitySync.Streamers;
 using Minerva.Server.DataAccessLayer.Services;
+using Minerva.Server.Contracts.Configuration;
 
 namespace Minerva.Server
 {
@@ -36,7 +37,9 @@ namespace Minerva.Server
                 .Build();
 
             var services = new ServiceCollection();
-            services.AddSingleton(Configuration);
+            
+            services.Configure<GameOptions>(Configuration.GetSection(nameof(GameOptions)));
+            services.Configure<DevelopmentOptions>(Configuration.GetSection(nameof(DevelopmentOptions)));
 
             ConfigureServices(services);
 

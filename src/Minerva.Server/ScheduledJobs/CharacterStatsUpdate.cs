@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using AltV.Net;
 using AltV.Net.Elements.Entities;
-using Microsoft.Extensions.Logging;
 using Minerva.Server.Callbacks;
 using Minerva.Server.Entities;
 using Minerva.Server.ScheduledJobs.Base;
@@ -14,13 +13,10 @@ namespace Minerva.Server.ScheduledJobs
     {
         private readonly Random _random;
 
-        private ILogger<CharacterStatsUpdate> Logger { get; }
-
-        public CharacterStatsUpdate(ILogger<CharacterStatsUpdate> logger)
+        public CharacterStatsUpdate()
             : base(TimeSpan.FromMinutes(1))
         {
             _random = new Random();
-            Logger = logger;
         }
 
         public override async Task Action()

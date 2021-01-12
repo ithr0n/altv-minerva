@@ -5,6 +5,7 @@ using AltV.Net.Elements.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Minerva.Server.Callbacks;
+using Minerva.Server.Contracts.Configuration;
 using Minerva.Server.DataAccessLayer.Context;
 using Minerva.Server.DataAccessLayer.Models;
 using Minerva.Server.Entities;
@@ -16,16 +17,19 @@ namespace Minerva.Server.ServerJobs
         : IServerJob
     {
         private readonly IDbContextFactory<DatabaseContext> _dbContextFactory;
+        private readonly DevelopmentOptions _devOptions;
 
         private ILogger<DatabaseServerJob> Logger { get; }
 
         public DatabaseServerJob(
             IDbContextFactory<DatabaseContext> dbContextFactory,
+            DevelopmentOptions devOptions,
             ILogger<DatabaseServerJob> logger)
         {
             Logger = logger;
 
             _dbContextFactory = dbContextFactory;
+            _devOptions = devOptions;
         }
 
         public Task OnSave()
@@ -106,8 +110,11 @@ namespace Minerva.Server.ServerJobs
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
 
-            // dbContext.Database.EnsureDeleted();
-            // Logger.LogWarning("Database dropped");
+            if (_devOptions.DropDatabaseAtStartup)
+            {
+                dbContext.Database.EnsureDeleted();
+                Logger.LogWarning("Database dropped");
+            }
 
             dbContext.Database.EnsureCreated();
             Logger.LogInformation("Database created");

@@ -7,13 +7,13 @@ using AltV.Net;
 using AltV.Net.Async;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Minerva.Server.DataAccessLayer.Models;
 using Minerva.Server.DataAccessLayer.Services;
 using Minerva.Server.Entities;
 using Minerva.Server.Extensions;
+using Minerva.Server.Contracts.Configuration;
 
 namespace Minerva.Server.Handlers
 {
@@ -23,20 +23,22 @@ namespace Minerva.Server.Handlers
 
         private readonly AccountService _accountService;
         private readonly CharacterService _characterService;
-
-        private ILogger<SessionHandler> Logger { get; }
-        private IConfiguration Configuration { get; }
+        private readonly ILogger<SessionHandler> _logger;
+        private readonly DevelopmentOptions _devOptions;
 
         public Vector3 SpawnPoint { get; }
 
         public SessionHandler(
             ILogger<SessionHandler> logger,
-            IConfiguration configuration,
+            GameOptions gameOptions,
+            DevelopmentOptions devOptions,
             AccountService accountService,
             CharacterService characterService)
         {
             _accountService = accountService;
             _characterService = characterService;
+            _logger = logger;
+            _devOptions = devOptions;
 
             AltAsync.OnPlayerConnect += (player, reason) => OnPlayerConnect(player as ServerPlayer, reason);
             Alt.OnPlayerDead += (player, killer, weapon) => OnPlayerDead(player as ServerPlayer, killer, weapon);
@@ -45,23 +47,14 @@ namespace Minerva.Server.Handlers
             AltAsync.OnClient<ServerPlayer, string>("Session:CreateNewCharacter", OnCreateNewCharacterAsync);
             Alt.OnClient<ServerPlayer, Vector3>("RequestTeleport", OnRequestTeleport);
 
-            Logger = logger;
-            Configuration = configuration;
-            if (
-                float.TryParse(configuration.GetSection("World:SpawnPoint:X").Value, out float spX) &&
-                float.TryParse(configuration.GetSection("World:SpawnPoint:Y").Value, out float spY) &&
-                float.TryParse(configuration.GetSection("World:SpawnPoint:Z").Value, out float spZ)
-            )
-            {
-                SpawnPoint = new Vector3(spX, spY, spZ);
-            }
+            SpawnPoint = new Vector3(gameOptions.SpawnPoint.X, gameOptions.SpawnPoint.Y, gameOptions.SpawnPoint.Z);
         }
 
         private async Task OnPlayerConnect(ServerPlayer player, string reason)
         {
             var uiUrl = "http://resource/client/html/index.html";
 
-            if (bool.TryParse(Configuration.GetSection("Game:DebugUI").Value, out bool debugUi) && debugUi)
+            if (_devOptions.DebugUI)
             {
                 uiUrl = "http://localhost:8080/index.html";
             }
@@ -69,8 +62,8 @@ namespace Minerva.Server.Handlers
             var socialClubId = player.SocialClubId;
             var ip = player.Ip;
 
-            Logger.LogInformation("Connection: SID {socialClub} with IP {ip}", socialClubId, ip);
-            Logger.LogDebug("Requesting UI from {url}", uiUrl);
+            _logger.LogInformation("Connection: SID {socialClub} with IP {ip}", socialClubId, ip);
+            _logger.LogDebug("Requesting UI from {url}", uiUrl);
 
             if (!await _accountService.Exists(socialClubId))
             {

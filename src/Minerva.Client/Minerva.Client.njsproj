@@ -77,6 +77,7 @@
     <Content Include="html\src\components\VehicleRadio.vue" />
     <Content Include="html\vue.config.js" />
     <Content Include="html\tsconfig.json" />
+    <Content Include="Modules\CommandSystem\CommandSystem.ts" />
     <Content Include="NativeUI\version.txt" />
     <Content Include="package.json" />
     <Content Include="prettier.config.js" />
@@ -99,15 +100,18 @@
     <Folder Include="html\src\plugins\" />
     <Folder Include="Handlers\" />
     <Folder Include="Modules\" />
+    <Folder Include="Modules\CommandSystem\" />
     <Folder Include="NativeUI\" />
     <Folder Include="NativeUI\enums\" />
     <Folder Include="NativeUI\items\" />
     <Folder Include="NativeUI\modules\" />
     <Folder Include="NativeUI\utils\" />
+    <Folder Include="Contracts\" />
     <Folder Include="UiManager\" />
     <Folder Include="Utils\" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Contracts\AdminLevel.ts" />
     <TypeScriptCompile Include="Data\CharacterCreatorData.ts" />
     <TypeScriptCompile Include="Data\Clothes.ts">
       <SubType>Code</SubType>
@@ -140,6 +144,8 @@
     <TypeScriptCompile Include="html\src\shims-vue.d.ts" />
     <TypeScriptCompile Include="loadIpls.ts" />
     <TypeScriptCompile Include="Modules\CharacterCreator.ts" />
+    <TypeScriptCompile Include="Modules\CommandSystem\CommandRegisterEntry.ts" />
+    <TypeScriptCompile Include="Modules\CommandSystem\index.ts" />
     <TypeScriptCompile Include="Modules\NewCharacterIntro.ts" />
     <TypeScriptCompile Include="Handlers\PlayerHandler\Appearance.ts" />
     <TypeScriptCompile Include="NativeUI\enums\Alignment.ts" />

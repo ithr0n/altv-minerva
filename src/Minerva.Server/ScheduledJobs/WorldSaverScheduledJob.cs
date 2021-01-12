@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Minerva.Server.Contracts.Configuration;
 using Minerva.Server.ScheduledJobs.Base;
 using Minerva.Server.ServerJobs.Base;
 
@@ -15,11 +15,12 @@ namespace Minerva.Server.ScheduledJobs
 
         private ILogger<WorldSaverScheduledJob> Logger { get; }
 
-        public WorldSaverScheduledJob(ILogger<WorldSaverScheduledJob> logger, IConfiguration serverConfig, IEnumerable<IServerJob> serverJobs)
-            : base(TimeSpan.FromSeconds(double.Parse(serverConfig.GetSection("World:SaveInterval")?.Value ?? "300")))
+        public WorldSaverScheduledJob(
+            ILogger<WorldSaverScheduledJob> logger, 
+            GameOptions gameOptions,
+            IEnumerable<IServerJob> serverJobs)
+            : base(TimeSpan.FromSeconds(gameOptions.SaveInterval))
         {
-            // if config not present then default of 5 minutes is applied in base constructor
-
             Logger = logger;
             _serverJobs = serverJobs;
         }
