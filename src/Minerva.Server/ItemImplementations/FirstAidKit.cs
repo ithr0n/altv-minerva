@@ -1,3 +1,4 @@
+using Minerva.Server.Entities;
 using Minerva.Server.ItemImplementations.Base;
 
 namespace Minerva.Server.ItemImplementations
@@ -6,8 +7,15 @@ namespace Minerva.Server.ItemImplementations
         : ConsumableItemImplementation
     {
         public FirstAidKit()
-            : base(healthModifier: 30)
+            : base(1)
         {
+        }
+
+        public override void OnAfterUsed(ServerPlayer player)
+        {
+            player.Health += 30;
+
+            base.OnAfterUsed(player);
         }
     }
 }

@@ -1,11 +1,12 @@
 ﻿using Microsoft.Extensions.Logging;
+using Minerva.Server.Contracts.ScriptStrategy;
 using Minerva.Server.EntitySync.Entities;
 using System.Numerics;
 
 namespace Minerva.Server.EntitySync.Streamers
 {
     public class StaticBlipsStreamer
-        : Streamer<StaticBlip>
+        : Streamer<StaticBlip>, ISingletonScript
     {
         public StaticBlipsStreamer(ILogger<StaticBlipsStreamer> logger)
             : base(logger)

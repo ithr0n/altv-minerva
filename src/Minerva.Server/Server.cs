@@ -9,12 +9,10 @@ using Minerva.Server.DataAccessLayer.Context;
 using Minerva.Server.ServerJobs.Base;
 using Minerva.Server.Extensions;
 using System.IO;
-using Minerva.Server.Handlers;
 using Minerva.Server.ScheduledJobs.Base;
 using Minerva.Server.Entities.Factories;
-using Minerva.Server.EntitySync.Streamers;
-using Minerva.Server.DataAccessLayer.Services;
 using Minerva.Server.Contracts.Configuration;
+using Minerva.Server.Contracts.ScriptStrategy;
 
 namespace Minerva.Server
 {
@@ -25,39 +23,72 @@ namespace Minerva.Server
 
         public IConfiguration Configuration { get; }
 
-        public ILogger<Server> Logger { get; }
-
         public Server()
             : base(new ActionTickSchedulerFactory())
         {
+            // read and build configuration
             Configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", false, true)
                 .AddJsonFile("appsettings.local.json", true, true)
                 .Build();
 
+            // initialize dependency injection
             var services = new ServiceCollection();
             
+            // register configuration options
             services.Configure<GameOptions>(Configuration.GetSection(nameof(GameOptions)));
             services.Configure<DevelopmentOptions>(Configuration.GetSection(nameof(DevelopmentOptions)));
 
-            ConfigureServices(services);
+            // configure and register loggers
+            services.AddLogging(config => config
+                .AddConfiguration(Configuration.GetSection("Logging"))
+                .AddDebug()
+                .AddConsole());
 
+            // register factory for database context
+            services.AddDbContextFactory<DatabaseContext>(options => options
+                .UseMySql(Configuration.GetConnectionString("Database"), MariaDbServerVersion.LatestSupportedServerVersion));
+
+            // register all transient implementations
+            services.AddAllTypes<ITranscientScript>();
+
+            // register all singleton implementations
+            services.AddAllTypes<ISingletonScript>(ServiceLifetime.Singleton);
+
+            // register all server jobs
+            services.AddAllTypes<IServerJob>();
+
+            // register all scheduled jobs
+            services.AddAllTypes<ScheduledJob>();
+
+            //
+            // TODO implement something like validation for registered services, so that one service is not registered multiple times / with multiple lifetimes
+            //
+
+            // build DI services
             _serviceProvider = services.BuildServiceProvider();
 
-            Logger = _serviceProvider.GetService<ILogger<Server>>();
+            // everything done
+            var _logger = _serviceProvider.GetService<ILogger<Server>>();
+            _logger.LogDebug("Dependency Injection initialized successfully");
         }
 
         public override void OnStart()
         {
-            _serviceProvider.InstanciateRegisteredServices();
+            // instanciate startup scripts
+            _serviceProvider.InstanciateStartupScripts();
 
+            // instanciate serverjobs
             var serverJobs = _serviceProvider.GetServices<IServerJob>();
+
+            // execute startup handler of all server jobs
             foreach (var job in serverJobs)
             {
                 job.OnStartup();
             }
 
+            // instanciate scheduled jobs and enable them
             var scheduledJobsManager = _serviceProvider.GetService<ScheduledJobManager>();
             if (scheduledJobsManager != null)
             {
@@ -72,57 +103,19 @@ namespace Minerva.Server
 
         public override void OnStop()
         {
+            // cancel all scheduled jobs
             var scheduledJobsManager = _serviceProvider.GetService<ScheduledJobManager>();
             if (scheduledJobsManager != null)
             {
                 scheduledJobsManager.Cancellation.Cancel();
             }
 
+            // execute shutdown handler of all server jobs
             var serverJobs = _serviceProvider.GetServices<IServerJob>();
             foreach (var job in serverJobs)
             {
                 job.OnShutdown();
             }
-        }
-
-        private void ConfigureServices(ServiceCollection services)
-        {
-            services.AddLogging(config => config
-                .AddConfiguration(Configuration.GetSection("Logging"))
-                .AddDebug()
-                .AddConsole());
-
-            services.AddDbContextFactory<DatabaseContext>(options => options
-                .UseMySql(Configuration.GetConnectionString("Database"), MariaDbServerVersion.LatestSupportedServerVersion));
-
-            /*services.AddScoped(p => p
-                .GetRequiredService<IDbContextFactory<DatabaseContext>>()
-                .CreateDbContext());*/
-
-            // register all server and scheduled jobs
-            services.AddAllTypes<IServerJob>();
-            services.AddAllTypes<ScheduledJob>();
-            services.AddSingletonAndInstanciate<ScheduledJobManager>();
-
-            // register streamers
-            services.AddSingleton<PropsStreamer>();
-            services.AddSingleton<MarkersStreamer>();
-            services.AddSingleton<StaticBlipsStreamer>();
-
-            // register handlers
-            services.AddSingletonAndInstanciate<ClientConsoleHandler>();
-            services.AddSingletonAndInstanciate<ServerConsoleHandler>();
-            services.AddSingletonAndInstanciate<SessionHandler>();
-            services.AddSingletonAndInstanciate<VehicleHandler>();
-            services.AddSingletonAndInstanciate<VoiceHandler>();
-
-            // register services
-            services.AddScoped<AccountService>();
-            services.AddScoped<BankAccountService>();
-            services.AddScoped<CharacterService>();
-
-            // custom
-            services.AddSingleton<WorldData>();
         }
 
         #region Entities

@@ -18,6 +18,7 @@ namespace Minerva.Server.ItemImplementations.Base
             int thirstModifier = 0,
             int alcoholModifier = 0,
             int drugsModifier = 0)
+            : base(1)
         {
             _healthModifier = healthModifier;
             _hungerModifier = hungerModifier;

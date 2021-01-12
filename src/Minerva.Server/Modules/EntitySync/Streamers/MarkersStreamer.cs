@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Minerva.Server.Contracts.ScriptStrategy;
 using Minerva.Server.EntitySync.Entities;
 using Minerva.Server.EntitySync.WritableData;
 using Minerva.Server.Enums;
@@ -7,7 +8,7 @@ using System.Numerics;
 namespace Minerva.Server.EntitySync.Streamers
 {
     public class MarkersStreamer
-        : Streamer<Marker>
+        : Streamer<Marker>, ISingletonScript
     {
         public MarkersStreamer(ILogger<MarkersStreamer> logger)
             : base(logger)

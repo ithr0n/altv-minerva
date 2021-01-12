@@ -1,10 +1,12 @@
 ﻿using AltV.Net;
 using AltV.Net.Enums;
+using Minerva.Server.Contracts.ScriptStrategy;
 using System;
 
 namespace Minerva.Server
 {
     public class WorldData
+        : ISingletonScript
     {
         public WorldData()
         {

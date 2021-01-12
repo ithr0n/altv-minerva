@@ -4,6 +4,7 @@ using AltV.Net;
 using AltV.Net.Elements.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Minerva.Server.Callbacks;
 using Minerva.Server.Contracts.Configuration;
 using Minerva.Server.DataAccessLayer.Context;
@@ -23,13 +24,13 @@ namespace Minerva.Server.ServerJobs
 
         public DatabaseServerJob(
             IDbContextFactory<DatabaseContext> dbContextFactory,
-            DevelopmentOptions devOptions,
+            IOptions<DevelopmentOptions> devOptions,
             ILogger<DatabaseServerJob> logger)
         {
             Logger = logger;
 
             _dbContextFactory = dbContextFactory;
-            _devOptions = devOptions;
+            _devOptions = devOptions.Value;
         }
 
         public Task OnSave()

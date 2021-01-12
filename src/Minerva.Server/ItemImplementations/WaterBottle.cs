@@ -3,7 +3,7 @@ using Minerva.Server.ItemImplementations.Base;
 namespace Minerva.Server.ItemImplementations
 {
     public class WaterBottle
-        : ConsumableItemImplementation
+        : FoodItemImplementation
     {
         public WaterBottle()
             : base(thirstModifier: 10)

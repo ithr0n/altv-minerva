@@ -2,12 +2,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Minerva.Server.Contracts.ScriptStrategy;
 using Minerva.Server.DataAccessLayer.Context;
 using Minerva.Server.DataAccessLayer.Models;
 
 namespace Minerva.Server.DataAccessLayer.Services
 {
     public class CharacterService
+        : ITranscientScript
     {
         private readonly IDbContextFactory<DatabaseContext> _dbContextFactory;
 

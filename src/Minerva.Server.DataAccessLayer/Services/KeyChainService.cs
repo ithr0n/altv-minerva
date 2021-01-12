@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Minerva.Server.Contracts.ScriptStrategy;
 using Minerva.Server.DataAccessLayer.Context;
 using Minerva.Server.DataAccessLayer.Models;
 using Minerva.Server.DataAccessLayer.Models.Base;
@@ -9,6 +10,7 @@ using Minerva.Server.DataAccessLayer.Models.Base;
 namespace Minerva.Server.DataAccessLayer.Services
 {
     public class KeyChainService
+        : ITranscientScript
     {
         private readonly IDbContextFactory<DatabaseContext> _dbContextFactory;
 

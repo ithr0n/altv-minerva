@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Minerva.Server.Contracts.ScriptStrategy;
 using Minerva.Server.DataAccessLayer.Context;
 using Minerva.Server.DataAccessLayer.Models;
 using System;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 namespace Minerva.Server.DataAccessLayer.Services
 {
     public class AccountService
+        : ITranscientScript
     {
         private readonly IDbContextFactory<DatabaseContext> _dbContextFactory;
 

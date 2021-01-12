@@ -1,11 +1,13 @@
 ﻿using AltV.Net;
 using AltV.Net.Elements.Entities;
+using Minerva.Server.Contracts.ScriptStrategy;
 using Minerva.Server.Entities;
 using Minerva.Server.Enums;
 
 namespace Minerva.Server.Handlers
 {
     public class VoiceHandler
+        : IStartupSingletonScript
     {
         public IVoiceChannel MainNormalVoiceChannel { get; }
         public IVoiceChannel MainWhisperVoiceChannel { get; }

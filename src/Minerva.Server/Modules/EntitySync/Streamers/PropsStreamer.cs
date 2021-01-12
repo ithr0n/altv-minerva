@@ -1,5 +1,6 @@
 ﻿using AltV.Net;
 using Microsoft.Extensions.Logging;
+using Minerva.Server.Contracts.ScriptStrategy;
 using Minerva.Server.EntitySync.Entities;
 using Minerva.Server.EntitySync.WritableData;
 using Minerva.Server.Enums;
@@ -8,7 +9,7 @@ using System.Numerics;
 namespace Minerva.Server.EntitySync.Streamers
 {
     public class PropsStreamer
-        : Streamer<Prop>
+        : Streamer<Prop>, ISingletonScript
     {
         public PropsStreamer(ILogger<PropsStreamer> logger)
             : base(logger)

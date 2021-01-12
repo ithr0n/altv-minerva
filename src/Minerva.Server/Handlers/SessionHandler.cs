@@ -14,10 +14,12 @@ using Minerva.Server.DataAccessLayer.Services;
 using Minerva.Server.Entities;
 using Minerva.Server.Extensions;
 using Minerva.Server.Contracts.Configuration;
+using Minerva.Server.Contracts.ScriptStrategy;
 
 namespace Minerva.Server.Handlers
 {
     public class SessionHandler
+        : IStartupSingletonScript
     {
         private readonly Vector3 CharCreatorPedPosition = new Position(402.93603515625f, -996.7662963867188f, -99.00023651123047f);
 

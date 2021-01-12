@@ -1,10 +1,12 @@
 ﻿using AltV.Net;
+using Minerva.Server.Contracts.ScriptStrategy;
 using Minerva.Server.Entities;
 using Minerva.Server.Enums;
 
 namespace Minerva.Server.Handlers
 {
     public class VehicleHandler
+        : IStartupSingletonScript
     {
         public VehicleHandler()
         {
