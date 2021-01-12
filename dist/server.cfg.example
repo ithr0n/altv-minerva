@@ -1,0 +1,36 @@
+name: 'alt:V Server'
+host: 0.0.0.0
+port: 7788
+players: 128
+#password: ultra-password
+announce: false
+#token: YOUR_TOKEN
+#useEarlyAuth: false
+#earlyAuthUrl: 'https://login.example.com/index.html:443'
+#useCdn: false
+#cdnUrl: 'https://cdn.example.com:1234'
+gamemode: Roleplay
+website: example.com
+language: de
+description: 'alt:V Sample Server'
+modules: [
+  "csharp-module",
+  "js-module"
+]
+resources: [
+  "altv-minerva"
+]
+streamingDistance: 800
+voice: {
+  bitrate: 64000
+  #externalSecret: 3499211612
+  #externalHost: localhost
+  #externalPort: 7798
+  #externalPublicHost: 8.8.8.8
+  #externalPublicPort: 7799
+}
+tags: [
+  "roleplay",
+  "german"
+]
+debug: false

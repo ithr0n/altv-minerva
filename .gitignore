@@ -362,6 +362,7 @@ MigrationBackup/
 appsettings.local.json
 
 # exclude dist folder
+dist/server.cfg
 dist/cache/
-dist/resources/playgermany/client/
-dist/resources/playgermany/server/
+dist/resources/
+!dist/resources/altv-minerva/resource.cfg

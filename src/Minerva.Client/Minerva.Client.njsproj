@@ -1,0 +1,230 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <Name>Minerva.Client</Name>
+    <RootNamespace>Minerva.Client</RootNamespace>
+    <SaveNodeJsSettingsInProjectFile>True</SaveNodeJsSettingsInProjectFile>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>37359194-dbf4-46a0-9e04-85a6e433ee1a</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <!--<StartupFile>html\node_modules\@vue\cli-service\bin\vue-cli-service.js</StartupFile>-->
+    <!--<ScriptArguments>serve</ScriptArguments>-->
+    <StartupFile>index.ts</StartupFile>
+    <StartWebBrowser>False</StartWebBrowser>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
+    <EnableTypeScript>true</EnableTypeScript>
+    <NodejsPort>1337</NodejsPort>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="index.ts" />
+    <Content Include=".multilinterrc.json" />
+    <Content Include="html\.eslintrc.js" />
+    <Content Include="html\.gitignore" />
+    <Content Include="html\babel.config.js" />
+    <Content Include="html\package-lock.json" />
+    <Content Include="html\package.json" />
+    <Content Include="html\prettier.config.js" />
+    <Content Include="html\public\favicon.ico" />
+    <Content Include="html\public\index.html" />
+    <Content Include="html\src\App.vue" />
+    <Content Include="html\src\assets\fonts\varela-round-v12-latin-regular.eot" />
+    <Content Include="html\src\assets\fonts\varela-round-v12-latin-regular.svg" />
+    <Content Include="html\src\assets\fonts\varela-round-v12-latin-regular.ttf" />
+    <Content Include="html\src\assets\fonts\varela-round-v12-latin-regular.woff" />
+    <Content Include="html\src\assets\fonts\varela-round-v12-latin-regular.woff2" />
+    <Content Include="html\src\assets\VehicleRadio\011-fm.png" />
+    <Content Include="html\src\assets\VehicleRadio\adr.png" />
+    <Content Include="html\src\assets\VehicleRadio\b4b.png" />
+    <Content Include="html\src\assets\VehicleRadio\beep.mp3" />
+    <Content Include="html\src\assets\VehicleRadio\insanity.png" />
+    <Content Include="html\src\assets\VehicleRadio\off.png" />
+    <Content Include="html\src\assets\VehicleRadio\onelove.png" />
+    <Content Include="html\src\assets\VehicleRadio\playgermany.png" />
+    <Content Include="html\src\assets\VehicleRadio\swr1.png" />
+    <Content Include="html\src\assets\VehicleRadio\radiosa.png" />
+    <Content Include="html\src\assets\VehicleRadio\rnr.png" />
+    <Content Include="html\src\assets\VehicleRadio\star104.png" />
+    <Content Include="html\src\assets\VehicleRadio\switching1.mp3" />
+    <Content Include="html\src\assets\VehicleRadio\switching2.mp3" />
+    <Content Include="html\src\assets\VehicleRadio\switching3.mp3" />
+    <Content Include="html\src\assets\VehicleRadio\switching4.mp3" />
+    <Content Include="html\src\assets\VehicleRadio\switching5.mp3" />
+    <Content Include="html\src\assets\VehicleRadio\switching6.mp3" />
+    <Content Include="html\src\components\CharacterCreation.vue" />
+    <Content Include="html\src\components\Login.vue" />
+    <Content Include="html\src\components\Notifications.vue" />
+    <Content Include="html\src\components\PlayerHud.vue" />
+    <Content Include="html\src\components\Phone.vue" />
+    <Content Include="html\src\components\VehicleHud.vue" />
+    <Content Include="html\src\components\VehicleRadio.vue" />
+    <Content Include="html\vue.config.js" />
+    <Content Include="html\tsconfig.json" />
+    <Content Include="NativeUI\version.txt" />
+    <Content Include="package.json" />
+    <Content Include="prettier.config.js" />
+    <Content Include="README.md" />
+    <Content Include="tsconfig.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Data\" />
+    <Folder Include="EntitySync\" />
+    <Folder Include="Handlers\PlayerHandler\" />
+    <Folder Include="Handlers\VehicleHandler\" />
+    <Folder Include="html\" />
+    <Folder Include="html\public\" />
+    <Folder Include="html\public\assets\" />
+    <Folder Include="html\src\" />
+    <Folder Include="html\src\assets\" />
+    <Folder Include="html\src\assets\fonts\" />
+    <Folder Include="html\src\assets\VehicleRadio\" />
+    <Folder Include="html\src\components\" />
+    <Folder Include="html\src\plugins\" />
+    <Folder Include="Handlers\" />
+    <Folder Include="Modules\" />
+    <Folder Include="NativeUI\" />
+    <Folder Include="NativeUI\enums\" />
+    <Folder Include="NativeUI\items\" />
+    <Folder Include="NativeUI\modules\" />
+    <Folder Include="NativeUI\utils\" />
+    <Folder Include="UiManager\" />
+    <Folder Include="Utils\" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="Data\CharacterCreatorData.ts" />
+    <TypeScriptCompile Include="Data\Clothes.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="EntitySync\MarkersStreamer.ts" />
+    <TypeScriptCompile Include="EntitySync\PedsStreamer.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="EntitySync\StaticBlipsStreamer.ts" />
+    <TypeScriptCompile Include="EntitySync\PropsStreamer.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Handlers\ConsoleHandler.ts" />
+    <TypeScriptCompile Include="Handlers\KeyHandler.ts" />
+    <TypeScriptCompile Include="Handlers\PlayerHandler\index.ts" />
+    <TypeScriptCompile Include="Handlers\PlayerHandler\HardcoreRoleplay.ts" />
+    <TypeScriptCompile Include="Handlers\SessionHandler.ts" />
+    <TypeScriptCompile Include="Handlers\VehicleHandler\EnginePowerModification.ts" />
+    <TypeScriptCompile Include="Handlers\VehicleHandler\Hud.ts" />
+    <TypeScriptCompile Include="Handlers\VehicleHandler\index.ts" />
+    <TypeScriptCompile Include="Handlers\VehicleHandler\Radio.ts" />
+    <TypeScriptCompile Include="Handlers\VehicleHandler\Signals.ts" />
+    <TypeScriptCompile Include="Handlers\VehicleHandler\Teleportation.ts" />
+    <TypeScriptCompile Include="Handlers\WorldDataHandler.ts" />
+    <TypeScriptCompile Include="html\src\main.ts" />
+    <TypeScriptCompile Include="html\src\plugins\alt.ts" />
+    <TypeScriptCompile Include="html\src\plugins\vuetify.ts" />
+    <TypeScriptCompile Include="html\src\shims-alt.d.ts" />
+    <TypeScriptCompile Include="html\src\shims-tsx.d.ts" />
+    <TypeScriptCompile Include="html\src\shims-vue.d.ts" />
+    <TypeScriptCompile Include="loadIpls.ts" />
+    <TypeScriptCompile Include="Modules\CharacterCreator.ts" />
+    <TypeScriptCompile Include="Modules\NewCharacterIntro.ts" />
+    <TypeScriptCompile Include="Handlers\PlayerHandler\Appearance.ts" />
+    <TypeScriptCompile Include="NativeUI\enums\Alignment.ts" />
+    <TypeScriptCompile Include="NativeUI\enums\BadgeStyle.ts" />
+    <TypeScriptCompile Include="NativeUI\enums\ChangeDirection.ts" />
+    <TypeScriptCompile Include="NativeUI\enums\Control.ts" />
+    <TypeScriptCompile Include="NativeUI\enums\Font.ts" />
+    <TypeScriptCompile Include="NativeUI\enums\HudColor.ts" />
+    <TypeScriptCompile Include="NativeUI\items\UIMenuAutoListItem.ts" />
+    <TypeScriptCompile Include="NativeUI\items\UIMenuCheckboxItem.ts" />
+    <TypeScriptCompile Include="NativeUI\items\UIMenuDynamicListItem.ts" />
+    <TypeScriptCompile Include="NativeUI\items\UIMenuItem.ts" />
+    <TypeScriptCompile Include="NativeUI\items\UIMenuListItem.ts" />
+    <TypeScriptCompile Include="NativeUI\items\UIMenuSliderItem.ts" />
+    <TypeScriptCompile Include="NativeUI\modules\BigMessage.ts" />
+    <TypeScriptCompile Include="NativeUI\modules\Container.ts" />
+    <TypeScriptCompile Include="NativeUI\modules\IElement.ts" />
+    <TypeScriptCompile Include="NativeUI\modules\InstructionalButton.ts" />
+    <TypeScriptCompile Include="NativeUI\modules\ItemsCollection.ts" />
+    <TypeScriptCompile Include="NativeUI\modules\ListItem.ts" />
+    <TypeScriptCompile Include="NativeUI\modules\Message.ts" />
+    <TypeScriptCompile Include="NativeUI\modules\MidsizedMessage.ts" />
+    <TypeScriptCompile Include="NativeUI\modules\Rectangle.ts" />
+    <TypeScriptCompile Include="NativeUI\modules\ResRectangle.ts" />
+    <TypeScriptCompile Include="NativeUI\modules\ResText.ts" />
+    <TypeScriptCompile Include="NativeUI\modules\Sprite.ts" />
+    <TypeScriptCompile Include="NativeUI\modules\Text.ts" />
+    <TypeScriptCompile Include="NativeUI\NativeUi.ts" />
+    <TypeScriptCompile Include="NativeUI\utils\Color.ts" />
+    <TypeScriptCompile Include="NativeUI\utils\Common.ts" />
+    <TypeScriptCompile Include="NativeUI\utils\LiteEvent.ts" />
+    <TypeScriptCompile Include="NativeUI\utils\Number.ts" />
+    <TypeScriptCompile Include="NativeUI\utils\Point.ts" />
+    <TypeScriptCompile Include="NativeUI\utils\Scaleform.ts" />
+    <TypeScriptCompile Include="NativeUI\utils\Screen.ts" />
+    <TypeScriptCompile Include="NativeUI\utils\Size.ts" />
+    <TypeScriptCompile Include="NativeUI\utils\UUIDV4.ts" />
+    <TypeScriptCompile Include="teststuff.ts" />
+    <TypeScriptCompile Include="UiManager\index.ts" />
+    <TypeScriptCompile Include="UiManager\Notifications.ts" />
+    <TypeScriptCompile Include="Handlers\PlayerHandler\Hud.ts" />
+    <TypeScriptCompile Include="Utils\AltHelper.ts" />
+    <TypeScriptCompile Include="Utils\AsyncHelper.ts" />
+    <TypeScriptCompile Include="Modules\Camera.ts" />
+    <TypeScriptCompile Include="Utils\KeyCodes.ts" />
+    <TypeScriptCompile Include="Utils\NativesHelper.ts" />
+    <TypeScriptCompile Include="Utils\Vectors.ts" />
+  </ItemGroup>
+  <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:48022/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost:1337</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+        <WebProjectProperties>
+          <StartPageUrl>
+          </StartPageUrl>
+          <StartAction>CurrentPage</StartAction>
+          <AspNetDebugging>True</AspNetDebugging>
+          <SilverlightDebugging>False</SilverlightDebugging>
+          <NativeDebugging>False</NativeDebugging>
+          <SQLDebugging>False</SQLDebugging>
+          <ExternalProgram>
+          </ExternalProgram>
+          <StartExternalURL>
+          </StartExternalURL>
+          <StartCmdLineArguments>
+          </StartCmdLineArguments>
+          <StartWorkingDirectory>
+          </StartWorkingDirectory>
+          <EnableENC>False</EnableENC>
+          <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

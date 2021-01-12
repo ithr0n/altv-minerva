@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Minerva.Server": {
+      "commandName": "Executable",
+      "executablePath": "./altv-server.exe",
+      "workingDirectory": "../../dist/"
+    }
+  }
+}
