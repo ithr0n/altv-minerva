@@ -1,4 +1,5 @@
 ﻿using AltV.Net;
+using AltV.Net.Async;
 using AltV.Net.Elements.Args;
 using AltV.Net.Elements.Entities;
 using AltV.Net.FunctionParser;
@@ -34,6 +35,7 @@ namespace Minerva.Server.Modules.CommandSystem
             }
 
             Alt.OnClient<ServerPlayer, string>("Commands:Execute", OnCommandRequest, OnCommandRequestParser);
+            // TODO AltAsync.OnClient<ServerPlayer, string>("Commands:Execute", OnCommandRequest, OnCommandRequestParser);
         }
 
         #region IServerJob

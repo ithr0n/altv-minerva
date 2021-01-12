@@ -3,7 +3,7 @@
 namespace Minerva.Server.Modules.CommandSystem
 {
     [AttributeUsage(AttributeTargets.Method)]
-    public class Command 
+    public class AsyncCommand
         : Attribute
     {
         public string Name { get; }
@@ -12,7 +12,7 @@ namespace Minerva.Server.Modules.CommandSystem
 
         public string[] Aliases { get; }
 
-        public Command(string name = null, bool greedyArg = false, string[] aliases = null)
+        public AsyncCommand(string name = null, bool greedyArg = false, string[] aliases = null)
         {
             Name = name;
             GreedyArg = greedyArg;
