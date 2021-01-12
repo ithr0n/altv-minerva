@@ -86,7 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
-    <Folder Include="EntitySync\" />
+    <Folder Include="Modules\EntitySync\" />
     <Folder Include="Handlers\PlayerHandler\" />
     <Folder Include="Handlers\VehicleHandler\" />
     <Folder Include="html\" />
@@ -107,7 +107,7 @@
     <Folder Include="NativeUI\modules\" />
     <Folder Include="NativeUI\utils\" />
     <Folder Include="Contracts\" />
-    <Folder Include="UiManager\" />
+    <Folder Include="Modules\UiManager\" />
     <Folder Include="Utils\" />
   </ItemGroup>
   <ItemGroup>
@@ -116,12 +116,13 @@
     <TypeScriptCompile Include="Data\Clothes.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="EntitySync\MarkersStreamer.ts" />
-    <TypeScriptCompile Include="EntitySync\PedsStreamer.ts">
+    <TypeScriptCompile Include="Modules\EntitySync\index.ts" />
+    <TypeScriptCompile Include="Modules\EntitySync\MarkersStreamer.ts" />
+    <TypeScriptCompile Include="Modules\EntitySync\PedsStreamer.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="EntitySync\StaticBlipsStreamer.ts" />
-    <TypeScriptCompile Include="EntitySync\PropsStreamer.ts">
+    <TypeScriptCompile Include="Modules\EntitySync\StaticBlipsStreamer.ts" />
+    <TypeScriptCompile Include="Modules\EntitySync\PropsStreamer.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Handlers\ConsoleHandler.ts" />
@@ -184,8 +185,8 @@
     <TypeScriptCompile Include="NativeUI\utils\Size.ts" />
     <TypeScriptCompile Include="NativeUI\utils\UUIDV4.ts" />
     <TypeScriptCompile Include="teststuff.ts" />
-    <TypeScriptCompile Include="UiManager\index.ts" />
-    <TypeScriptCompile Include="UiManager\Notifications.ts" />
+    <TypeScriptCompile Include="Modules\UiManager\index.ts" />
+    <TypeScriptCompile Include="Modules\UiManager\Notifications.ts" />
     <TypeScriptCompile Include="Handlers\PlayerHandler\Hud.ts" />
     <TypeScriptCompile Include="Utils\AltHelper.ts" />
     <TypeScriptCompile Include="Utils\AsyncHelper.ts" />

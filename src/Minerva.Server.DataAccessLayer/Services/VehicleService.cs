@@ -8,7 +8,7 @@ using Minerva.Server.DataAccessLayer.Models;
 namespace Minerva.Server.DataAccessLayer.Services
 {
     public class VehicleService
-        : ITranscientScript
+        : ITransientScript
     {
         private readonly IDbContextFactory<DatabaseContext> _dbContextFactory;
 

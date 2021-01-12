@@ -14,9 +14,9 @@ namespace Minerva.Server.ServerJobs
             Logger = logger;
         }
 
-        public Task OnSave()
+        public async Task OnSave()
         {
-            return Task.Run(() =>
+            await Task.Run(() =>
             {
                 Logger.LogInformation("OnSave Demo");
             });

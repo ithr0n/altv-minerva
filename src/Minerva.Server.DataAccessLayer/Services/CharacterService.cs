@@ -9,7 +9,7 @@ using Minerva.Server.DataAccessLayer.Models;
 namespace Minerva.Server.DataAccessLayer.Services
 {
     public class CharacterService
-        : ITranscientScript
+        : ITransientScript
     {
         private readonly IDbContextFactory<DatabaseContext> _dbContextFactory;
 

@@ -7,7 +7,7 @@ using Minerva.Server.DataAccessLayer.Models;
 namespace Minerva.Server.DataAccessLayer.Services
 {
     public class BankAccountService
-        : ITranscientScript
+        : ITransientScript
     {
         private readonly IDbContextFactory<DatabaseContext> _dbContextFactory;
 

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Minerva.Server.DataAccessLayer.Services
 {
     public class AccountService
-        : ITranscientScript
+        : ITransientScript
     {
         private readonly IDbContextFactory<DatabaseContext> _dbContextFactory;
 

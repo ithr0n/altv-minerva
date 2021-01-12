@@ -10,7 +10,7 @@ using Minerva.Server.DataAccessLayer.Models.Base;
 namespace Minerva.Server.DataAccessLayer.Services
 {
     public class KeyChainService
-        : ITranscientScript
+        : ITransientScript
     {
         private readonly IDbContextFactory<DatabaseContext> _dbContextFactory;
 

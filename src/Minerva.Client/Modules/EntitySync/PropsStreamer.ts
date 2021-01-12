@@ -1,6 +1,6 @@
 import * as alt from 'alt-client'
 import * as natives from 'natives'
-import * as AsyncHelper from '../Utils/AsyncHelper'
+import * as AsyncHelper from '../../Utils/AsyncHelper'
 
 class PropEntity {
     public Handle: number

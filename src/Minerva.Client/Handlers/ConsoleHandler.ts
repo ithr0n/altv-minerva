@@ -1,7 +1,7 @@
 import * as alt from 'alt-client'
 import * as natives from 'natives'
 import * as NativesHelper from '../Utils/NativesHelper'
-import * as Notifications from '../UiManager/Notifications'
+import Notifications from '../Modules/UiManager/Notifications'
 
 alt.on('consoleCommand', (command: string, ...args: string[]) => {
     alt.emitServer('ClientConsoleHandler:Command', command, args)

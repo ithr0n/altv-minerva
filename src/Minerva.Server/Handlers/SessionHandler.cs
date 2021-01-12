@@ -15,6 +15,7 @@ using Minerva.Server.Entities;
 using Minerva.Server.Extensions;
 using Minerva.Server.Contracts.Configuration;
 using Minerva.Server.Contracts.ScriptStrategy;
+using Microsoft.Extensions.Options;
 
 namespace Minerva.Server.Handlers
 {
@@ -32,15 +33,15 @@ namespace Minerva.Server.Handlers
 
         public SessionHandler(
             ILogger<SessionHandler> logger,
-            GameOptions gameOptions,
-            DevelopmentOptions devOptions,
+            IOptions<GameOptions> gameOptions,
+            IOptions<DevelopmentOptions> devOptions,
             AccountService accountService,
             CharacterService characterService)
         {
             _accountService = accountService;
             _characterService = characterService;
             _logger = logger;
-            _devOptions = devOptions;
+            _devOptions = devOptions.Value;
 
             AltAsync.OnPlayerConnect += (player, reason) => OnPlayerConnect(player as ServerPlayer, reason);
             Alt.OnPlayerDead += (player, killer, weapon) => OnPlayerDead(player as ServerPlayer, killer, weapon);
@@ -49,7 +50,10 @@ namespace Minerva.Server.Handlers
             AltAsync.OnClient<ServerPlayer, string>("Session:CreateNewCharacter", OnCreateNewCharacterAsync);
             Alt.OnClient<ServerPlayer, Vector3>("RequestTeleport", OnRequestTeleport);
 
-            SpawnPoint = new Vector3(gameOptions.SpawnPoint.X, gameOptions.SpawnPoint.Y, gameOptions.SpawnPoint.Z);
+            SpawnPoint = new Vector3(
+                gameOptions.Value.SpawnPoint.X, 
+                gameOptions.Value.SpawnPoint.Y, 
+                gameOptions.Value.SpawnPoint.Z);
         }
 
         private async Task OnPlayerConnect(ServerPlayer player, string reason)

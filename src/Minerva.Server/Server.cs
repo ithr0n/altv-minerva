@@ -51,7 +51,7 @@ namespace Minerva.Server
                 .UseMySql(Configuration.GetConnectionString("Database"), MariaDbServerVersion.LatestSupportedServerVersion));
 
             // register all transient implementations
-            services.AddAllTypes<ITranscientScript>();
+            services.AddAllTypes<ITransientScript>();
 
             // register all singleton implementations
             services.AddAllTypes<ISingletonScript>(ServiceLifetime.Singleton);

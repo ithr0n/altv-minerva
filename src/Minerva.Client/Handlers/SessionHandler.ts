@@ -3,7 +3,7 @@ import * as natives from 'natives'
 import * as AsyncHelper from '../Utils/AsyncHelper'
 import Camera from '../Modules/Camera'
 import * as AltHelper from '../Utils/AltHelper'
-import * as UiManager from '../UiManager'
+import UiManager from '../Modules/UiManager'
 import * as NewCharacterIntro from '../Modules/NewCharacterIntro'
 import CharacterCreator from '../Modules/CharacterCreator'
 

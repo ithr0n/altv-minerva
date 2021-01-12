@@ -1,7 +1,6 @@
 import * as alt from 'alt-client'
 import * as natives from 'natives'
 
-import './loadIpls'
 
 import './Handlers/SessionHandler'
 import './Handlers/ConsoleHandler'
@@ -10,11 +9,11 @@ import './Handlers/KeyHandler'
 import './Handlers/PlayerHandler'
 import './Handlers/WorldDataHandler'
 
-import './EntitySync/PropsStreamer'
-import './EntitySync/MarkersStreamer'
+import './Modules/CommandSystem'
+import './Modules/EntitySync'
+import './Modules/UiManager'
 
-import './UiManager'
-
+import './loadIpls'
 import './teststuff'
 
 alt.log('Resource has been loaded.')

@@ -2,16 +2,65 @@
 using AltV.Net.Elements.Args;
 using AltV.Net.Elements.Entities;
 using AltV.Net.FunctionParser;
+using Minerva.Server.Contracts.ScriptStrategy;
 using Minerva.Server.Entities;
+using Minerva.Server.ServerJobs.Base;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace Minerva.Server.Modules.CommandSystem
 {
-    public class CommandModule 
-        : IModule
+    public class CommandSystem 
+        : IServerJob
     {
+        public CommandSystem(
+            IEnumerable<IStartupSingletonScript> startupSingletonScripts,
+            IEnumerable<ISingletonScript> singletonScripts,
+            IEnumerable<ITransientScript> transientScripts)
+        {
+            foreach (var script in startupSingletonScripts)
+            {
+                RegisterEvents(script);
+            }
+            foreach (var script in singletonScripts)
+            {
+                RegisterEvents(script);
+            }
+            foreach (var script in transientScripts)
+            {
+                RegisterEvents(script);
+            }
+
+            Alt.OnClient<ServerPlayer, string>("Commands:Execute", OnCommandRequest, OnCommandRequestParser);
+        }
+
+        #region IServerJob
+
+        public void OnStartup()
+        {
+        }
+
+        public async Task OnSave()
+        {
+            await Task.CompletedTask;
+        }
+
+        public void OnShutdown()
+        {
+            Functions.Clear();
+
+            foreach (var handle in Handles)
+            {
+                handle.Free();
+            }
+
+            Handles.Clear();
+        }
+
+        #endregion
+
         #region CommandDoesNotExists
 
         private static readonly HashSet<CommandDoesNotExistDelegate> CommandDoesNotExistDelegates =
@@ -52,26 +101,6 @@ namespace Minerva.Server.Modules.CommandSystem
             new Dictionary<string, LinkedList<CommandDelegate>>();
 
         private static readonly string[] EmptyArgs = new string[0];
-
-        public void OnScriptsStarted(IScript[] scripts)
-        {
-            foreach (var script in scripts)
-                RegisterEvents(script);
-
-            Alt.OnClient<ServerPlayer, string>("Commands:Execute", OnCommandRequest, OnCommandRequestParser);
-        }
-
-        public void OnStop()
-        {
-            Functions.Clear();
-
-            foreach (var handle in Handles)
-            {
-                handle.Free();
-            }
-
-            Handles.Clear();
-        }
 
         private static void OnCommandRequestParser(IPlayer player, MValueConst[] valueArray,
             Action<ServerPlayer, string> action)

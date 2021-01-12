@@ -1,5 +1,5 @@
 import * as alt from 'alt-client'
-import * as UiManager from '../../UiManager'
+import UiManager from '../../Modules/UiManager'
 
 alt.onServer('PlayerSpawned', () => {
     UiManager.showComponent('PlayerHud')
