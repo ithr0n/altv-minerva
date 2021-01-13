@@ -4,10 +4,10 @@ namespace Minerva.Server.ServerJobs.Base
 {
     public interface IServerJob
     {
-        void OnStartup();
+        Task OnStartup();
 
         Task OnSave();
 
-        void OnShutdown();
+        Task OnShutdown();
     }
 }

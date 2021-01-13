@@ -2,17 +2,20 @@
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using Minerva.Server.Callbacks;
+using Minerva.Server.Contracts.ScriptStrategy;
+using Minerva.Server.DataAccessLayer.Enums;
 using Minerva.Server.Entities;
 using Minerva.Server.Enums;
 using Minerva.Server.Extensions;
 using Minerva.Server.Modules.CommandSystem;
 using System.Linq;
 
-namespace Minerva.Server.Domain.Administration
+namespace Minerva.Server.Commands
 {
-    public class Commands
+    public class Administration
+        : ISingletonScript
     {
-        [Command("broadcast", true)]
+        [Command("broadcast", AccessLevel.Admin, true)]
         public void OnTeleportToWaypointCommand(ServerPlayer player, string message)
         {
             if (string.IsNullOrWhiteSpace(message))
@@ -24,7 +27,7 @@ namespace Minerva.Server.Domain.Administration
             Alt.EmitAllClients("UiManager:Notification", message);
         }
 
-        [Command("tp")]
+        [Command("tp", AccessLevel.Admin)]
         public void OnTeleportCommand(ServerPlayer player, string x, string y, string z)
         {
             if (float.TryParse(x.Trim(','), out var xPos) && float.TryParse(y.Trim(','), out var yPos) & float.TryParse(z.Trim(','), out var zPos))
@@ -33,7 +36,7 @@ namespace Minerva.Server.Domain.Administration
             }
         }
 
-        [Command("tpto")]
+        [Command("tpto", AccessLevel.Admin)]
         public void OnTeleportToPlayerCommand(ServerPlayer player, string target = null)
         {
             if (target == null)
@@ -59,24 +62,24 @@ namespace Minerva.Server.Domain.Administration
             }
         }
 
-        [Command("tpwp")]
+        [Command("tpwp", AccessLevel.Admin)]
         public void OnTeleportToWaypointCommand(ServerPlayer player)
         {
             player.Emit("ConsoleHandler:TeleportToWaypoint");
         }
 
-        [Command("players")]
+        [Command("players", AccessLevel.Admin)]
         public void OnPlayersCommand(ServerPlayer player)
         {
             //var lambda = new AsyncFunctionCallback<IPlayer>(async (IPlayer otherPlayer) =>
-            var lambda = new FunctionCallback<IPlayer>((IPlayer otherPlayer) =>
+            var lambda = new FunctionCallback<IPlayer>((otherPlayer) =>
             {
                 if (otherPlayer is ServerPlayer serverPlayer)
                 {
                     player.Notify(serverPlayer.RoleplayName);
                 }
 
-            //    await Task.CompletedTask;
+                //    await Task.CompletedTask;
             });
 
             //await Alt.ForEachPlayers(lambda);

@@ -26,7 +26,7 @@ namespace Minerva.Server.DataAccessLayer.Models
 
         public string Password { get; set; }
 
-        public AdminLevel AdminLevel { get; set; }
+        public AccessLevel AccessLevel { get; set; }
 
         public DateTime Created { get; set; }
 

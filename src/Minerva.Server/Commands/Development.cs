@@ -3,24 +3,26 @@ using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using Minerva.Server.Callbacks;
+using Minerva.Server.Contracts.ScriptStrategy;
+using Minerva.Server.DataAccessLayer.Enums;
 using Minerva.Server.Entities;
 using Minerva.Server.EntitySync.Streamers;
 using Minerva.Server.Enums;
 using Minerva.Server.Extensions;
 using Minerva.Server.Modules.CommandSystem;
 using System;
-using System.Linq;
 
-namespace Minerva.Server.Domain.Development
+namespace Minerva.Server.Commands
 {
-    public class Commands
+    public class Development
+        : ISingletonScript
     {
         private readonly PropsStreamer _propsStreamer;
         private readonly WorldData _worldData;
 
         private bool _traceLogRunning;
 
-        public Commands(
+        public Development(
             PropsStreamer propsStreamer,
             WorldData worldData)
         {
@@ -28,7 +30,7 @@ namespace Minerva.Server.Domain.Development
             _worldData = worldData;
         }
 
-        [Command("StartTrace")]
+        [Command("StartTrace", AccessLevel.Developer)]
         public void OnStartTraceCommand(ServerPlayer player, string traceName = "TraceLog")
         {
             if (_traceLogRunning)
@@ -43,7 +45,7 @@ namespace Minerva.Server.Domain.Development
             player.Notify($"Trace Logging started ({traceName}.nettrace)", NotificationType.Info);
         }
 
-        [Command("StopTrace")]
+        [Command("StopTrace", AccessLevel.Developer)]
         public void OnStopTraceCommand(ServerPlayer player)
         {
             if (!_traceLogRunning)
@@ -58,20 +60,20 @@ namespace Minerva.Server.Domain.Development
             player.Notify("Trace Logging stopped.", NotificationType.Info);
         }
 
-        [Command("hash", true)]
+        [Command("hash", AccessLevel.Developer, true)]
         public void OnHashCommand(ServerPlayer player, string text)
         {
             player.Notify(Alt.Hash(text).ToString(), NotificationType.Info);
         }
 
-        [Command("pos")]
+        [Command("pos", AccessLevel.Developer)]
         public void OnPositionCommand(ServerPlayer player)
         {
             player.Notify($"Aktuelle Position: {player.Position}");
             player.Emit("UiManager:CopyToClipboard", player.Position.ToString());
         }
 
-        [Command("car")]
+        [Command("car", AccessLevel.Developer)]
         public void OnCarCommand(ServerPlayer player, string model)
         {
             if (string.IsNullOrWhiteSpace(model))
@@ -85,7 +87,7 @@ namespace Minerva.Server.Domain.Development
                 hash = Alt.Hash(model);
             }
 
-            var pos = player.Position + new AltV.Net.Data.Position(3, 0, 0);
+            var pos = player.Position + new Position(3, 0, 0);
 
             try
             {
@@ -97,7 +99,7 @@ namespace Minerva.Server.Domain.Development
             }
         }
 
-        [Command("speedhack")]
+        [Command("speedhack", AccessLevel.Developer)]
         public void OnSpeedHackCommand(ServerPlayer player, int engineMultiplier)
         {
             if (!player.IsInVehicle)
@@ -115,7 +117,7 @@ namespace Minerva.Server.Domain.Development
             player.Vehicle.SetStreamSyncedMetaData("EnginePowerMultiplier", engineMultiplier);
         }
 
-        [Command("prop", true)]
+        [Command("prop", AccessLevel.Developer, true)]
         public void OnCreateSyncedPropCommand(ServerPlayer player, string model)
         {
             if (string.IsNullOrWhiteSpace(model))
@@ -139,7 +141,7 @@ namespace Minerva.Server.Domain.Development
             }
         }
 
-        [Command("weather")]
+        [Command("weather", AccessLevel.Developer)]
         public void OnChangeWeatherCommand(ServerPlayer player, int weatherId, bool immediately = true)
         {
             if (!Enum.IsDefined(typeof(WeatherType), weatherId))
@@ -164,7 +166,7 @@ namespace Minerva.Server.Domain.Development
             }
         }
 
-        [Command("time")]
+        [Command("time", AccessLevel.Developer)]
         public void OnChangeTimeCommand(ServerPlayer player, int hours, bool freezeClock = false)
         {
             if (hours < 0 || hours > 23)
@@ -184,7 +186,7 @@ namespace Minerva.Server.Domain.Development
 
             await Alt.ForEachPlayers(lambda);*/
 
-            var lambda = new FunctionCallback<IPlayer>((IPlayer p) =>
+            var lambda = new FunctionCallback<IPlayer>((p) =>
             {
                 p.SetDateTime(_worldData.Clock);
             });
@@ -192,7 +194,7 @@ namespace Minerva.Server.Domain.Development
             Alt.ForEachPlayers(lambda);
         }
 
-        [Command("blackout")]
+        [Command("blackout", AccessLevel.Developer)]
         public void OnBlackoutCommand(ServerPlayer player)
         {
             _worldData.Blackout = !_worldData.Blackout;

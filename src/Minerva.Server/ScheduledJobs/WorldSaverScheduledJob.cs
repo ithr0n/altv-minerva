@@ -28,18 +28,16 @@ namespace Minerva.Server.ScheduledJobs
 
         public override async Task Action()
         {
-            Logger.LogTrace("World save initiated at {CurrentDate}", DateTime.Now);
+            Logger.LogTrace($"World save initiated at {DateTime.Now}");
 
+            // execute save method of all server jobs
             var taskList = new List<Task>();
+            Parallel.ForEach(_serverJobs, job => taskList.Add(job.OnSave()));
 
-            foreach (var job in _serverJobs)
-            {
-                taskList.Add(job.OnSave());
-            }
-
+            // wait until all jobs finished
             await Task.WhenAll(taskList.ToArray());
 
-            Logger.LogTrace("World save completed at {CurrentDate}", DateTime.Now);
+            Logger.LogTrace($"World save completed at {DateTime.Now}");
         }
     }
 }

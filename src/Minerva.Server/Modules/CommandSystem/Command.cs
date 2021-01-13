@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Minerva.Server.DataAccessLayer.Enums;
+using System;
 
 namespace Minerva.Server.Modules.CommandSystem
 {
@@ -8,13 +9,16 @@ namespace Minerva.Server.Modules.CommandSystem
     {
         public string Name { get; }
 
+        public AccessLevel RequiredAccessLevel { get; }
+
         public bool GreedyArg { get; }
 
         public string[] Aliases { get; }
 
-        public Command(string name = null, bool greedyArg = false, string[] aliases = null)
+        public Command(string name = null, AccessLevel requiredAccessLevel = AccessLevel.Player, bool greedyArg = false, string[] aliases = null)
         {
             Name = name;
+            RequiredAccessLevel = requiredAccessLevel;
             GreedyArg = greedyArg;
             Aliases = aliases;
         }

@@ -13,6 +13,8 @@ using Minerva.Server.ScheduledJobs.Base;
 using Minerva.Server.Entities.Factories;
 using Minerva.Server.Contracts.Configuration;
 using Minerva.Server.Contracts.ScriptStrategy;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Minerva.Server
 {
@@ -82,11 +84,12 @@ namespace Minerva.Server
             // instanciate serverjobs
             var serverJobs = _serviceProvider.GetServices<IServerJob>();
 
-            // execute startup handler of all server jobs
-            foreach (var job in serverJobs)
-            {
-                job.OnStartup();
-            }
+            // execute startup method of all server jobs
+            var taskList = new List<Task>();
+            Parallel.ForEach(serverJobs, job => taskList.Add(job.OnStartup()));
+
+            // wait until all jobs finished
+            Task.WaitAll(taskList.ToArray());
 
             // instanciate scheduled jobs and enable them
             var scheduledJobsManager = _serviceProvider.GetService<ScheduledJobManager>();
@@ -110,12 +113,14 @@ namespace Minerva.Server
                 scheduledJobsManager.Cancellation.Cancel();
             }
 
-            // execute shutdown handler of all server jobs
+            // execute shutdown method of all server jobs
             var serverJobs = _serviceProvider.GetServices<IServerJob>();
-            foreach (var job in serverJobs)
-            {
-                job.OnShutdown();
-            }
+
+            var taskList = new List<Task>();
+            Parallel.ForEach(serverJobs, job => taskList.Add(job.OnShutdown()));
+
+            // wait until all jobs finished
+            Task.WaitAll(taskList.ToArray());
         }
 
         #region Entities

@@ -4,6 +4,7 @@ using AltV.Net.Elements.Args;
 using AltV.Net.Elements.Entities;
 using AltV.Net.FunctionParser;
 using Minerva.Server.Contracts.ScriptStrategy;
+using Minerva.Server.DataAccessLayer.Enums;
 using Minerva.Server.Entities;
 using Minerva.Server.ServerJobs.Base;
 using System;
@@ -13,9 +14,22 @@ using System.Threading.Tasks;
 
 namespace Minerva.Server.Modules.CommandSystem
 {
-    public class CommandSystem 
+    public class CommandSystem
         : IServerJob
     {
+        private class RestrictedAccessCommandDelegate
+        {
+            public RestrictedAccessCommandDelegate(CommandDelegate action, AccessLevel requiredAccessLevel)
+            {
+                Action = action;
+                RequiredAccessLevel = requiredAccessLevel;
+            }
+
+            public CommandDelegate Action { get; }
+
+            public AccessLevel RequiredAccessLevel { get; }
+        }
+
         public CommandSystem(
             IEnumerable<IStartupSingletonScript> startupSingletonScripts,
             IEnumerable<ISingletonScript> singletonScripts,
@@ -40,8 +54,9 @@ namespace Minerva.Server.Modules.CommandSystem
 
         #region IServerJob
 
-        public void OnStartup()
+        public async Task OnStartup()
         {
+            await Task.CompletedTask;
         }
 
         public async Task OnSave()
@@ -49,7 +64,7 @@ namespace Minerva.Server.Modules.CommandSystem
             await Task.CompletedTask;
         }
 
-        public void OnShutdown()
+        public async Task OnShutdown()
         {
             Functions.Clear();
 
@@ -59,6 +74,8 @@ namespace Minerva.Server.Modules.CommandSystem
             }
 
             Handles.Clear();
+
+            await Task.CompletedTask;
         }
 
         #endregion
@@ -80,15 +97,15 @@ namespace Minerva.Server.Modules.CommandSystem
 
         #region CommandAccessLevelViolation
 
-        private static readonly HashSet<CommandAccessLevelViolationDelegate> CommandAccessLevelViolationDelegates =
+        private static readonly HashSet<CommandAccessLevelViolationDelegate> CommandAccessViolationDelegates =
             new HashSet<CommandAccessLevelViolationDelegate>();
 
         public delegate void CommandAccessLevelViolationDelegate(ServerPlayer player, string command);
 
-        public static event CommandAccessLevelViolationDelegate OnCommandAccessLevelViolation
+        public static event CommandAccessLevelViolationDelegate OnCommandAccessViolation
         {
-            add => CommandAccessLevelViolationDelegates.Add(value);
-            remove => CommandAccessLevelViolationDelegates.Remove(value);
+            add => CommandAccessViolationDelegates.Add(value);
+            remove => CommandAccessViolationDelegates.Remove(value);
         }
 
         #endregion
@@ -99,8 +116,8 @@ namespace Minerva.Server.Modules.CommandSystem
 
         private static readonly LinkedList<GCHandle> Handles = new LinkedList<GCHandle>();
 
-        private readonly IDictionary<string, LinkedList<CommandDelegate>> _commandDelegates =
-            new Dictionary<string, LinkedList<CommandDelegate>>();
+        private readonly IDictionary<string, LinkedList<RestrictedAccessCommandDelegate>> _commandDelegates =
+            new Dictionary<string, LinkedList<RestrictedAccessCommandDelegate>>();
 
         private static readonly string[] EmptyArgs = new string[0];
 
@@ -124,14 +141,24 @@ namespace Minerva.Server.Modules.CommandSystem
 
             var cmd = args[0];
 
-            LinkedList<CommandDelegate> delegates;
+            LinkedList<RestrictedAccessCommandDelegate> delegates;
             if (argsLength < 2)
             {
                 if (_commandDelegates.TryGetValue(cmd, out delegates) && delegates.Count > 0)
                 {
                     foreach (var commandDelegate in delegates)
                     {
-                        commandDelegate(player, EmptyArgs);
+                        if (commandDelegate.RequiredAccessLevel <= player.Account.AccessLevel)
+                        {
+                            commandDelegate.Action(player, EmptyArgs);
+                        }
+                        else
+                        {
+                            foreach (var accessViolationDelegate in CommandAccessViolationDelegates)
+                            {
+                                accessViolationDelegate(player, cmd);
+                            }
+                        }
                     }
                 }
                 else
@@ -151,7 +178,17 @@ namespace Minerva.Server.Modules.CommandSystem
             {
                 foreach (var commandDelegate in delegates)
                 {
-                    commandDelegate(player, argsArray);
+                    if (commandDelegate.RequiredAccessLevel <= player.Account.AccessLevel)
+                    {
+                        commandDelegate.Action(player, argsArray);
+                    }
+                    else
+                    {
+                        foreach (var accessViolationDelegate in CommandAccessViolationDelegates)
+                        {
+                            accessViolationDelegate(player, cmd);
+                        }
+                    }
                 }
             }
             else
@@ -190,20 +227,29 @@ namespace Minerva.Server.Modules.CommandSystem
 
                                 if (!_commandDelegates.TryGetValue(commandName, out var delegates))
                                 {
-                                    delegates = new LinkedList<CommandDelegate>();
+                                    delegates = new LinkedList<RestrictedAccessCommandDelegate>();
                                     _commandDelegates[commandName] = delegates;
                                 }
 
                                 if (command.GreedyArg)
                                 {
-                                    delegates.AddLast((player, arguments) =>
-                                    {
-                                        function.Call(player, new[] { string.Join(" ", arguments) });
-                                    });
+                                    delegates.AddLast(new RestrictedAccessCommandDelegate(
+                                        (player, arguments) =>
+                                        {
+                                            function.Call(player, new[] { string.Join(" ", arguments) });
+                                        },
+                                        command.RequiredAccessLevel)
+                                    );
                                 }
                                 else
                                 {
-                                    delegates.AddLast((player, arguments) => { function.Call(player, arguments); });
+                                    delegates.AddLast(new RestrictedAccessCommandDelegate(
+                                        (player, arguments) =>
+                                        {
+                                            function.Call(player, arguments);
+                                        },
+                                        command.RequiredAccessLevel)
+                                    );
                                 }
 
                                 var aliases = command.Aliases;
@@ -213,20 +259,29 @@ namespace Minerva.Server.Modules.CommandSystem
                                     {
                                         if (!_commandDelegates.TryGetValue(alias, out delegates))
                                         {
-                                            delegates = new LinkedList<CommandDelegate>();
+                                            delegates = new LinkedList<RestrictedAccessCommandDelegate>();
                                             _commandDelegates[alias] = delegates;
                                         }
 
                                         if (command.GreedyArg)
                                         {
-                                            delegates.AddLast((player, arguments) =>
-                                            {
-                                                function.Call(player, new[] { string.Join(" ", arguments) });
-                                            });
+                                            delegates.AddLast(new RestrictedAccessCommandDelegate(
+                                                (player, arguments) =>
+                                                {
+                                                    function.Call(player, new[] { string.Join(" ", arguments) });
+                                                },
+                                                command.RequiredAccessLevel)
+                                            );
                                         }
                                         else
                                         {
-                                            delegates.AddLast((player, arguments) => { function.Call(player, arguments); });
+                                            delegates.AddLast(new RestrictedAccessCommandDelegate(
+                                                (player, arguments) =>
+                                                {
+                                                    function.Call(player, arguments);
+                                                },
+                                                command.RequiredAccessLevel)
+                                            );
                                         }
                                     }
                                 }
@@ -262,7 +317,7 @@ namespace Minerva.Server.Modules.CommandSystem
 
                                         if (scriptFunction == null) return;
 
-                                        OnCommandAccessLevelViolation += (player, commandName) =>
+                                        OnCommandAccessViolation += (player, commandName) =>
                                         {
                                             scriptFunction.Set(player);
                                             scriptFunction.Set(commandName);

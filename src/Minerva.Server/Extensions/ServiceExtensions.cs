@@ -52,7 +52,14 @@ namespace Minerva.Server.Extensions
                     _logger.LogTrace("... and configured for instanciation on startup");
                 }
 
+                // add as resolvable by implementation type
                 services.Add(new ServiceDescriptor(type, type, lifetime));
+
+                if (typeof(T) != type)
+                {
+                    // add as resolvable by service type
+                    services.Add(new ServiceDescriptor(typeof(T), type, lifetime));
+                }
             }
 
             var typesOfClasses = AppDomain
@@ -72,8 +79,14 @@ namespace Minerva.Server.Extensions
                     _logger.LogTrace("... and configured for instanciation on startup");
                 }
 
+                // add as resolvable by implementation type
                 services.Add(new ServiceDescriptor(type, type, lifetime));
 
+                if (typeof(T) != type)
+                {
+                    // add as resolvable by service type
+                    services.Add(new ServiceDescriptor(typeof(T), type, lifetime));
+                }
             }
         }
 

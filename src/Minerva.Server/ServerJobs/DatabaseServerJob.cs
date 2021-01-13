@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Minerva.Server.Callbacks;
 using Minerva.Server.Contracts.Configuration;
 using Minerva.Server.DataAccessLayer.Context;
+using Minerva.Server.DataAccessLayer.Enums;
 using Minerva.Server.DataAccessLayer.Models;
 using Minerva.Server.Entities;
 using Minerva.Server.ServerJobs.Base;
@@ -102,12 +103,12 @@ namespace Minerva.Server.ServerJobs
             return Task.WhenAll(playersTask, vehiclesTask);
         }
 
-        public void OnShutdown()
+        public async Task OnShutdown()
         {
-
+            await Task.CompletedTask;
         }
 
-        public void OnStartup()
+        public async Task OnStartup()
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
 
@@ -121,14 +122,15 @@ namespace Minerva.Server.ServerJobs
             Logger.LogInformation("Database created");
 
             // seedings
-            /*
-            dbContext.Accounts.Add(new Account
+            if (!await dbContext.Accounts.AnyAsync())
             {
-                SocialClubId = 305176062,
-                AdminLevel = AdminLevel.Owner,
-                Password = "ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff"
-            });
-            */
+                dbContext.Accounts.Add(new Account
+                {
+                    SocialClubId = 305176062,
+                    AccessLevel = AccessLevel.Owner,
+                    Password = "ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff"
+                });
+            }
 
             dbContext.SaveChanges();
         }
