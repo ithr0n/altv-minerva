@@ -2,7 +2,7 @@
     <v-container fill-height fluid>
         <v-row justify="center">
             <v-banner elevation="10" color="grey lighten-1"
-                >Play Germany - Anmeldung</v-banner
+                >alt:V Minerva - Login</v-banner
             >
         </v-row>
 

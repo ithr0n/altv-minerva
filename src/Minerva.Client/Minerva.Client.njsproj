@@ -39,7 +39,6 @@
     <Content Include="html\.eslintrc.js" />
     <Content Include="html\.gitignore" />
     <Content Include="html\babel.config.js" />
-    <Content Include="html\package-lock.json" />
     <Content Include="html\package.json" />
     <Content Include="html\prettier.config.js" />
     <Content Include="html\public\favicon.ico" />
