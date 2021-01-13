@@ -15,3 +15,8 @@ Please read the [wiki](https://github.com/ithr0n/altv-minerva/wiki).
 
 ## You like my work
 Great! If you wanna support me *(and motivate me to invest more time in this resource :smile:)* you can click here: https://ko-fi.com/ithr0n
+
+## License
+You may ask what you are allowed to do with code of this repository? I selected the license `AGPL-3.0-only` as license, you can check for details [here](https://choosealicense.com/licenses/agpl-3.0/) or at wikipedia. In short: You can use and change everything as you like, but you need to keep copyrights and must keep source code publicy available.
+
+I know that is is not attractive for server owners. But main purposes of this project is research and education. I want to help newcomers with getting started to code their own resources. If you don't want to make your source code based on this repository public then please contact me for finding an individual license model.
