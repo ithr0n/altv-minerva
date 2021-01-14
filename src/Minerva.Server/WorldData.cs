@@ -1,6 +1,6 @@
 ﻿using AltV.Net;
 using AltV.Net.Enums;
-using Minerva.Server.Contracts.ScriptStrategy;
+using Minerva.Server.Core.ScriptStrategy;
 using System;
 
 namespace Minerva.Server

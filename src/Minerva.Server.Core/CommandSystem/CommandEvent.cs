@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace Minerva.Server.Modules.CommandSystem
+namespace Minerva.Server.Core.CommandSystem
 {
     [AttributeUsage(AttributeTargets.Method)]
-    public class CommandEvent 
+    public class CommandEvent
         : Attribute
     {
         public CommandEventType EventType { get; }

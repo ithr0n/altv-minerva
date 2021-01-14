@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using Minerva.Server.Contracts.ScriptStrategy;
+using Minerva.Server.Core.ScriptStrategy;
 using Minerva.Server.EntitySync.Entities;
 using System.Numerics;
 

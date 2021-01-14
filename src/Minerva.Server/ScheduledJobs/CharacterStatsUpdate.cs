@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using AltV.Net;
 using AltV.Net.Elements.Entities;
 using Minerva.Server.Callbacks;
+using Minerva.Server.Core.ScheduledJob;
 using Minerva.Server.Entities;
-using Minerva.Server.ScheduledJobs.Base;
 
 namespace Minerva.Server.ScheduledJobs
 {

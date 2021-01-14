@@ -1,4 +1,4 @@
-namespace Minerva.Server.DataAccessLayer.Enums
+namespace Minerva.Server.Core.Enums
 {
     public enum NpcShopEntryType
     {

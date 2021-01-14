@@ -1,4 +1,4 @@
-﻿namespace Minerva.Server.Contracts.ScriptStrategy
+﻿namespace Minerva.Server.Core.ScriptStrategy
 {
     /// <summary>
     /// Dependency Injection will configure every class which implements this interface with a transient lifetime.

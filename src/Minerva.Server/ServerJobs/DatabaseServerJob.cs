@@ -6,12 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Minerva.Server.Callbacks;
-using Minerva.Server.Contracts.Configuration;
+using Minerva.Server.Core.Configuration;
+using Minerva.Server.Core.Enums;
+using Minerva.Server.Core.ServerJobs;
 using Minerva.Server.DataAccessLayer.Context;
-using Minerva.Server.DataAccessLayer.Enums;
 using Minerva.Server.DataAccessLayer.Models;
 using Minerva.Server.Entities;
-using Minerva.Server.ServerJobs.Base;
 
 namespace Minerva.Server.ServerJobs
 {

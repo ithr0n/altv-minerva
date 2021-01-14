@@ -1,4 +1,4 @@
-﻿using Minerva.Server.DataAccessLayer.Enums;
+﻿using Minerva.Server.Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

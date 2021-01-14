@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Minerva.Server.DataAccessLayer.Enums;
+using Minerva.Server.Core.Enums;
 using Minerva.Server.DataAccessLayer.Models.Base;
 
 namespace Minerva.Server.DataAccessLayer.Models

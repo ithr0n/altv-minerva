@@ -1,4 +1,4 @@
-﻿namespace Minerva.Server.Contracts.Configuration
+﻿namespace Minerva.Server.Core.Configuration
 {
     public class DevelopmentOptions
     {

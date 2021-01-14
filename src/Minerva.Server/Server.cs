@@ -6,15 +6,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Minerva.Server.DataAccessLayer.Context;
-using Minerva.Server.ServerJobs.Base;
 using Minerva.Server.Extensions;
 using System.IO;
-using Minerva.Server.ScheduledJobs.Base;
 using Minerva.Server.Entities.Factories;
-using Minerva.Server.Contracts.Configuration;
-using Minerva.Server.Contracts.ScriptStrategy;
+using Minerva.Server.Core.ScriptStrategy;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Minerva.Server.Core.Configuration;
+using Minerva.Server.Core.ServerJobs;
+using Minerva.Server.Core.ScheduledJob;
 
 namespace Minerva.Server
 {

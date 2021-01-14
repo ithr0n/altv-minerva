@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Minerva.Server.ScheduledJobs.Base
+namespace Minerva.Server.Core.ScheduledJob
 {
     public abstract class ScheduledJob
     {

@@ -1,4 +1,4 @@
-﻿namespace Minerva.Server.Contracts.ScriptStrategy
+﻿namespace Minerva.Server.Core.ScriptStrategy
 {
     /// <summary>
     /// Same as <see cref="ISingletonScript"/>, but additionally the script gets constructed as soon as the server starts.

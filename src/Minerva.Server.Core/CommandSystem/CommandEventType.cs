@@ -1,4 +1,4 @@
-﻿namespace Minerva.Server.Modules.CommandSystem
+﻿namespace Minerva.Server.Core.CommandSystem
 {
     public enum CommandEventType
     {

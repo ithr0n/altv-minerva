@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Minerva.Server.Contracts\Minerva.Server.Contracts.csproj" />
+    <ProjectReference Include="..\Minerva.Server.Core\Minerva.Server.Core.csproj" />
     <ProjectReference Include="..\Minerva.Server.DataAccessLayer\Minerva.Server.DataAccessLayer.csproj" />
   </ItemGroup>
 

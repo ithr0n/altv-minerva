@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Minerva.Server.ScheduledJobs.Base
+namespace Minerva.Server.Core.ScheduledJob
 {
     public class ScheduledJobManager
     {
@@ -15,7 +15,9 @@ namespace Minerva.Server.ScheduledJobs.Base
         public CancellationTokenSource Cancellation { get; private set; }
         private ILogger<ScheduledJobManager> Logger { get; }
 
-        public ScheduledJobManager(ILogger<ScheduledJobManager> logger, IEnumerable<ScheduledJob> scheduledJobs)
+        public ScheduledJobManager(
+            ILogger<ScheduledJobManager> logger,
+            IEnumerable<ScheduledJob> scheduledJobs)
         {
             Cancellation = new CancellationTokenSource();
             Logger = logger;

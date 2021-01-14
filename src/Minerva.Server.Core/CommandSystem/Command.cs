@@ -1,10 +1,10 @@
-﻿using Minerva.Server.DataAccessLayer.Enums;
+﻿using Minerva.Server.Core.Enums;
 using System;
 
-namespace Minerva.Server.Modules.CommandSystem
+namespace Minerva.Server.Core.CommandSystem
 {
     [AttributeUsage(AttributeTargets.Method)]
-    public class Command 
+    public class Command
         : Attribute
     {
         public string Name { get; }

@@ -3,7 +3,7 @@ using AltV.Net.EntitySync;
 using AltV.Net.EntitySync.ServerEvent;
 using AltV.Net.EntitySync.SpatialPartitions;
 using Microsoft.Extensions.Logging;
-using Minerva.Server.ServerJobs.Base;
+using Minerva.Server.Core.ServerJobs;
 
 namespace Minerva.Server.ServerJobs
 {

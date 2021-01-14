@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Minerva.Server.Contracts.Configuration;
-using Minerva.Server.ScheduledJobs.Base;
-using Minerva.Server.ServerJobs.Base;
+using Minerva.Server.Core.Configuration;
+using Minerva.Server.Core.ServerJobs;
 
-namespace Minerva.Server.ScheduledJobs
+namespace Minerva.Server.Core.ScheduledJob
 {
     public class WorldSaverScheduledJob
         : ScheduledJob
@@ -17,7 +16,7 @@ namespace Minerva.Server.ScheduledJobs
         private ILogger<WorldSaverScheduledJob> Logger { get; }
 
         public WorldSaverScheduledJob(
-            ILogger<WorldSaverScheduledJob> logger, 
+            ILogger<WorldSaverScheduledJob> logger,
             IOptions<GameOptions> gameOptions,
             IEnumerable<IServerJob> serverJobs)
             : base(TimeSpan.FromSeconds(gameOptions.Value.SaveInterval))

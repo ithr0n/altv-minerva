@@ -2,12 +2,12 @@
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using Minerva.Server.Callbacks;
-using Minerva.Server.Contracts.ScriptStrategy;
-using Minerva.Server.DataAccessLayer.Enums;
+using Minerva.Server.Core.CommandSystem;
+using Minerva.Server.Core.Enums;
+using Minerva.Server.Core.ScriptStrategy;
 using Minerva.Server.Entities;
 using Minerva.Server.Enums;
 using Minerva.Server.Extensions;
-using Minerva.Server.Modules.CommandSystem;
 using System.Linq;
 
 namespace Minerva.Server.Commands

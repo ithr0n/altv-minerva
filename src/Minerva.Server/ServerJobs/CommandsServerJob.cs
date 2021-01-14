@@ -1,20 +1,20 @@
 ﻿using AltV.Net;
-using AltV.Net.Async;
 using AltV.Net.Elements.Args;
 using AltV.Net.Elements.Entities;
 using AltV.Net.FunctionParser;
-using Minerva.Server.Contracts.ScriptStrategy;
-using Minerva.Server.DataAccessLayer.Enums;
+using Minerva.Server.Core.ScriptStrategy;
+using Minerva.Server.Core.CommandSystem;
+using Minerva.Server.Core.ServerJobs;
 using Minerva.Server.Entities;
-using Minerva.Server.ServerJobs.Base;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using Minerva.Server.Core.Enums;
 
-namespace Minerva.Server.Modules.CommandSystem
+namespace Minerva.Server.ServerJobs
 {
-    public class CommandSystem
+    public class CommandsServerJob
         : IServerJob
     {
         private class RestrictedAccessCommandDelegate
@@ -30,7 +30,7 @@ namespace Minerva.Server.Modules.CommandSystem
             public AccessLevel RequiredAccessLevel { get; }
         }
 
-        public CommandSystem(
+        public CommandsServerJob(
             IEnumerable<IStartupSingletonScript> startupSingletonScripts,
             IEnumerable<ISingletonScript> singletonScripts,
             IEnumerable<ITransientScript> transientScripts)

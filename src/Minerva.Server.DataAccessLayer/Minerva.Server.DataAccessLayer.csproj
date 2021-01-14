@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Minerva.Server.Contracts\Minerva.Server.Contracts.csproj" />
+    <ProjectReference Include="..\Minerva.Server.Core\Minerva.Server.Core.csproj" />
   </ItemGroup>
 
 </Project>

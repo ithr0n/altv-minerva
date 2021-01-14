@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Minerva.Server.ServerJobs.Base;
+using Minerva.Server.Core.ServerJobs;
 
 namespace Minerva.Server.ServerJobs
 {

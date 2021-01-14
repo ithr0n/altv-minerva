@@ -1,5 +1,5 @@
 ﻿using AltV.Net;
-using Minerva.Server.Contracts.ScriptStrategy;
+using Minerva.Server.Core.ScriptStrategy;
 using Minerva.Server.Entities;
 using Minerva.Server.Enums;
 

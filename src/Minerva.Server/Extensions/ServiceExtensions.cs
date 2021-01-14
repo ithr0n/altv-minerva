@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Minerva.Server.Contracts.ScriptStrategy;
+using Minerva.Server.Core.ScriptStrategy;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,6 +13,7 @@ namespace Minerva.Server.Extensions
     public static class ServiceCollectionExtensions
     {
         private static readonly ILogger _logger;
+        private static readonly Dictionary<Type, object> _singletonInstances;
 
         static ServiceCollectionExtensions()
         {
@@ -31,11 +32,15 @@ namespace Minerva.Server.Extensions
             });
 
             _logger = loggerFactory.CreateLogger(typeof(ServiceCollectionExtensions));
+
+            _singletonInstances = new Dictionary<Type, object>();
         }
 
         public static void AddAllTypes<T>(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Transient)
             where T : class
         {
+            #region T is interface
+
             var typesOfInterface = AppDomain
                 .CurrentDomain
                 .GetAssemblies()
@@ -44,12 +49,20 @@ namespace Minerva.Server.Extensions
 
             foreach (var type in typesOfInterface)
             {
-                _logger.LogTrace($"Dependency Injection: Registering {type.Name} (implements interface {typeof(T).Name})");
+                _logger.LogTrace($"Registering {type.Name} (implements interface {typeof(T).Name}) with lifetime {Enum.GetName(lifetime)}");
+
+                if (services.Any(e => e.ServiceType == type))
+                {
+                    _logger.LogDebug($"Skipping registration of {type.Name} -> already registered!");
+                    continue;
+                }
 
                 if (type.ImplementedInterfaces.Contains(typeof(IStartupSingletonScript)))
                 {
                     servicesToInstanciate.Add(type);
-                    _logger.LogTrace("... and configured for instanciation on startup");
+                    lifetime = ServiceLifetime.Singleton;
+
+                    _logger.LogTrace($"Configured {type.Name} for instanciation on startup");
                 }
 
                 // add as resolvable by implementation type
@@ -57,10 +70,14 @@ namespace Minerva.Server.Extensions
 
                 if (typeof(T) != type)
                 {
-                    // add as resolvable by service type
-                    services.Add(new ServiceDescriptor(typeof(T), type, lifetime));
+                    // add as resolvable by service type (forwarding)
+                    services.Add(new ServiceDescriptor(typeof(T), x => x.GetRequiredService(type), lifetime));
                 }
             }
+
+            #endregion
+
+            #region T is class
 
             var typesOfClasses = AppDomain
                 .CurrentDomain
@@ -70,13 +87,19 @@ namespace Minerva.Server.Extensions
 
             foreach (var type in typesOfClasses)
             {
-                _logger.LogTrace($"Dependency Injection: Registering {type.Name} (inherits class {typeof(T).Name})");
+                _logger.LogTrace($"Registering {type.Name} (inherits class {typeof(T).Name}) with lifetime {Enum.GetName(lifetime)}");
 
+                if (services.Any(e => e.ServiceType == type))
+                {
+                    _logger.LogDebug($"Skipping registration of {type.Name} -> already registered!");
+                    continue;
+                }
                 if (type.GetTypeInfo().ImplementedInterfaces.Contains(typeof(IStartupSingletonScript)))
                 {
                     servicesToInstanciate.Add(type);
+                    lifetime = ServiceLifetime.Singleton;
 
-                    _logger.LogTrace("... and configured for instanciation on startup");
+                    _logger.LogTrace($"Configured {type.Name} for instanciation on startup");
                 }
 
                 // add as resolvable by implementation type
@@ -84,10 +107,25 @@ namespace Minerva.Server.Extensions
 
                 if (typeof(T) != type)
                 {
-                    // add as resolvable by service type
-                    services.Add(new ServiceDescriptor(typeof(T), type, lifetime));
+                    // add as resolvable by service type (forwarding)
+                    services.Add(new ServiceDescriptor(typeof(T), x => x.GetRequiredService(type), lifetime));
                 }
             }
+
+            #endregion
+        }
+
+        private static object GetSingletonInstance(IServiceProvider serviceProvider, Type type)
+        {
+            if (_singletonInstances.ContainsKey(type))
+            {
+                return _singletonInstances[type];
+            }
+
+            var instance = serviceProvider.GetRequiredService(type);
+            _singletonInstances.Add(type, instance);
+
+            return instance;
         }
 
         private static readonly List<Type> servicesToInstanciate = new List<Type>();

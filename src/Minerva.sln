@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minerva.Server", "Minerva.S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minerva.Server.DataAccessLayer", "Minerva.Server.DataAccessLayer\Minerva.Server.DataAccessLayer.csproj", "{7447BD51-C211-4A77-9979-D121C29F8927}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minerva.Server.Contracts", "Minerva.Server.Contracts\Minerva.Server.Contracts.csproj", "{5DF9977C-5663-4D3A-8637-C5BEEDA1F1F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minerva.Server.Core", "Minerva.Server.Core\Minerva.Server.Core.csproj", "{5DF9977C-5663-4D3A-8637-C5BEEDA1F1F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
