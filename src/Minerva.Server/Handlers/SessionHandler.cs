@@ -9,13 +9,14 @@ using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Minerva.Server.DataAccessLayer.Models;
 using Minerva.Server.DataAccessLayer.Services;
-using Minerva.Server.Entities;
 using Minerva.Server.Extensions;
 using Minerva.Server.Core.ScriptStrategy;
 using Microsoft.Extensions.Options;
 using Minerva.Server.Core.Configuration;
+using Minerva.Server.Core.Entities;
+using Minerva.Server.Core.Contracts.Enums;
+using Minerva.Server.Core.Contracts.Models;
 
 namespace Minerva.Server.Handlers
 {
@@ -49,7 +50,7 @@ namespace Minerva.Server.Handlers
             AltAsync.OnClient<ServerPlayer, int>("Session:RequestCharacterSpawn", OnRequestCharacterSpawnAsync);
             AltAsync.OnClient<ServerPlayer, string>("Session:CreateNewCharacter", OnCreateNewCharacterAsync);
             Alt.OnClient<ServerPlayer, Vector3>("RequestTeleport", OnRequestTeleport);
-
+            
             SpawnPoint = new Vector3(
                 gameOptions.Value.SpawnPointX, 
                 gameOptions.Value.SpawnPointY, 
@@ -92,7 +93,7 @@ namespace Minerva.Server.Handlers
         {
             if (string.IsNullOrWhiteSpace(password))
             {
-                player.Notify("Du musst ein gültiges Passwort eingeben!", Enums.NotificationType.Error);
+                player.Notify("Du musst ein gültiges Passwort eingeben!", NotificationType.Error);
                 return;
             }
 

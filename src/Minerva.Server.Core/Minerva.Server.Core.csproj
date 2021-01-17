@@ -5,8 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AltV.Net" Version="1.48.3" />
+    <PackageReference Include="AltV.Net.Async" Version="1.48.3" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Minerva.Server.Core.Contracts\Minerva.Server.Core.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,6 @@
-using Minerva.Server.Core.Enums;
-using Minerva.Server.DataAccessLayer.Models;
-using Minerva.Server.Entities;
+using Minerva.Server.Core.Contracts.Enums;
+using Minerva.Server.Core.Contracts.Models;
+using Minerva.Server.Core.Entities;
 
 namespace Minerva.Server.ItemImplementations.Base
 {

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Minerva.Server.Core.Enums;
+using Minerva.Server.Core.Contracts.Enums;
+using Minerva.Server.Core.Contracts.Models;
 using Minerva.Server.DataAccessLayer.Context;
-using Minerva.Server.DataAccessLayer.Models;
 using Minerva.Server.ItemImplementations.Base;
 
 namespace Minerva.Server.Managers

@@ -1,4 +1,4 @@
-﻿using Minerva.Server.Core.Enums;
+﻿using Minerva.Server.Core.Contracts.Enums;
 using System;
 
 namespace Minerva.Server.Core.CommandSystem

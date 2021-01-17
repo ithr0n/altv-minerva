@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>..\..\dist\resources\minerva\server\</OutputPath>
+    <OutputPath>..\..\dist\resources\altv-minerva\server\</OutputPath>
     <Optimize>false</Optimize>
   </PropertyGroup>
 

@@ -8,13 +8,13 @@ using Microsoft.Extensions.Logging;
 using Minerva.Server.DataAccessLayer.Context;
 using Minerva.Server.Extensions;
 using System.IO;
-using Minerva.Server.Entities.Factories;
 using Minerva.Server.Core.ScriptStrategy;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Minerva.Server.Core.Configuration;
 using Minerva.Server.Core.ServerJobs;
 using Minerva.Server.Core.ScheduledJob;
+using Minerva.Server.Core.Entities.Factories;
 
 namespace Minerva.Server
 {

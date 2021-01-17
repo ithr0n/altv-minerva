@@ -1,5 +1,5 @@
 ﻿using AltV.Net.Elements.Entities;
-using Minerva.Server.Enums;
+using Minerva.Server.Core.Contracts.Enums;
 
 namespace Minerva.Server.Extensions
 {

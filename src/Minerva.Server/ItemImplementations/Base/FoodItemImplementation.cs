@@ -1,5 +1,5 @@
 using System;
-using Minerva.Server.Entities;
+using Minerva.Server.Core.Entities;
 
 namespace Minerva.Server.ItemImplementations.Base
 {

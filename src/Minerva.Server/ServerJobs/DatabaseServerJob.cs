@@ -7,11 +7,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Minerva.Server.Callbacks;
 using Minerva.Server.Core.Configuration;
-using Minerva.Server.Core.Enums;
+using Minerva.Server.Core.Contracts.Enums;
+using Minerva.Server.Core.Contracts.Models;
+using Minerva.Server.Core.Entities;
 using Minerva.Server.Core.ServerJobs;
 using Minerva.Server.DataAccessLayer.Context;
-using Minerva.Server.DataAccessLayer.Models;
-using Minerva.Server.Entities;
 
 namespace Minerva.Server.ServerJobs
 {
@@ -73,7 +73,7 @@ namespace Minerva.Server.ServerJobs
 
             var vehiclesTask = Task.Run(async () =>
             {
-                var vehiclesToUpdate = new List<DataAccessLayer.Models.Vehicle>();
+                var vehiclesToUpdate = new List<Core.Contracts.Models.Vehicle>();
                 var callback = new AsyncFunctionCallback<IVehicle>(async (vehicle) =>
                 {
                     var serverVehicle = (ServerVehicle)vehicle;

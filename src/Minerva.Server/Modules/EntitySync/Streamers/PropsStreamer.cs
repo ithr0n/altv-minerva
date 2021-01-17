@@ -44,10 +44,11 @@ namespace Minerva.Server.EntitySync.Streamers
             bool? onFire = null,
             TextureVariation? textureVariation = null,
             bool? visible = null,
+            bool? isCollisionless = null,
             uint streamRange = 520
         )
         {
-            return Create(Alt.Hash(model), position, rotation, dimension, isDynamic, freezed, lodDistance, lightColor, onFire, textureVariation, visible, streamRange);
+            return Create(Alt.Hash(model), position, rotation, dimension, isDynamic, freezed, lodDistance, lightColor, onFire, textureVariation, visible, isCollisionless, streamRange);
         }
 
         /// <summary>
@@ -78,6 +79,7 @@ namespace Minerva.Server.EntitySync.Streamers
             bool? onFire = null,
             TextureVariation? textureVariation = null,
             bool? visible = null,
+            bool? isCollisionless = null,
             uint streamRange = 520
         )
         {
@@ -91,7 +93,8 @@ namespace Minerva.Server.EntitySync.Streamers
                 LightColor = lightColor ?? null,
                 OnFire = onFire ?? null,
                 TextureVariation = textureVariation ?? null,
-                Visible = visible ?? null
+                Visible = visible ?? null,
+                IsCollisionless = isCollisionless ?? null
             };
 
             return Create(newEntity);

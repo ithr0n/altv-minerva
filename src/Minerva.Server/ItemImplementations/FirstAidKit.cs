@@ -1,4 +1,4 @@
-using Minerva.Server.Entities;
+using Minerva.Server.Core.Entities;
 using Minerva.Server.ItemImplementations.Base;
 
 namespace Minerva.Server.ItemImplementations

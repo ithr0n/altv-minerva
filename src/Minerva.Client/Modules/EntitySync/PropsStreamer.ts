@@ -16,7 +16,7 @@ class PropEntity {
     public Freezed: boolean
     public LightColor: alt.RGBA
     public Velocity: alt.Vector3
-
+    public IsCollisionless: boolean
 
     public FireHandle: number
 }
@@ -46,6 +46,7 @@ alt.onServer("entitySync:create", async (entityId: number, entityType: number, p
         entity.Freezed = !!newEntityData.freezed
         entity.LightColor = newEntityData.lightColor
         entity.Velocity = newEntityData.velocity
+        entity.IsCollisionless = !!newEntityData.isCollisionless
 
         entity.Position = position
 
@@ -152,6 +153,11 @@ alt.onServer("entitySync:updateData", async (entityId, entityType, newEntityData
         e.Velocity = newEntityData.velocity
         if (e.Handle) natives.setEntityVelocity(e.Handle, e.Velocity.x, e.Velocity.y, e.Velocity.z);
     }
+
+    if (newEntityData.hasOwnProperty("isCollisionless")) {
+        e.IsCollisionless = !!newEntityData.isCollisionless
+        if (e.Handle) natives.setEntityCollision(e.Handle, e.IsCollisionless, false); // todo keep physics?!
+    }
 })
 
 alt.onServer("entitySync:clearCache", (entityId, entityType) => {
@@ -182,6 +188,7 @@ const spawnEntityAtClient = async (e: PropEntity) => {
     natives.setObjectTextureVariation(e.Handle, e.TextureVariation);
     natives.setEntityDynamic(e.Handle, e.Dynamic);
     natives.freezeEntityPosition(e.Handle, e.Freezed);
+    natives.setEntityCollision(e.Handle, e.IsCollisionless, false) // todo keep physics?
 
     if (e.OnFire) {
         e.FireHandle = natives.startScriptFire(e.Position.x, e.Position.y, e.Position.z, 1, false);

@@ -5,12 +5,11 @@ using AltV.Net.Enums;
 using Minerva.Server.Callbacks;
 using Minerva.Server.Core.ScriptStrategy;
 using Minerva.Server.Core.CommandSystem;
-using Minerva.Server.Entities;
 using Minerva.Server.EntitySync.Streamers;
-using Minerva.Server.Enums;
 using Minerva.Server.Extensions;
 using System;
-using Minerva.Server.Core.Enums;
+using Minerva.Server.Core.Entities;
+using Minerva.Server.Core.Contracts.Enums;
 
 namespace Minerva.Server.Commands
 {

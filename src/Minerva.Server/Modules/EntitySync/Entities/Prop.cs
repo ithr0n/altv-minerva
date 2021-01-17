@@ -103,6 +103,12 @@ namespace Minerva.Server.EntitySync.Entities
             set { if (Velocity != value) SetData("velocity", value); }
         }
 
+        public bool? IsCollisionless
+        {
+            get => TryGetData("isCollisionless", out bool isCollisionless) ? isCollisionless : default;
+            set { if (IsCollisionless != value) SetData("isCollisionless", value); }
+        }
+
         public WritableVector3 SlideToPosition
         {
             get => TryGetData("slideToPosition", out WritableVector3 slideToPosition) ? slideToPosition : default;

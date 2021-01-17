@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minerva.Server.DataAccessLa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minerva.Server.Core", "Minerva.Server.Core\Minerva.Server.Core.csproj", "{5DF9977C-5663-4D3A-8637-C5BEEDA1F1F7}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minerva.Server.Core.Contracts", "Minerva.Server.Core.Contracts\Minerva.Server.Core.Contracts.csproj", "{611F3E40-1107-4CAC-BE62-A94276E930AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{5DF9977C-5663-4D3A-8637-C5BEEDA1F1F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5DF9977C-5663-4D3A-8637-C5BEEDA1F1F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5DF9977C-5663-4D3A-8637-C5BEEDA1F1F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{611F3E40-1107-4CAC-BE62-A94276E930AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{611F3E40-1107-4CAC-BE62-A94276E930AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{611F3E40-1107-4CAC-BE62-A94276E930AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{611F3E40-1107-4CAC-BE62-A94276E930AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
