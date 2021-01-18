@@ -9,24 +9,24 @@ using Minerva.Server.Core.Callbacks;
 using Minerva.Server.Core.Configuration;
 using Minerva.Server.Core.Contracts.Abstractions;
 using Minerva.Server.Core.Contracts.Enums;
-using Minerva.Server.Core.Contracts.Models;
+using Minerva.Server.Core.Contracts.Models.Database;
 using Minerva.Server.Core.Entities;
 using Minerva.Server.DataAccessLayer.Context;
 
 namespace Minerva.Server.ServerJobs
 {
-    public class DatabaseServerJob
+    public class Database
         : IServerJob
     {
         private readonly IDbContextFactory<DatabaseContext> _dbContextFactory;
         private readonly DevelopmentOptions _devOptions;
 
-        private ILogger<DatabaseServerJob> Logger { get; }
+        private ILogger<Database> Logger { get; }
 
-        public DatabaseServerJob(
+        public Database(
             IDbContextFactory<DatabaseContext> dbContextFactory,
             IOptions<DevelopmentOptions> devOptions,
-            ILogger<DatabaseServerJob> logger)
+            ILogger<Database> logger)
         {
             Logger = logger;
 
@@ -73,7 +73,7 @@ namespace Minerva.Server.ServerJobs
 
             var vehiclesTask = Task.Run(async () =>
             {
-                var vehiclesToUpdate = new List<Core.Contracts.Models.Vehicle>();
+                var vehiclesToUpdate = new List<Core.Contracts.Models.Database.Vehicle>();
                 var callback = new AsyncFunctionCallback<IVehicle>(async (vehicle) =>
                 {
                     var serverVehicle = (ServerVehicle)vehicle;

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Minerva.Server.Core.Contracts.Enums;
 using Minerva.Server.Core.Contracts.Models.Base;
 
-namespace Minerva.Server.Core.Contracts.Models
+namespace Minerva.Server.Core.Contracts.Models.Database
 {
     public class Character
         : PositionRotationEntityBase

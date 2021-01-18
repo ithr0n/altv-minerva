@@ -73,7 +73,7 @@ namespace Minerva.Server.Commands
         }
 
         [Command("car", AccessLevel.Developer)]
-        public void OnCarCommand(ServerPlayer player, string model)
+        public void OnCarCommand(ServerPlayer player, string model = null)
         {
             if (string.IsNullOrWhiteSpace(model))
             {
@@ -99,7 +99,7 @@ namespace Minerva.Server.Commands
         }
 
         [Command("speedhack", AccessLevel.Developer)]
-        public void OnSpeedHackCommand(ServerPlayer player, int engineMultiplier)
+        public void OnSpeedHackCommand(ServerPlayer player, int engineMultiplier = -1)
         {
             if (!player.IsInVehicle)
             {
@@ -117,7 +117,7 @@ namespace Minerva.Server.Commands
         }
 
         [Command("prop", AccessLevel.Developer, true)]
-        public void OnCreateSyncedPropCommand(ServerPlayer player, string model)
+        public void OnCreateSyncedPropCommand(ServerPlayer player, string model = null)
         {
             if (string.IsNullOrWhiteSpace(model))
             {
@@ -141,7 +141,7 @@ namespace Minerva.Server.Commands
         }
 
         [Command("weather", AccessLevel.Developer)]
-        public void OnChangeWeatherCommand(ServerPlayer player, int weatherId, bool immediately = true)
+        public void OnChangeWeatherCommand(ServerPlayer player, int weatherId = -1, bool immediately = true)
         {
             if (!Enum.IsDefined(typeof(WeatherType), weatherId))
             {
@@ -166,7 +166,7 @@ namespace Minerva.Server.Commands
         }
 
         [Command("time", AccessLevel.Developer)]
-        public void OnChangeTimeCommand(ServerPlayer player, int hours, bool freezeClock = false)
+        public void OnChangeTimeCommand(ServerPlayer player, int hours = -1, bool freezeClock = false)
         {
             if (hours < 0 || hours > 23)
             {

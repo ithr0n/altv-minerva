@@ -1,7 +1,7 @@
 ﻿using System;
 using AltV.Net.Elements.Entities;
 using Minerva.Server.Core.Contracts.Enums;
-using Minerva.Server.Core.Contracts.Models;
+using Minerva.Server.Core.Contracts.Models.Database;
 using Minerva.Server.Core.PlayerBuffs;
 using Minerva.Server.Core.PlayerJobs;
 

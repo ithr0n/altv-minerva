@@ -4,12 +4,12 @@ using Minerva.Server.Core.Contracts.Abstractions;
 
 namespace Minerva.Server.ServerJobs
 {
-    public class DemoJob
+    public class Demo
         : IServerJob
     {
-        private ILogger<DemoJob> Logger { get; }
+        private ILogger<Demo> Logger { get; }
 
-        public DemoJob(ILogger<DemoJob> logger)
+        public Demo(ILogger<Demo> logger)
         {
             Logger = logger;
         }

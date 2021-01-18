@@ -1,6 +1,6 @@
 using Minerva.Server.Core.Contracts.Enums;
 
-namespace Minerva.Server.Core.Contracts.Models
+namespace Minerva.Server.Core.Contracts.Models.Database
 {
     public class NpcShopEntry
     {

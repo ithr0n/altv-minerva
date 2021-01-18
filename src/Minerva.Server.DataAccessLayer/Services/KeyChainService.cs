@@ -3,8 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Minerva.Server.Core.Contracts.Abstractions.ScriptStrategy;
-using Minerva.Server.Core.Contracts.Models;
 using Minerva.Server.Core.Contracts.Models.Base;
+using Minerva.Server.Core.Contracts.Models.Database;
 using Minerva.Server.DataAccessLayer.Context;
 
 namespace Minerva.Server.DataAccessLayer.Services

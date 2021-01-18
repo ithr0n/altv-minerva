@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Minerva.Server.Core.Contracts.Abstractions.ScriptStrategy;
-using Minerva.Server.Core.Contracts.Models;
+using Minerva.Server.Core.Contracts.Models.Database;
 using Minerva.Server.DataAccessLayer.Context;
 using System;
 using System.Security.Cryptography;

@@ -1,4 +1,4 @@
-namespace Minerva.Server.Core.Contracts.Models
+namespace Minerva.Server.Core.Contracts.Models.Database
 {
     public class BankAccountGroupAccess
     {
@@ -6,7 +6,7 @@ namespace Minerva.Server.Core.Contracts.Models
         public BankAccount BankAccount { get; set; }
 
         public int GroupId { get; set; }
-        public Group Group{ get; set; }
+        public Group Group { get; set; }
 
         public uint WithdrawLevel { get; set; }
 

@@ -15,8 +15,8 @@ using Microsoft.Extensions.Options;
 using Minerva.Server.Core.Configuration;
 using Minerva.Server.Core.Entities;
 using Minerva.Server.Core.Contracts.Enums;
-using Minerva.Server.Core.Contracts.Models;
 using Minerva.Server.Core.Contracts.Abstractions.ScriptStrategy;
+using Minerva.Server.Core.Contracts.Models.Database;
 
 namespace Minerva.Server.Handlers
 {
@@ -45,6 +45,7 @@ namespace Minerva.Server.Handlers
             _devOptions = devOptions.Value;
 
             AltAsync.OnPlayerConnect += (player, reason) => OnPlayerConnect(player as ServerPlayer, reason);
+            AltAsync.OnPlayerDisconnect += (player, reason) => OnPlayerDisconnect(player as ServerPlayer, reason);
             Alt.OnPlayerDead += (player, killer, weapon) => OnPlayerDead(player as ServerPlayer, killer, weapon);
             AltAsync.OnClient<ServerPlayer, string>("Login:Authenticate", OnLoginAuthenticateAsync);
             AltAsync.OnClient<ServerPlayer, int>("Session:RequestCharacterSpawn", OnRequestCharacterSpawnAsync);
@@ -82,6 +83,22 @@ namespace Minerva.Server.Handlers
             await Task.Delay(100);
 
             player.Emit("Session:Initialize", uiUrl);
+        }
+
+        private async Task OnPlayerDisconnect(ServerPlayer serverPlayer, string reason)
+        {
+            Character character;
+
+            lock (serverPlayer)
+            {
+                if (serverPlayer.Exists && serverPlayer.IsLoggedIn)
+                {
+                    serverPlayer.Character.Position = serverPlayer.Position;
+                    character = serverPlayer.Character;
+                }
+            }
+
+            await _characterService.Update(serverPlayer.Character);
         }
 
         private void OnPlayerDead(ServerPlayer player, IEntity killer, uint weapon)

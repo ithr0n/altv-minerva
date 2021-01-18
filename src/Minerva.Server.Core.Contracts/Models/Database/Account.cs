@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Minerva.Server.Core.Contracts.Models
+namespace Minerva.Server.Core.Contracts.Models.Database
 {
     public class Account
     {

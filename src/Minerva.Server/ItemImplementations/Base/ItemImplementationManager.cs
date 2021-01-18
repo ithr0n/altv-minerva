@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Minerva.Server.Core.Contracts.Enums;
-using Minerva.Server.Core.Contracts.Models;
+using Minerva.Server.Core.Contracts.Models.Database;
 using Minerva.Server.DataAccessLayer.Context;
 using Minerva.Server.ItemImplementations.Base;
 

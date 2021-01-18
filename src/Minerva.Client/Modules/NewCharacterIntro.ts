@@ -13,6 +13,8 @@ export const Execute = async () => {
     const hashFemaleModel = alt.hash('mp_f_freemode_01')
     const isFemale = player.model === hashFemaleModel
 
+    natives.doScreenFadeIn(1000)
+
     //const plane = natives.createVehicle(alt.hash('jet'), -1200, -1490, 142.385, 0, false, false, false)
 
     natives.prepareMusicEvent('GLOBAL_KILL_MUSIC')

@@ -14,7 +14,7 @@ using Minerva.Server.Core.Contracts.Abstractions;
 
 namespace Minerva.Server.ServerJobs
 {
-    public class CommandsServerJob
+    public class Commands
         : IServerJob
     {
         private class RestrictedAccessCommandDelegate
@@ -30,7 +30,7 @@ namespace Minerva.Server.ServerJobs
             public AccessLevel RequiredAccessLevel { get; }
         }
 
-        public CommandsServerJob(
+        public Commands(
             IEnumerable<IStartupSingletonScript> startupSingletonScripts,
             IEnumerable<ISingletonScript> singletonScripts,
             IEnumerable<ITransientScript> transientScripts)

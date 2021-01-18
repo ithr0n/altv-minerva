@@ -12,6 +12,16 @@ alt.on('keyup', (key: KeyCodes) => {
     }
 
     switch (key) {
+        case KeyCodes.E_KEY: {
+            if (localPlayer.vehicle) {
+                return
+            }
+
+            alt.emitServer('Interactions:Trigger')
+
+            break
+        }
+
         case KeyCodes.VK_F3:
             alt.emitServer('Voice:SwitchVoiceLevel')
             break

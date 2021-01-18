@@ -1,10 +1,10 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Minerva.Server.Core.Contracts.Models
+namespace Minerva.Server.Core.Contracts.Models.Database
 {
-    public class NpcShop
+    public class Group
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -12,6 +12,9 @@ namespace Minerva.Server.Core.Contracts.Models
 
         public string Name { get; set; }
 
-        public List<NpcShopEntry> Entries { get; set; }
+        public int OwnerId { get; set; }
+        public Character Owner { get; set; }
+
+        public List<GroupMember> Members { get; set; }
     }
 }

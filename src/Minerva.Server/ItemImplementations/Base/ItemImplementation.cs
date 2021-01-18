@@ -1,5 +1,5 @@
 using Minerva.Server.Core.Contracts.Enums;
-using Minerva.Server.Core.Contracts.Models;
+using Minerva.Server.Core.Contracts.Models.Database;
 using Minerva.Server.Core.Entities;
 
 namespace Minerva.Server.ItemImplementations.Base

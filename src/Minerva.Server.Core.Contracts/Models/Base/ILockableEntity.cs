@@ -1,3 +1,4 @@
+using Minerva.Server.Core.Contracts.Models.Database;
 using System;
 
 namespace Minerva.Server.Core.Contracts.Models.Base

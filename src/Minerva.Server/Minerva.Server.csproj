@@ -24,6 +24,7 @@
     <PackageReference Include="AltV.Net.Async" Version="1.48.3" />
     <PackageReference Include="AltV.Net.EntitySync" Version="1.9.0-dev-preview" />
     <PackageReference Include="AltV.Net.EntitySync.ServerEvent" Version="1.9.0-dev-preview" />
+    <PackageReference Include="AltV.Net.Interactions" Version="1.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />

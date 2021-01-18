@@ -7,12 +7,12 @@ using Minerva.Server.Core.Contracts.Abstractions;
 
 namespace Minerva.Server.ServerJobs
 {
-    public class EntitySyncServerJob
+    public class EntitySync
         : IServerJob
     {
-        private ILogger<EntitySyncServerJob> Logger { get; }
+        private ILogger<EntitySync> Logger { get; }
 
-        public EntitySyncServerJob(ILogger<EntitySyncServerJob> logger)
+        public EntitySync(ILogger<EntitySync> logger)
         {
             Logger = logger;
         }

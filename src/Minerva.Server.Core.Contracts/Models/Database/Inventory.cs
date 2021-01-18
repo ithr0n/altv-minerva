@@ -2,22 +2,21 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Minerva.Server.Core.Contracts.Models
+namespace Minerva.Server.Core.Contracts.Models.Database
 {
-    public class KeyChain
+    public class Inventory
     {
-        public KeyChain()
+        public Inventory()
         {
-            Keys = new List<KeyData>();
+            Items = new List<Item>();
         }
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        public int ItemId { get; set; }
-        public Item Item { get; set; }
+        public float MaxWeight { get; set; }
 
-        public List<KeyData> Keys { get; set; }
+        public List<Item> Items { get; set; }
     }
 }

@@ -800,7 +800,6 @@ export class CharacterCreator {
         this.camera.pointAtCoord(new alt.Vector3(CharCreatorPedPos.x, CharCreatorPedPos.y, CharCreatorPedPos.z + 1))
         this.camera.render()
 
-
         this.creatorMainMenu.Visible = true
 
         return true
@@ -823,13 +822,14 @@ export class CharacterCreator {
     }
 
     hide() {
-        this.camera.destroy()
-
         if (this.pedHandle) {
             natives.deleteEntity(this.pedHandle);
         }
 
+        this.camera.destroy()
+
         natives.displayRadar(true)
+        natives.doScreenFadeOut(0)
 
         this.creatorMainMenu.Visible = false
         this.resetAppearanceMenu()

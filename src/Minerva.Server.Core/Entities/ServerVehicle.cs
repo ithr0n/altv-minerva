@@ -35,6 +35,6 @@ namespace Minerva.Server.Core.Entities
             }
         }
 
-        public Contracts.Models.Vehicle DbEntity { get; set; }
+        public Contracts.Models.Database.Vehicle DbEntity { get; set; }
     }
 }
