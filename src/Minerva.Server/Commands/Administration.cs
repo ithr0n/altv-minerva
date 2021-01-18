@@ -15,7 +15,7 @@ namespace Minerva.Server.Commands
         : ISingletonScript
     {
         [Command("broadcast", AccessLevel.Admin, true)]
-        public void OnTeleportToWaypointCommand(ServerPlayer player, string message)
+        public void OnBroadcast(ServerPlayer player, string message = null)
         {
             if (string.IsNullOrWhiteSpace(message))
             {
