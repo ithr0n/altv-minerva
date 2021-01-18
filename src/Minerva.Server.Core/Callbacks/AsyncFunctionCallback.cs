@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Elements.Pools;
 
-namespace Minerva.Server.Callbacks
+namespace Minerva.Server.Core.Callbacks
 {
     public class AsyncFunctionCallback<T>
         : IAsyncBaseObjectCallback<T>

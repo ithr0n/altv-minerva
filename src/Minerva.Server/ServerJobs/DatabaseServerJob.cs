@@ -5,12 +5,12 @@ using AltV.Net.Elements.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Minerva.Server.Callbacks;
+using Minerva.Server.Core.Callbacks;
 using Minerva.Server.Core.Configuration;
+using Minerva.Server.Core.Contracts.Abstractions;
 using Minerva.Server.Core.Contracts.Enums;
 using Minerva.Server.Core.Contracts.Models;
 using Minerva.Server.Core.Entities;
-using Minerva.Server.Core.ServerJobs;
 using Minerva.Server.DataAccessLayer.Context;
 
 namespace Minerva.Server.ServerJobs

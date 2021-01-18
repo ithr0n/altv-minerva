@@ -2,7 +2,7 @@ using System;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Elements.Pools;
 
-namespace Minerva.Server.Callbacks
+namespace Minerva.Server.Core.Callbacks
 {
     public class FunctionCallback<T>
         : IBaseObjectCallback<T>

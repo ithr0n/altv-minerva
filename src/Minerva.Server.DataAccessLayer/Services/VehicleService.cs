@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Minerva.Server.Core.Contracts.Abstractions.ScriptStrategy;
 using Minerva.Server.Core.Contracts.Models;
-using Minerva.Server.Core.ScriptStrategy;
 using Minerva.Server.DataAccessLayer.Context;
 
 namespace Minerva.Server.DataAccessLayer.Services

@@ -11,12 +11,12 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Minerva.Server.DataAccessLayer.Services;
 using Minerva.Server.Extensions;
-using Minerva.Server.Core.ScriptStrategy;
 using Microsoft.Extensions.Options;
 using Minerva.Server.Core.Configuration;
 using Minerva.Server.Core.Entities;
 using Minerva.Server.Core.Contracts.Enums;
 using Minerva.Server.Core.Contracts.Models;
+using Minerva.Server.Core.Contracts.Abstractions.ScriptStrategy;
 
 namespace Minerva.Server.Handlers
 {

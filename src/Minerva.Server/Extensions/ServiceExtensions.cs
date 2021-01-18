@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Minerva.Server.Core.ScriptStrategy;
+using Minerva.Server.Core.Contracts.Abstractions.ScriptStrategy;
 using System;
 using System.Collections.Generic;
 using System.IO;

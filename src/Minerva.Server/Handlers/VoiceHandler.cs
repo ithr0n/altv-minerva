@@ -1,8 +1,8 @@
 ﻿using AltV.Net;
 using AltV.Net.Elements.Entities;
+using Minerva.Server.Core.Contracts.Abstractions.ScriptStrategy;
 using Minerva.Server.Core.Contracts.Enums;
 using Minerva.Server.Core.Entities;
-using Minerva.Server.Core.ScriptStrategy;
 
 namespace Minerva.Server.Handlers
 {

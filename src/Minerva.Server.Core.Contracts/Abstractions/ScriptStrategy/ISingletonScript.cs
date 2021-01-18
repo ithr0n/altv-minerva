@@ -1,4 +1,4 @@
-﻿namespace Minerva.Server.Core.ScriptStrategy
+﻿namespace Minerva.Server.Core.Contracts.Abstractions.ScriptStrategy
 {
     /// <summary>
     /// Dependency Injection will configure every class implementing this interface with a singleton lifetime.

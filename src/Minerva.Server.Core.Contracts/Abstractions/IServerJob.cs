@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Minerva.Server.Core.ServerJobs
+namespace Minerva.Server.Core.Contracts.Abstractions
 {
     public interface IServerJob
     {

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Minerva.Server.Core.ServerJobs;
+using Minerva.Server.Core.Contracts.Abstractions;
 
 namespace Minerva.Server.ServerJobs
 {

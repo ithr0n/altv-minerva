@@ -2,15 +2,15 @@
 using AltV.Net.Elements.Args;
 using AltV.Net.Elements.Entities;
 using AltV.Net.FunctionParser;
-using Minerva.Server.Core.ScriptStrategy;
 using Minerva.Server.Core.CommandSystem;
-using Minerva.Server.Core.ServerJobs;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Minerva.Server.Core.Entities;
 using Minerva.Server.Core.Contracts.Enums;
+using Minerva.Server.Core.Contracts.Abstractions.ScriptStrategy;
+using Minerva.Server.Core.Contracts.Abstractions;
 
 namespace Minerva.Server.ServerJobs
 {

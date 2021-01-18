@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using AltV.Net;
 using AltV.Net.Elements.Entities;
-using Minerva.Server.Callbacks;
+using Minerva.Server.Core.Callbacks;
 using Minerva.Server.Core.Entities;
 using Minerva.Server.Core.ScheduledJob;
 

@@ -1,8 +1,8 @@
 ﻿using Minerva.Server.Core.CommandSystem;
 using Minerva.Server.Extensions;
-using Minerva.Server.Core.ScriptStrategy;
 using Minerva.Server.Core.Entities;
 using Minerva.Server.Core.Contracts.Enums;
+using Minerva.Server.Core.Contracts.Abstractions.ScriptStrategy;
 
 namespace Minerva.Server.Commands
 {

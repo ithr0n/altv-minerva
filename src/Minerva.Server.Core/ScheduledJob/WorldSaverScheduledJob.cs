@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Minerva.Server.Core.Configuration;
-using Minerva.Server.Core.ServerJobs;
+using Minerva.Server.Core.Contracts.Abstractions;
 
 namespace Minerva.Server.Core.ScheduledJob
 {
