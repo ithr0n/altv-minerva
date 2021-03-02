@@ -1,9 +1,9 @@
-﻿using AltV.Net.EntitySync;
-using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Numerics;
+using AltV.Net.EntitySync;
+using Microsoft.Extensions.Logging;
 
-namespace Minerva.Server.EntitySync.Streamers
+namespace Minerva.Server.Modules.EntitySync.Streamers
 {
     public class Streamer<T> where T : Entity
     {
@@ -17,14 +17,14 @@ namespace Minerva.Server.EntitySync.Streamers
             ManagedEntities = new List<T>();
         }
 
-        public ulong Create(T entity)
+        public T Create(T entity)
         {
             ManagedEntities.Add(entity);
             AltEntitySync.AddEntity(entity);
 
             Logger.LogDebug($"[EntitySync] Created entity with id {entity.Id}");
 
-            return entity.Id;
+            return entity;
         }
 
         public bool Delete(T entity)

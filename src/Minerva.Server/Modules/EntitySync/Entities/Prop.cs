@@ -1,9 +1,9 @@
-﻿using AltV.Net.EntitySync;
+﻿using System.Numerics;
+using AltV.Net.EntitySync;
 using Minerva.Server.EntitySync.WritableData;
 using Minerva.Server.Enums;
-using System.Numerics;
 
-namespace Minerva.Server.EntitySync.Entities
+namespace Minerva.Server.Modules.EntitySync.Entities
 {
     public class Prop
         : Entity
@@ -82,10 +82,10 @@ namespace Minerva.Server.EntitySync.Entities
         /// <summary>
         /// Freeze an object into it's current position. or get it's status
         /// </summary>
-        public bool? Freezed
+        public bool? Frozen
         {
-            get => TryGetData("freezed", out bool freezed) ? freezed : null;
-            set { if (Freezed != value) SetData("freezed", value); }
+            get => TryGetData("frozen", out bool frozen) ? frozen : null;
+            set { if (Frozen != value) SetData("frozen", value); }
         }
 
         /// <summary>
@@ -113,6 +113,12 @@ namespace Minerva.Server.EntitySync.Entities
         {
             get => TryGetData("slideToPosition", out WritableVector3 slideToPosition) ? slideToPosition : default;
             set { if (SlideToPosition != value) SetData("slideToPosition", value); }
+        }
+
+        public bool? PlacedOnGround
+        {
+            get => TryGetData("placedOnGround", out bool placedOnGround) ? placedOnGround : default;
+            set { if (PlacedOnGround != value) SetData("placedOnGround", value); }
         }
     }
 }

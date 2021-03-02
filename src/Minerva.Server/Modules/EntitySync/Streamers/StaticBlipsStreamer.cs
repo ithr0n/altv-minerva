@@ -1,9 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Numerics;
+using Microsoft.Extensions.Logging;
 using Minerva.Server.Core.Contracts.Abstractions.ScriptStrategy;
 using Minerva.Server.EntitySync.Entities;
-using System.Numerics;
 
-namespace Minerva.Server.EntitySync.Streamers
+namespace Minerva.Server.Modules.EntitySync.Streamers
 {
     public class StaticBlipsStreamer
         : Streamer<StaticBlip>, ISingletonScript
@@ -25,7 +25,7 @@ namespace Minerva.Server.EntitySync.Streamers
         /// <param name="dimension"></param>
         /// <param name="range"></param>
         /// <returns></returns>
-        public ulong Create(
+        public StaticBlip Create(
             string name,
             int spriteId,
             Vector3 position,

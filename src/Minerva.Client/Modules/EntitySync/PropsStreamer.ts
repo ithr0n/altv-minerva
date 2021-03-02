@@ -13,10 +13,12 @@ class PropEntity {
     public Dynamic: boolean
     public Visible: boolean
     public OnFire: boolean
-    public Freezed: boolean
+    public Frozen: boolean
     public LightColor: alt.RGBA
     public Velocity: alt.Vector3
     public IsCollisionless: boolean
+    public IsOnGround: boolean
+    public SlideToPosition: alt.Vector3
 
     public FireHandle: number
 }
@@ -43,10 +45,11 @@ alt.onServer("entitySync:create", async (entityId: number, entityType: number, p
         entity.Dynamic = !!newEntityData.dynamic
         entity.Visible = !!newEntityData.visible
         entity.OnFire = !!newEntityData.onFire
-        entity.Freezed = !!newEntityData.freezed
+        entity.Frozen = !!newEntityData.freezed
         entity.LightColor = newEntityData.lightColor
         entity.Velocity = newEntityData.velocity
         entity.IsCollisionless = !!newEntityData.isCollisionless
+        entity.IsOnGround = !!newEntityData.placedOnGround
 
         entity.Position = position
 
@@ -75,7 +78,10 @@ alt.onServer("entitySync:updatePosition", async (entityId, entityType, position)
 
     if (entities.hasOwnProperty(entityId)) {
         entities[entityId].Position = position
-        natives.setEntityCoordsNoOffset(entities[entityId].Handle, position.x, position.y, position.z, false, false, false)
+
+        if (entities[entityId].Handle) {
+            natives.setEntityCoordsNoOffset(entities[entityId].Handle, position.x, position.y, position.z, false, false, false)
+        }
     }
 })
 
@@ -122,19 +128,20 @@ alt.onServer("entitySync:updateData", async (entityId, entityType, newEntityData
     if (newEntityData.hasOwnProperty("onFire")) {
         e.OnFire = !!newEntityData.onFire
 
-        if (e.Handle) {
+        if (e.FireHandle) {
+            natives.removeScriptFire(e.FireHandle);
+
             if (e.OnFire) {
                 e.FireHandle = natives.startScriptFire(e.Position.x, e.Position.y, e.Position.z, 1, false);
-            } else if (e.FireHandle !== null) {
-                natives.removeScriptFire(e.FireHandle);
+            } else {
                 e.FireHandle = null;
             }
         }
     }
 
-    if (newEntityData.hasOwnProperty("freezed")) {
-        e.Freezed = !!newEntityData.freezed
-        if (e.Handle) natives.freezeEntityPosition(e.Handle, e.Freezed);
+    if (newEntityData.hasOwnProperty("frozen")) {
+        e.Frozen = !!newEntityData.frozen
+        if (e.Handle) natives.freezeEntityPosition(e.Handle, e.Frozen);
     }
 
     if (newEntityData.hasOwnProperty("lightColor")) {
@@ -157,6 +164,16 @@ alt.onServer("entitySync:updateData", async (entityId, entityType, newEntityData
     if (newEntityData.hasOwnProperty("isCollisionless")) {
         e.IsCollisionless = !!newEntityData.isCollisionless
         if (e.Handle) natives.setEntityCollision(e.Handle, e.IsCollisionless, false); // todo keep physics?!
+    }
+
+    if (newEntityData.hasOwnProperty("placedOnGround")) {
+        e.IsOnGround = !!newEntityData.placedOnGround
+        if (e.Handle) natives.placeObjectOnGroundProperly(e.Handle);
+    }
+
+    if (newEntityData.hasOwnProperty("slideToPosition")) {
+        e.SlideToPosition = newEntityData.slideToPosition
+        if (e.Handle) natives.slideObject(e.Handle, e.SlideToPosition.x, e.SlideToPosition.y, e.SlideToPosition.z, 8, 8, 8, true);
     }
 })
 
@@ -183,12 +200,23 @@ const spawnEntityAtClient = async (e: PropEntity) => {
 
     await AsyncHelper.RequestModel(modelHash)
 
-    e.Handle = natives.createObject(modelHash, e.Position.x, e.Position.y, e.Position.z, false, false, false);
+    e.Handle = natives.createObjectNoOffset(modelHash, e.Position.x, e.Position.y, e.Position.z, false, false, false);
     natives.setEntityRotation(e.Handle, e.Rotation.x, e.Rotation.y, e.Rotation.z, 2, true);
-    natives.setObjectTextureVariation(e.Handle, e.TextureVariation);
     natives.setEntityDynamic(e.Handle, e.Dynamic);
-    natives.freezeEntityPosition(e.Handle, e.Freezed);
+    natives.freezeEntityPosition(e.Handle, e.Frozen);
     natives.setEntityCollision(e.Handle, e.IsCollisionless, false) // todo keep physics?
+
+    if (e.TextureVariation !== null) {
+        natives.setObjectTextureVariation(e.Handle, e.TextureVariation);
+    }
+
+    if (e.Velocity) {
+        natives.setEntityVelocity(e.Handle, e.Velocity.x, e.Velocity.y, e.Velocity.z);
+    }
+
+    if (e.IsOnGround) {
+        natives.placeObjectOnGroundProperly(e.Handle);
+    }
 
     if (e.OnFire) {
         e.FireHandle = natives.startScriptFire(e.Position.x, e.Position.y, e.Position.z, 1, false);

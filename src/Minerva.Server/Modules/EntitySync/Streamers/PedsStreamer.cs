@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Minerva.Server.EntitySync.Entities;
 
-namespace Minerva.Server.EntitySync.Streamers
+namespace Minerva.Server.Modules.EntitySync.Streamers
 {
     public class PedsStreamer
         : Streamer<Ped>

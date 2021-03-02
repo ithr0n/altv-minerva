@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Numerics;
+using Microsoft.Extensions.Logging;
 using Minerva.Server.Core.Contracts.Abstractions.ScriptStrategy;
 using Minerva.Server.EntitySync.Entities;
 using Minerva.Server.EntitySync.WritableData;
 using Minerva.Server.Enums;
-using System.Numerics;
 
-namespace Minerva.Server.EntitySync.Streamers
+namespace Minerva.Server.Modules.EntitySync.Streamers
 {
     public class MarkersStreamer
         : Streamer<Marker>, ISingletonScript
@@ -15,7 +15,7 @@ namespace Minerva.Server.EntitySync.Streamers
         {
         }
 
-        public ulong Create(
+        public Marker Create(
             MarkerType markerType,
             Vector3 position,
             Vector3 scale,

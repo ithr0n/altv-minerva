@@ -3,13 +3,13 @@ using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using Minerva.Server.Core.CommandSystem;
-using Minerva.Server.EntitySync.Streamers;
 using Minerva.Server.Extensions;
 using System;
 using Minerva.Server.Core.Entities;
 using Minerva.Server.Core.Contracts.Enums;
 using Minerva.Server.Core.Contracts.Abstractions.ScriptStrategy;
 using Minerva.Server.Core.Callbacks;
+using Minerva.Server.Modules.EntitySync.Streamers;
 
 namespace Minerva.Server.Commands
 {
@@ -132,7 +132,7 @@ namespace Minerva.Server.Commands
 
             try
             {
-                _propsStreamer.Create(hash, player.Position - new Position(0, 0, 1), player.Rotation, freezed: true);
+                _propsStreamer.Create(hash, player.Position - new Position(0, 0, 1), player.Rotation, frozen: true);
             }
             catch (Exception ex)
             {
